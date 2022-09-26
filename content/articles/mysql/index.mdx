@@ -1,0 +1,262 @@
+---
+id: a2033028-30ae-4a45-91c0-15e570e5e2b6
+
+title: 'MySQL with Node.js'
+description: 'Learn how to use MySQL with Node.js'
+slug: 'mysql-with-nodejs'
+image: 'Express-Supertest-jest.png'
+
+status: 'publish'
+date: '2022-09-26'
+tags: ['nodejs', 'mysql']
+---
+
+## Intro
+
+Any web app needs to persist data somehow, and relational databases are always a good option for any web app. In this article i'm going to show you how to connect a node application to a MySQL database. 
+
+<YouTube id="Hej48pi_lOc"></YouTube>
+
+In these examples, we'll be using **mysql2**, **ESModules**, and **async/await**
+
+The completed code can be found Here: [https://github.com/Sam-Meech-Ward/Node-MySQL](https://github.com/Sam-Meech-Ward/Node-MySQL)
+
+## Setup
+
+I'm assuming you already have MySQL installed on your machine. If you haven't, you can follow the instructions here: https://www.youtube.com/watch?v=u96rVINbAUI
+
+Once you have MySQL installed, you should be able to access the database through MySQL workbench or terminal. I'm going to access MySQL through terminal, but you can use whichever one you prefer. 
+
+In terminal you can access the mysql cli as root by typing in `mysql -u root -p`
+
+Then you can type `show databases;` to see which databases you already have. 
+
+For this tutorial, we need to create a new database for storing notes. Run the following SQL code in MySQL workbench or in the MySQL cli.
+
+```sql
+CREATE DATABASE notes_app;
+USE notes_app;
+
+CREATE TABLE notes (
+  id integer PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  contents TEXT NOT NULL,
+  created TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+INSERT INTO notes (title, contents)
+VALUES 
+('My First Note', 'A note about something'),
+('My Second Note', 'A note about something else');
+```
+
+The database will be called `notes_app` that contains a single table called `notes`. I've also added a few dummy notes to the database. 
+
+If you want more information on how to create tables in MySQL, read my article [A Quick Guide to Creating Tables](https://sammeechward.com/a-quick-guide-to-creating-tables/)
+
+
+## Node App Setup
+
+Create a new folder for the node app and run `npm init -y` to create a package.json. Add a new `"type": "module"` property to the `package.json` file
+
+```json
+{
+  "name": "Notes",
+  "type": "module",
+```
+
+This is just so we can use ESModules instead of the older commonjs modules.
+
+Install the `mysql2` library for node. Make sure it's `mysql2` and not `mysql` becuase `mysql2` is a much better version of the library. 
+
+```
+npm install mysql2
+```
+
+Create a new `database.js` file and require the library:
+
+```js
+import mysql from 'mysql2'
+```
+
+Now create a connection pool to MySQL and pass in the host, username, password, and database name. 
+
+```js
+const pool = mysql.createPool({
+  host: '127.0.0.1',
+  user: 'root',
+  password: '',
+  database: 'notes_app',
+}).promise()
+```
+
+This is where we tell the library how to connect to our database. By creating a pool, we can reuse connections to the database instead of all ways opening and closing connections. This will improve performance once your app is hosted and you have a lot of users. 
+
+And the `.promise()` method is a method that allows us to use async/await. 
+
+As long as the information in here is correct, we can now start to query the database by writing pool.query and writing a SQL query inside of a string. So let's try getting all of the notes. 
+
+## Get All Notes
+
+Add the following code to the database.js file:
+
+```js
+const result = await pool.query("select * from notes")
+console.log(result)
+```
+
+Now run the file `node database.js`, and you should see a whole bunch of weird looking stuff. But if you scroll to the top of the terminal output, there's the data. `query` returns an array where the first item in the array are the rows from the database, and the second item is the metadata about the fields in the table. We don't really care about that, we just want the data, so update that code to only get the data:
+
+```js
+const result = await pool.query("select * from notes")
+const rows = result[0]
+console.log(rows)
+```
+
+Much better, and we can actually use **destructuring assignment** to make this a little cleaner. 
+
+```js
+const [rows] = await pool.query("select * from notes")
+console.log(rows)
+```
+
+`rows` will be the first thing in the array returned by the query. 
+
+Let's put this into a function to make it more readable and more reusable when we setup express later.
+
+```js
+async function getAllnotes() {
+  const [rows] = await pool.query("select * from notes")
+  return rows
+}
+
+const notes = await getAllnotes()
+console.log(notes)
+```
+
+## Environment variables (.env)
+
+Before moving on, we need to talk about environment variables. Because we should be using environment variables for all the database details here.
+ 
+These are those variables that start with process.env. `process.env.HOST` that you might have seen before. An envirnoment variable is a variable that exists on the machine where your code is running. Our node apps can access data that exists on the current machine through environment variables. 
+
+This is really useful for two main reasons.
+
+1. It makes configuration easier. In development, i'm connecting to a database on localhost, but in production, i'm going to be connecting to a database on a different machine. And if I have a staging environment, i'm going to be connecting to a database on a different machine. So I want to make it really easy to change the database connection information without having to actually update the code. Especially handy if the person deploying the application is not the same person who wrote the backend code.
+2. We don't want to put sensitive information directly into our code and we especially don't want to commit any sensitive information into git. So env vars allow us to keep sensitive information out of our code.
+
+What this means for us is replacing all of these values with environment variables.
+
+There are many different ways of actually creating these environment variables. When developing on your local machine, the easiest is to use the the dotenv library. So install dotenv.
+
+
+```
+npm i dotenv
+```
+
+Create a new file called `.env` and add the database details:
+
+```
+MYSQL_HOST='127.0.0.1'
+MYSQL_USER='root'
+MYSQL_PASSWORD=''
+MYSQL_DATABASE='notes_app'
+```
+
+Then in the database file, import dotenv, call config() on it, and have the pool use the environment variables.
+
+```js
+import dotenv from 'dotenv'
+dotenv.config()
+
+const pool = mysql.createPool({
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE
+}).promise()
+```
+
+Everything should still be working correctly, but now the database details aren't hard coded into the app.
+
+## More Queries
+
+Maybe we don't want to get all notes, maybe we only want to get a single photo using its id. 
+
+Add the following function to database.js:
+
+```js
+async function getNote(id) {
+  const [rows] = await pool.query(`
+  SELECT * 
+  FROM notes
+  WHERE id = ${id}
+  `)
+  return rows
+}
+
+const note = await getNote(1)
+console.log(note)
+```
+
+If you call this function with 1, it should select the note `where id = 1`, the first note. This will also work if we pass in `2` because there is a note with the id 2. But if we try and call this with `3`, then we end up with an empty array because no note exits. Selecting always returns an array because there could be multiple rows, but in this case, we know there will only be at most one returned here.
+
+Let's change the function a bit to only return a single note. 
+
+
+```js
+export async function getNote(id) {
+  const [rows] = await pool.query(`
+  SELECT * 
+  FROM notes
+  WHERE id = ${id}
+  `)
+  return rows[0]
+}
+```
+
+That way it returns undefined if nothing was found, and just the single item if there is one.
+
+
+## SQL Injection
+
+This looks good, but we shouldn't just be dumping the id into the query string like this. It's very likely that this number will come from somwhere untrusted. Through a url perhaps where someone could try and manipulate the value to perform a SQL injection attack. To prevent this, we should use prepared statements. This means putting a quesion mark where the potentially unsafe value should be and passing the value to the query function in an array. 
+
+```js
+export async function getNote(id) {
+  const [rows] = await pool.query(`
+  SELECT * 
+  FROM notes
+  WHERE id = ?
+  `, [id])
+  return rows[0]
+}
+
+const note = await getNote(3)
+console.log(note)
+```
+
+Now the id and the query will get sent to MySQL separatly and MySQL will only treat id as a value, it won't execute it as a query. This is much safer.
+
+
+## Insert
+
+So we can select, now let's add a function to create a new note.
+
+```js
+export async function createNote(title, contents) {
+  const [result] = await pool.query(`
+  INSERT INTO notes (title, contents)
+  VALUES (?, ?)
+  `, [title, contents])
+  return result
+}
+```
+
+The order of the values in params array just has to match the order of the question marks as they appear in the query. 
+
+We get back a result object, but this isn't the item added, it's the metadata about the insert. Keep this in mind if you ever try to use the result object.
+
+## Summary
+
+That's it! We've got a database connection and we can use it to store and retrieve data. There is obviously a lot more you would want to do with this to make a fully functional application, but this is a good starting point for how to connect to and use a MySQL database.

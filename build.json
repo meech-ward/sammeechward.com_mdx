@@ -1,0 +1,18 @@
+{
+  "articles": [
+    {
+      "name": "mysql.mdx",
+      "path": "/content/articles/mysql.mdx",
+      "filePath": "/Users/sam/Projects/SamMeechWard/sammeechward.com_mdx/content/articles/mysql.mdx",
+      "id": "a2033028-30ae-4a45-91c0-15e570e5e2b6",
+      "title": "MySQL with Node.js",
+      "description": "Learn how to use MySQL with Node.js",
+      "date": "2022-09-26",
+      "tags": [
+        "nodejs",
+        "mysql"
+      ],
+      "skipSize": 173
+    }
+  ]
+}

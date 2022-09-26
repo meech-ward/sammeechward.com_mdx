@@ -1,0 +1,118 @@
+---
+id: 58f4fbb7-7c9f-44d9-96fe-2be9924bb379
+title: 'HTTPS on Amazon Linux with Nginx'
+date: '2021-10-02T19:58:23'
+slug: 'https-on-amazon-linux-with-nginx'
+image: 'AWS-Cloud-Banner-Landscape.png'
+---
+
+Learn how to setup an Amazon Linux 2 EC2 instance with nginx to accept HTTPS requests.
+
+[https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-amazon-linux-2.html#letsencrypt](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-amazon-linux-2.html#letsencrypt)
+
+## Setup
+
+First you need to create a new amazon linux 2 ec2 instance with Nginx installed. You can follow one of these videos to get started:
+
+*   [Nginx Reverse Proxy on AWS EC2 Amazon Linux 2: https://youtu.be/\_EBARqreeao](https://youtu.be/_EBARqreeao)
+*   [Setting Up And Deploying AWS EC2 Instances: https://youtu.be/GEVbYQWWJkQ](https://youtu.be/GEVbYQWWJkQ)
+
+```shell
+sudo amazon-linux-extras install nginx1 -y
+sudo systemctl enable nginx
+sudo systemctl start nginx
+```
+
+## DNS
+
+Make sure you have a domain name pointed at the EC2’s ip address. You can follow along with this guide if you’re going to use route53: [https://faun.pub/how-to-migrate-your-domain-to-route53-and-connect-it-to-an-ec2-instance-93698085f0b3](https://faun.pub/how-to-migrate-your-domain-to-route53-and-connect-it-to-an-ec2-instance-93698085f0b3)
+
+Just make sure you can access the ec2 instance on port 80 using a domain name.
+
+Before continuing, stop the nginx service
+
+```shell
+sudo systemctl stop nginx
+```
+
+## Certbot
+
+Certbot is a free, open-source software tool for automatically using Let's Encrypt certificates on manually-administrated websites to enable HTTPS.
+
+*   https://certbot.eff.org/about/
+
+In short, certbot is some software that makes setting up a TLS certificate incredibly easy.
+
+Install certbot on the EC2 instance:
+
+```shell
+sudo wget -r --no-parent -A 'epel-release-*.rpm' https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/
+sudo rpm -Uvh dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-*.rpm
+sudo yum-config-manager --enable epel*
+sudo yum install -y certbot 
+sudo yum install -y python-certbot-nginx
+```
+
+Run the following command to setup a TLS certificate for your domain name:
+
+```shell
+sudo certbot certonly --standalone --debug -d your.domain.here
+```
+
+Replace `your.domain.here` with your actual domain or sub domain.
+
+Once you’ve gone through all of the steps, you should end up with two files in the `/etc/letsencrypt/live/your.domain` directory. Of course, always replacing `your.domain` with the actual domain name you used.
+
+*   `/etc/letsencrypt/live/your.domain/privkey.pem`
+*   `/etc/letsencrypt/live/your.domain/fullchain.pem`
+
+These files contain the public and private keys needed to create a secure connection with this server. Now we just need to tell nginx to use these when an HTTPS request comes in.
+
+Modify the `/etc/nginx/nginx.conf` file to allow requests on port 443. You can just uncomment the final part of this file and adjust the settings for:
+
+*   `ssl_certificate "/etc/letsencrypt/live/your.domain/fullchain.pem";`
+*   `ssl_certificate_key "/etc/letsencrypt/live/your.domain/privkey.pem";`
+*   `ssl_protocols TLSv1.2 TLSv1.3;`
+*   `ssl_ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DH+3DES:!ADH:!AECDH:!MD5;`
+
+Make sure you replace `your.domain` with your actual domain name. Your final server block for port 443 might look something like this:
+
+```nginx
+server {
+    listen       443 ssl http2;
+    listen       [::]:443 ssl http2;
+    server_name  your.domain;
+
+    ssl_certificate "/etc/letsencrypt/live/your.domain/fullchain.pem";
+    ssl_certificate_key "/etc/letsencrypt/live/your.domain/privkey.pem";
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DH+3DES:!ADH:!AECDH:!MD5;
+
+    ssl_session_cache shared:SSL:1m;
+    ssl_session_timeout  10m;
+    ssl_prefer_server_ciphers on;
+
+
+    location / {
+        proxy_pass http://1.1.1.1:4000;
+    }
+}
+```
+
+Then adjust the port 80 server block to forward HTTP requests to HTTPS requests.
+
+```nginx
+server {
+  listen 80 default_server;
+
+  server_name _;
+
+  return 301 https://$host$request_uri;
+}
+```
+
+Restart nginx and test that you can now connect using HTTPS.
+
+```shell
+sudo systemctl restart nginx
+```
