@@ -1,0 +1,102 @@
+---
+id: d09ff4fe-38e2-4479-b9c3-0d8c7d0743f6
+wp_id: 319
+title: 'Razor Blade Advent Calendar'
+date: '2018-12-05T11:45:03'
+slug: 'razor-blade-advent-calendar'
+image: 'razor-blade-advent-calendar.png'
+status: 'published'
+description: 'Problem: Build an advent calendar that automatically unlocks candy each day. Solution: Use razor blades… Obviously!'
+tags: ['arduino', 'C', 'christmas', 'node js']
+---
+
+Problem: Build an advent calendar that automatically unlocks candy each day.  
+Solution: Use razor blades… Obviously!
+
+This year, I decided to make my girlfriend April an advent calendar full of her favorite candy. But I had to make sure that she wouldn’t be able to just open up a door and take candy whenever she wanted. I needed the calendar to lock each door and only unlock one door each day in December.
+
+My semi-successful solution was to tie each door to the calendar using a piece of string. Then I connected a razor blade to some CNC parts and had the stepper motor move the motor and cut the string, releasing the door for that day.
+
+![](https://sammeechward.com/wp-content/uploads/2019/07/calendar_1-1024x520.png)
+
+## YouTube Video
+
+## How To Build
+
+### Required Hardware
+
+*   [Arduino UNO](https://www.ebay.ca/itm/282789077942)
+*   [A4988 Stepper Motor Driver](https://www.ebay.com/itm/221921771119)
+*   [NEMA 17 Stepper motor](https://www.ebay.ca/itm/131622995166)
+*   [CNC Stepper Motor Coupler Connector](https://www.ebay.ca/itm/131904158434)
+*   [T8 500mm Lead Screw Rod W/Nut Shaft Coupling Mounting Support for 3d Printer Set](https://www.ebay.ca/itm/182887854654)
+*   [Lots of hardboard](https://www.homedepot.ca/en/home/p.standard-hardboard-18-x-4-x-8.1000167412.html)
+
+### Steps
+
+  
+Make the calendar strurcture.  
+
+First I cut out a bunch of wood to make the calendar structure. it was supposed to have 26 slots for candy (25 days in December + one bonus day when I showed off the calendar). At the end of the project, only 22 were used because the CNC parts got in the way.
+
+![](blob:https://sammeechward.com/2bdaba29-30cd-4c94-ac50-4c4b377d4a59)
+
+  
+Attatch the CNC parts to razor blades  
+
+I didn’t want to try controlling 25 separate locks, I wanted it to be simpler than that. I had purchased the following pieces to make a small laser cutter, but haven’t gotten around to actually making that yet:
+
+*   [NEMA 17 Stepper motor](https://www.ebay.ca/itm/131622995166)
+*   [CNC Stepper Motor Coupler Connector](https://www.ebay.ca/itm/131904158434)
+
+So I attached razor blades to these pieces, with hot glue of course, so that I could just control the stepper motors that would cut some string holding on the calendar doors.
+
+![](https://sammeechward.com/wp-content/uploads/2019/07/razor_glue-1024x680.jpg)
+
+I used a cheap plastic rail that I found at home depot, and some blank circuit boards hot glued to the nut. This worked way better than expected to guide the nut in a straight line.
+
+  
+Wire up an arduino to the stepper motors.  
+
+With the calendar setup and the razor blades in place, I needed to put together the circuit to control the motors from my Arduino. I purchased some [A4988 stepper motor drivers](https://www.ebay.com/itm/221921771119) and used the following blog post to help me wire everything and write the first piece of code. https://howtomechatronics.com/tutorials/arduino/how-to-control-stepper-motor-with-a4988-driver-and-arduino/
+
+![](https://sammeechward.com/wp-content/uploads/2019/07/circuit-1024x536.jpg)
+
+  
+Program the arduino  
+
+With the calendar setup and the motors and razor blades in place, I needed the code to actually make this thing work.
+
+One big problem I faced with this, is that the Arduino won’t be able to know the current date and time after it’s been powered down. So I needed a way of telling the Arduino what the current time is, every time it gets turned on / plugged in.
+
+My original plan was to use an Arduino pro mini to keep track of the time that could be connected to a 9v battery. So even when the calendar was unplugged, the pro mini would continue running. Then when the Arduino UNO needed to know the time, it would just ask the pro mini.
+
+After an hour of failing to get the [SoftwareSerial](https://www.arduino.cc/en/Reference/SoftwareSerial) library to work, I decided to give up and just use my laptop to sync up the date and time to the Arduino. The consequence of this is that every time we unplug the calendar, the Arduino needs to be plugged into a computer that can run the following script to sync the date: [Computer Serial](https://github.com/Sam-Meech-Ward/Calendar_Computer_Serial) code.
+
+All of the code for the Arduino can be found on github: https://github.com/Sam-Meech-Ward/Advent\_Calendar\_2018
+
+  
+Add candy and tie up all of the doors  
+
+Now that the calendar is pretty much completely setup, the only thing left to do is add candy and tie up the doors.
+
+April’s favorite candies right now are the herbaland gummy candies, so I bought a bunch of those. To mix things up, I also got some lint chocolates and a fidget spinner.
+
+![](https://sammeechward.com/wp-content/uploads/2019/07/candy-1024x647.jpg)
+
+Putting the candy in the calendar was easy, tying up all of the doors was a long and mundane task. I could never be a sewer, I don’t have the patience to thread anything.
+
+  
+Give the advent calendar to a loved one  
+
+Because of bad string tying skills, a limited amount of time until December 1st, and an overall lack of planning and experience; the calendar ended up looking like this:
+
+![](blob:https://sammeechward.com/6c3e87de-d3c4-48a0-9f2f-f9504890d24e)
+
+But at least it works… kind of.
+
+That’s why you give this calendar to a loved one, they’re the ones that appreciate “homemade” gifts.
+
+## Conclusion
+
+This calendar is kind of a perfect visualization of any piece of software ever built. Most software engineers start out with a vision for something that’s going to look great and work great and end up with code that looks and functions like this calendar.

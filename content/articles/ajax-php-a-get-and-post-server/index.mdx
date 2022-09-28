@@ -1,0 +1,260 @@
+---
+id: 70970afd-ce12-404f-9ccd-a108026dbf92
+wp_id: 347
+title: 'AJAX & PHP – A GET and POST Server'
+date: '2019-09-16T17:35:20'
+slug: 'ajax-php-a-get-and-post-server'
+image: 'ajax-php-a-get-and-post-server.png'
+status: 'published'
+description: 'When we’re building modern single-page web applications, or when we’re building native mobile and desktop applications, we need an API that accepts and returns data in formats other than HTML. URL encoded data is a common format for sending data to servers, and JSON is common for sending data from a server to a client. \[…\]'
+tags: ['ajax', 'http', 'php']
+---
+
+When we’re building modern single-page web applications, or when we’re building native mobile and desktop applications, we need an API that accepts and returns data in formats other than HTML. URL encoded data is a common format for sending data to servers, and JSON is common for sending data from a server to a client.
+
+In this tutorial, we will send URL encoded data to an HTTP server that returns JSON data to a client.
+
+You can view the completed code from this tutorial here: [https://gist.github.com/meech-ward/f72d101c400692da703fef920355f149](https://gist.github.com/meech-ward/f72d101c400692da703fef920355f149)
+
+## AJAX and HTTP
+
+Before reading, check out this short video on AJAX and HTTP: [https://www.youtube.com/watch?v=RDo3hBL1rfA](https://www.youtube.com/watch?v=RDo3hBL1rfA)
+
+## Basic GET
+
+When our application needs to get some new data, maybe a new image or search result, we will create a GET request.
+
+Let’s start with a basic example of a php script that serves some JSON. This example mimics the [`kanye.rest`](https://api.kanye.rest) api and serves up random Kanye West Quotes.
+
+### Server `kanye.php`
+
+```php
+<?php
+
+// 1
+$quotes = [
+  "Pulling up in the may bike", 
+  "If I don't scream, if I don't say something then no one's going to say anything.", 
+  "I wish I had a friend like me", 
+  "Style is genderless", 
+  "Believe in your flyness...conquer your shyness.", 
+  "Sometimes you have to get rid of everything"
+];
+
+$randomQuote = $quotes[array_rand($quotes)]; // 2
+$data = ["quote" => $randomQuote]; // 3
+
+// 4
+header("Content-type: application/json");
+echo json_encode($data);
+```
+
+1.  Create an array of quotes.
+2.  Select a random quote from the array.
+3.  Create an associative array with the random quote.
+4.  Echo the quote as JSON.
+
+If this file is named `kanye.php`, we can run `php -S 0.0.0.0:8080` from within the directory and access the api by going to `localhost:8080/kanye.php` in a web browser.
+
+The api will return a random quote as a JSON object:
+
+```
+{
+  "quote": "Style is genderless"
+}
+```
+
+### Client
+
+Now we need a client to display this quote.
+
+#### Note:
+
+  
+The client-side examples in this post will all be using jQuery and `$.ajax` to make HTTP requests.  
+
+```html
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+function updateQuote() {
+  $.ajax({
+    type: "GET",
+    url: "kanye.php"
+  }).then(data => {
+    $('<p>')
+      .text(data.quote)
+      .appendTo(body);
+  }).catch(error => {
+    console.log("ERROR", error);
+  });
+}
+
+$(body).on('click', updateQuote);
+</script>
+```
+
+Every time the body is clicked, a GET request is sent to the `kanye.php` file which returns a new quote JSON object. We can then create a new `p` tag and set its text to the JSON object’s quote.
+
+## Form GET
+
+The previous `GET` request was an overly simplified example. Usually, we want to specify some parameters when making a GET request. For example, when we shop on Amazon, we don’t just see random products show up—our `GET` request includes data about what we’re searching for.
+
+[https://www.amazon.ca/s?k=kanye+west](https://www.amazon.ca/s?k=kanye+west)
+
+The `k=kanye+west` part of the url is the extra data that we’re sending with the get request. The server can then access this data and show relevant results.
+
+For our quote server, we will allow a client to specify the index of a quote to be served. So if someone wanted the third quote, they could pass an index of `2` in the url like this:
+
+[http://localhost:8080/kanye.php?index=2](http://localhost:8080/kanye.php?index=2)
+
+### Server
+
+```php
+<?php
+
+$quotes = [
+  "Pulling up in the may bike", 
+  "If I don't scream, if I don't say something then no one's going to say anything.", 
+  "I wish I had a friend like me", 
+  "Style is genderless", 
+  "Believe in your flyness...conquer your shyness.", 
+  "Sometimes you have to get rid of everything"
+];
+
+if (isset($_GET['index'])) {
+  $index = $_GET['index'];
+} else {
+  $index = array_rand($quotes);
+}
+
+$data = ["quote" => $quotes[$index]];
+
+header("Content-type: application/json");
+echo json_encode($data);
+```
+
+We are checking if the `index` parameter has been added to the URL using the $\_GET superglobal. If it has been set, then we use it as the index, otherwise, we use a random index.
+
+### PHP Superglobals
+
+For more information on PHP Superglobals, read the following post on w3schools.
+
+[https://www.w3schools.com/php/php\_superglobals.asp](https://www.w3schools.com/php/php_superglobals.asp)
+
+### Client
+
+Making a GET request with query parameters from the client could look something like this:
+
+```html
+<form id="quoteForm">
+  <input type="number" name="index">
+  <input type="submit" value="Submit">
+</form>
+```
+
+```js
+function updateQuote(data) {
+  $.ajax({
+    type: "GET",
+    url: "kanye.php",
+    data: data
+  }).then(data => {
+    console.log(data.quote);
+  }).catch(error => {
+    console.log("ERROR", error);
+  });
+}
+
+$("#quoteForm").on("submit", function(event) {
+  event.preventDefault();
+  const data = $(this).serialize(); // index=#
+  updateQuote(data);
+});
+```
+
+Calling `.serialize()` on the form will [url encode](https://www.w3schools.com/tags/ref_urlencode.asp) the data. Then we add that data to the ajax request which jQuery will send to the server in the url of the GET request.
+
+You an see an example of the jQuery `.serialize()` function at the demo section on the following page: [https://api.jquery.com/serialize/](https://api.jquery.com/serialize/)
+
+### GET VS POST
+
+Read the following article that describes the differences between a GET and a POST request.
+
+[https://www.w3schools.com/tags/ref\_httpmethods.asp](https://www.w3schools.com/tags/ref_httpmethods.asp)
+
+We use a GET request any time that we’re getting some data and we’re not making any updates to any resources on the server. A GET request is safe in that you can make as many GET requests as you want, and no resources should be modified as a consequence.
+
+A POST request on the other hand is not safe. A POST request can create, update and delete resources. Resources are usually database entries like user accounts or posts.
+
+## POST
+
+We wouldn’t use a POST request to get quotes from the server, but we _would_ use a POST request to create a new quote or update existing quotes.
+
+Let’s look at the client-side code first this time.
+
+### Client
+
+```html
+<form id="quoteForm">
+  <input type="text" name="quote">
+  <input type="submit" value="Submit">
+</form>
+```
+
+```js
+$.ajax({
+  type: "POST",
+  url: "kanye.php",
+  data: data
+}).then(data => {
+  console.log(data);
+}).catch(error => {
+  console.log("ERROR", error);
+});
+}
+
+$("#quoteForm").on("submit", function(event) {
+  event.preventDefault();
+  const data = $(this).serialize();
+  createQuote(data);
+});
+```
+
+We have a form that has a `quote` input. When the form is submitted, a POST request is made to the server that contains the quote data.
+
+### Server
+
+```php
+// 1
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+  $quote = $_POST["quote"]; // 2
+
+  // 3
+  $file = fopen("quote.txt", "w");
+  fwrite($file, $quote);
+  fclose($file);
+
+  // 4
+  header("Content-type: application/json");
+  echo json_encode(["message" => "Successfully added quote"]);
+
+} else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+  ...
+```
+
+1.  Check if the request was a `POST` request.
+2.  The server receives the quote data in the `$_POST` superglobal.
+3.  A new text file is created with the quoted text inside of it. In this example there is no database, so a text file works for demonstration purposes.
+4.  A success message is sent back to the client. A response must always be sent at the end of an HTTP request.
+
+#### Note:
+
+  
+We are passing `"quote"` to the `$_POST` superglobal because the name of the input is `quote` `<input type="text" name="quote">`. If we changed the name of the input to something else, like pancakes,`<input type="text" name="pancakes">`, then we would also have to use that on the server `$_POST["pancakes"]`. Essentially, the server will access the form value using it’s `name`.  
+
+## Summary
+
+Client-side apps will make GET and POST requests to a server to get and manipulate data. Using PHP, we can create scripts that respond to these requests appropriately.
+
+Full Code Example: [https://gist.github.com/meech-ward/f72d101c400692da703fef920355f149](https://gist.github.com/meech-ward/f72d101c400692da703fef920355f149)

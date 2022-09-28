@@ -1,0 +1,58 @@
+---
+id: 40fbc30e-2531-45b5-a366-7c1558da474e
+wp_id: 344
+title: 'Installing Node.js on Any Raspberry Pi'
+date: '2019-09-10T04:49:47'
+slug: 'installing-node-js-on-any-raspberry-pi'
+image: 'installing-node-js-on-any-raspberry-pi.png'
+status: 'published'
+description: 'JavaScript is one of the most simple yet powerful languages that we can use make apps for pretty much anything. This includes apps for the raspberry pi. In this tutorial, we will learn how to install NodeJs on any raspberry pi. For those of you that would prefer a video, here’s one that I prepared \[…\]'
+tags: ['IoT', 'javascript', 'node js', 'raspberry pi']
+---
+
+JavaScript is one of the most simple yet powerful languages that we can use make apps for pretty much anything. This includes apps for the raspberry pi.
+
+In this tutorial, we will learn how to install NodeJs on any raspberry pi.
+
+For those of you that would prefer a video, here’s one that I prepared earlier: [https://www.youtube.com/watch?v=oFdlRcRl5aQ](https://www.youtube.com/watch?v=oFdlRcRl5aQ)
+
+## Node JS
+
+Node js is a javascript runtime environment that allows us to run javascript directly on a computer, without a browser. By installing node on the raspberry pi, we will be able to control everything using JavaScript.
+
+Different versions of the raspberry pi sometimes require different versions of node. So to make things simple, we’re just going to use a script that will handle all of the complexities for us. The script and the details about it can be found at https://github.com/meech-ward/NodeJs-Raspberry-Pi.
+
+## Don’t use nvm
+
+A quick aside for anyone wondering why we’re not using nvm here. NVM doesn’t work well with `sudo`, and it helps to be able to run a script on the raspberry pi with `sudo`. You can still use nvm with sudo but it usually involves something weird like `sudo $(which node) script.js`, and deamon services are awkward. It’s better just to install it without nvm.
+
+## Open Terminal
+
+Before installing node, you need to have your raspberry pi setup and access to the pi’s terminal. If you need help getting setup, check out my getting started videos: https://sammeechward.com/raspberry-pi-for-developers-getting-started/
+
+## Install Node
+
+The following code comes straight from https://github.com/meech-ward/NodeJs-Raspberry-Pi
+
+Copy the following line of code and paste it into your terminal:
+
+```shell
+wget -O - https://raw.githubusercontent.com/meech-ward/NodeJs-Raspberry-Pi/master/Install-Node.sh | sudo bash
+```
+
+Hit enter to install node. This should only take a moment.
+
+That’s it, node js should be installed and ready to go.
+
+We can test this out by typing in `node` and pressing enter. This will put us in the node repl where we can start typing javascript commands, like
+
+```js
+var greeting = "Hello Pi";
+console.log(greeting);
+```
+
+Press control + d to get out of there.
+
+## Summary
+
+The raspberry pi now has node installed which means that we can start writing javascript and executing it directly on the pi. To start controlling the gpio pins with JavaScript, check out the [onoff](https://www.npmjs.com/package/onoff) library. For more help getting setup with the raspberry pi check out [my videos on the subject](https://sammeechward.com/raspberry-pi-for-developers-getting-started/).

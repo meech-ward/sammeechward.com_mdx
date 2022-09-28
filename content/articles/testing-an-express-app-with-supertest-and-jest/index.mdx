@@ -1,0 +1,299 @@
+---
+id: a5796370-7a47-4dd2-8f91-af0e746e464c
+wp_id: 687
+title: 'Testing an Express App With Supertest and Jest'
+date: '2021-04-01T08:49:05'
+slug: 'testing-an-express-app-with-supertest-and-jest'
+image: 'testing-an-express-app-with-supertest-and-jest.png'
+status: 'published'
+description: 'In this article, we’re going to look at how to use TDD to test an express API using the supertest and jest frameworks. Jest is a javascript test runner for running automated tests, and supertest provides a high-level abstraction for testing HTTP. The app that we will be testing will will contain a single endpoint \[…\]'
+tags: ['express', 'jest', 'node js', 'tdd']
+---
+
+In this article, we’re going to look at how to use TDD to test an express API using the supertest and jest frameworks.
+
+Jest is a javascript test runner for running automated tests, and supertest provides a high-level abstraction for testing HTTP.
+
+The app that we will be testing will will contain a single endpoint to POST a new user given a username and password.
+
+## Express Apps
+
+A normal express implementation might look something like this:
+
+```js
+import express from 'express'
+
+const app = express()
+
+app.get('/test', (req, res) => {
+  res.send("🤗")
+})
+
+app.listen(8080, () => console.log("listening on port 8080"))
+```
+
+Where we create a new http server from the express function and bind it to a port to listen for HTTP requests. When we write tests for the server using supertest, we can actually let supertest take care of the port binding which makes the tests much cleaner and easier to write. In order to do this, we won’t call `app.listen` here. Instead we should remove the app.listen line and just export app from this file.
+
+```js
+export default app
+```
+
+Then in our test file, we can import app and use supertest to test the api. More in that in a moment.
+
+## App Setup
+
+The setup for this app will contain the following three files:
+
+*   `app.js`: Contains the express code to define and implement all of the HTTP routes.
+*   `app.test.js`: Imports `app.js` and tests all of the endpoints.
+*   `server.js`: Imports `app.js` and binds it to port 8080.
+
+`server.js` will act as the entry point of the entire back end application that we can run with `node server.js`, and `app.js` only contains express specific code. We’ll see this separation come in handy even more in future articles.
+
+**app.js**
+
+```js
+import express from 'express'
+
+const app = express()
+
+app.post('/users', (req, res) => {
+
+})
+
+export default app
+```
+
+**server.js**
+
+```js
+import app from './app.js'
+
+app.listen(8080, () => "Listening on port 8080")
+```
+
+**test.js**
+
+```js
+import request from 'supertest'
+import app from 'app.js'
+```
+
+## What Are We Testing?
+
+So in the test file, we are going to test that a POST request to `/users` works correctly. What does that mean? What exactly are we going to test?
+
+That’s a good question, let’s plan this out in the `app.test.js` file.
+
+```js
+import request from 'supertest'
+import app from 'app.js'
+
+describe("POST /users", () => {
+
+  describe("when passed a username and password", () => {
+  // should save the username and password in the database
+  // should respond with a json object that contains the id from the database. (probably jwt in the real world)
+  // should respond with a 200 status code
+  // should specify json as the content type in the http header.
+  })
+
+  describe("when the username or password is missing", () => {
+  // should return a 400 status code to show there was a user error.
+  // should return a json object that contains an error message.
+  // should specify json as the content type in the http header.
+  })
+})
+```
+
+We’re using describe blocks here to better organize the code. The top block is the “happy” path, when things go well, and the bottom block is the sad path. These are all of the things that we’re going to test.
+
+*   when passed a username and password
+    *   should save the username and password in the database
+    *   should respond with a json object that contains the id from the database. (probably jwt in the real world)
+    *   should respond with a 200 status code
+    *   should specify json as the content type in the http header.
+*   when the username or password is missing
+    *   should return a 400 status code to show there was a user error.
+    *   should return a json object that contains an error message.
+    *   should specify json as the content type in the http header.
+
+There are still things missing here:
+
+*   The username and password should be validated
+*   The password should be hashed
+*   What do we do if the username already exists in the database?
+*   What happens if the connection to the database fails?
+
+But this is sufficient for this introductory article.
+
+## Writing Tests
+
+Time to start writing tests. For now we’re going to ignore any test that interacts with the database and that will get covered in another article. We’re just going to focus on the things that are directly related to the HTTP requests.
+
+```js
+import request from "supertest"
+import app from "./app.js"
+
+describe("POST /users", () => {
+
+  describe("when passed a username and password", () => {
+    test("should respond with a 200 status code", async () => {
+      const response = await request(app).post("/users").send({ 
+        username: "username", 
+        password: "password" 
+      })
+      expect(response.statusCode).toBe(200)
+    })
+  })
+
+})
+```
+
+When we pass the express `app` to the `request()` function, supertest will bind the app to some port and listen for http requests. It abstracts away all of the http request code so we can just call `.post` or `.get` or whatever to make the http request to our server. When it’s a post request, we can use `.send` to add post body data and supertest will take of converting it to JSON and setting the request content type.
+
+The response object contains all of the details about the HTTP response from the server, so we can use this to test the server is working correctly. In this test, we just want to make sure the status code is 200.
+
+This should fail with a `Timeout` error because server isn’t responding to the client. Let’s make this pass by changing the `post('/users')` endpoint
+
+```js
+app.post('/users', async (req, res) => {
+
+  res.sendStatus(200)
+})
+```
+
+Re run the test and this will be passing.
+
+Ok, on to the next test.
+
+### Response has a JSON content type
+
+When this endpoint is fully setup, it should return some json data back to the client. It’s very important that the server tells the client that the content type is JSON data. In general, we should just be doing this as a good practice, but some libraries like axios rely on this information to convert response data to a JavaScript object. So it’s worth testing this has been set correctly by the server.
+
+```js
+test("should specify json as the content type in the http header", () => {
+  const response = await request(app).post("/users").send({ 
+    username: "username", 
+    password: "password" 
+  })
+  expect(response.headers['content-type']).toEqual(expect.stringContaining('json'))
+})
+```
+
+We’re making the same request as last time, but we’re using some jest’s `stringContaining` function to make sure the content-type contains ‘json’
+
+This will now fail and the easiest way to make this pass is to change the response code to this:
+
+```js
+res.send({})
+```
+
+If we pass a javascript object to `res.send`, express will strinigfy the object and set the content-type to application/json.
+
+> Side Note:  
+> Remember that with TDD it’s common to write our code this way, where we’re making tests pass with the simplest solution. This obviously isn’t what our production code is going to look like in the end, but the test is still valid. An incomplete implementation is just a sign that we don’t have enough tests yet. When we have a sufficient number of tests, then the code will actually work correctly. We only need to add more tests and make them pass, we won’t change the existing tests, they pass now with a overly simplistic implementation, but they must keep passing even when we have a more complex implementation later.
+
+For more on TDD: https://youtu.be/89Pl2Uok8xc
+
+### Contains UserId
+
+Next test, we want to make sure the response object contains a userID
+
+```js
+test("should contain a userId in the response body", () => {
+  const response = await request(app).post("/users").send({ 
+    username: "username", 
+    password: "password" 
+  })
+  expect(response.body.userId).toBeDefined()
+})
+```
+
+We’re not checking the content here, because we would need to think about the database for that. So instead, we’re just going to make sure it’s defined for now.
+
+This will fail, so we can make it pass by changing the api:
+
+```js
+app.send({userId: 0})
+```
+
+And now the test passes.
+
+## No Username
+
+That’s it for the happy path without implementing a database. Let’s move onto the sad path. When a username or password is missing, the server should respond with a 400 status code:
+
+```js
+describe("when the username or password is missing", () => {
+  test("should return a 400 status code", () => {
+    const response = await request(app).post("/users").send({ username: "username" })
+    expect(response.statusCode).toBe(400)
+  })
+})
+```
+
+This fails because the server is still responding with a 200. But we can make this pass with a simple check for a username:
+
+```js
+app.use(express.json())
+app.post('/users', async (req, res) => {
+  const { username, password } = req.body
+  if (!username) {
+    res.send(400)
+    return
+  }
+
+  res.send({userId: 0})
+})
+```
+
+Now it’s passing, let’s do the same for a password. Instead of making a new test for this, let’s just throw this into the same test since it’s really testing the same thing.
+
+```js
+test("should return a 400 status code", () => {
+  const bodies = [
+    { username: "username" },
+    { password: "password" }
+  ]
+  for (const body of bodies) {
+    const response = await request(app).post("/users").send(body)
+    expect(response.statusCode).toBe(400)
+  }
+})
+```
+
+Instead of just duplicating the same code again, we can put the data in an array and use a for loop to execute the actual test. This makes it easier to add more username and password cases in the future.
+
+This should fail, but we can make it pass:
+
+```js
+app.use(express.json())
+app.post('/users', async (req, res) => {
+  const { username, password } = req.body
+  if (!username || !password) {
+    res.send(400)
+    return
+  }
+
+  res.send({userId: 0})
+})
+```
+
+Now that’s passing, we want to check what happens when neither username nor password are provided:
+
+```js
+const bodies = [
+  { username: "username" },
+  { password: "password" },
+  {}
+]
+```
+
+And this should already be passing, but it’s good to test.
+
+## Database
+
+Ok so this is great that we’re testing some of the basic HTTP stuff, but we really need to test that the main thing works. That the data actually gets stored in the database.
+
+Before we get into that, let’s talk about dependency injection.

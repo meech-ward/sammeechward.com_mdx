@@ -1,0 +1,76 @@
+---
+id: a4869432-4e3b-4867-a004-14ff81cf6cc4
+wp_id: 336
+title: 'Swift Array Transformation Examples'
+date: '2019-08-13T21:51:43'
+slug: 'swift-array-methods'
+image: 'swift-array-methods.png'
+status: 'published'
+description: 'Just some examples of some of the built-in methods you can call on a swift array. Let’s start with some data. A sentence that is split into an array of words. forEach Execute a closure once for each item in an array. map Create a new array based on an existing array. filter Create a \[…\]'
+tags: ['programming', 'swift']
+---
+
+Just some examples of some of the built-in methods you can call on a swift array.
+
+Let’s start with some data. A sentence that is split into an array of words.
+
+```swift
+let quote = "What I cannot create, I do not understand."
+let words = quote.split(separator: " ")
+// ["What", "I", "cannot", "create,", "I", "do", "not", "understand."]
+```
+
+#### forEach
+
+Execute a closure once for each item in an array.
+
+```swift
+let wordLengths = words.forEach { word in
+  print(word)
+}
+```
+
+#### map
+
+Create a new array based on an existing array.
+
+```swift
+let wordLengths = words.map { word in
+  return word.count
+}
+// [4, 1, 6, 7, 1, 2, 3, 11]
+```
+
+#### filter
+
+Create a new array that is a subset of the items from an existing array.
+
+```swift
+let largeWords = words.filter { word in
+  return word.count > 3
+}
+// ["What", "cannot", "create,", "understand."]
+```
+
+#### sorted
+
+Create a new array that is the sorted version of an existing array.
+
+```swift
+let largestToSmallest = words.sorted { word1, word2 in
+  return word1.count > word2.count
+}
+// ["understand.", "create,", "cannot", "What", "not", "do", "I", "I"]
+```
+
+#### reduce
+
+Create a new single value based on the values inside an array.
+
+```swift
+let totalLetters = words.reduce(0) { result, word in
+  return result + word.count
+}
+// 35
+// Won't include any whitespace characters
+```

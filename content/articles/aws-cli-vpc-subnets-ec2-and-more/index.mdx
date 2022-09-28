@@ -1,0 +1,406 @@
+---
+id: dc3928e7-9446-40e0-b4d9-2447aae2ac5c
+wp_id: 596
+title: 'AWS CLI | VPC, Subnets, EC2, and more'
+date: '2020-11-28T19:47:00'
+slug: 'aws-cli-vpc-subnets-ec2-and-more'
+image: 'aws-cli-vpc-subnets-ec2-and-more.png'
+status: 'published'
+description: 'Let’s take a look at how to use the aws cli to create a VPC, Subnets, EC2 instances, and more.'
+tags: ['aws', 'ec2', 'vpc']
+---
+
+Let’s take a look at how to use the aws cli to create a VPC, Subnets, EC2 instances, and more.
+
+In this article, we will take a look at how to do the following using the aws cli:
+
+*   Create a VPC and subnets
+*   Create an internet gateway and route table to make the subnet public
+*   Create security groups
+*   Create an ec2 instance on a public subnet and install nginx
+
+Skip to the bottom of the article if you just want the script.
+
+## AWS CLI
+
+The AWS Command Line Interface (CLI) lets us manage all of our AWS services from the command line, without having to use the web console. So instead of clicking a bunch of buttons to create a new EC2 instance, you could just run a command like this:
+
+```shell
+aws ec2 run-instances  --region $region --image-id "ami-0d4504aaac331dc68" --count 1 --instance-type t2.micro --associate-public-ip-address
+```
+
+In this article, we will take a look at how to setup an S3 bucket to host a static website using the aws cli. Skip to the bottom of the article if you just want the script.
+
+## Setup
+
+If you haven’t setup the AWS CLI already, you can do so using this link: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
+
+The reference for all of the commands used here is available at  
+https://docs.aws.amazon.com/cli/latest/reference/
+
+## VPC and EC2 instance
+
+When setting up a new VPC to deploy EC2 instances, we usually follow these basic steps.
+
+1.  Create a vpc
+2.  Create subnets for different parts of the infrastructure
+3.  Create a route table for a public subnet
+4.  Attach an internet gateway to make a public subnet
+5.  Create security groups to allow specific traffic
+6.  Create ec2 instances on the subnets
+
+### 1\. Create a vpc
+
+[aws ec2 create-vpc](https://docs.aws.amazon.com/cli/latest/reference/ec2/create-vpc.html)
+
+```shell
+aws ec2 create-vpc --region us-east-1 --cidr-block "10.0.0.0/16" 
+```
+
+This will setup a new VPC with the cidr block `10.0.0.0/16` and return some JSON. You will need to find the `VpcId` from this JSON and save it for the next steps.
+
+```json
+{
+    "Vpc": {
+        "VpcId": "vpc-2f09a348", 
+        ...
+    }
+}
+```
+
+### 2\. Create subnets for different parts of the infrastructure
+
+[aws ec2 create-subnet](https://docs.aws.amazon.com/cli/latest/reference/ec2/create-subnet.html)
+
+```shell
+aws ec2 create-subnet --region us-east-1 --cidr-block "10.0.1.0/24" --availability-zone us-east-1a --vpc-id "..."
+aws ec2 create-subnet --region us-east-1 --cidr-block "10.0.2.0/24" --availability-zone us-east-1b --vpc-id "..."
+```
+
+This will create two new subnets in az 1a an 1b with the cidr blocks `10.0.1.0/24` and `10.0.w.0/24`. You will need to use the VpcId from the previous step.
+
+Find the `SubnetId` from the json returned and save them for the next steps. We will use the first subnet in us-east-1a as the public subnet, so we really only need the id of that subnet.
+
+```json
+{
+  "Subnet": {
+      ...
+      "SubnetId": "subnet-079a1cf",
+      ...
+  }
+}
+```
+
+### 3\. Create a route table for a public subnet
+
+[aws ec2 create-route-table](https://docs.aws.amazon.com/cli/latest/reference/ec2/create-route-table.html)
+
+```shell
+aws ec2 create-route-table --region us-east-1  --vpc-id "..."
+```
+
+This will create a new route table. You will need to use the VpcId from the first step.
+
+Find the `RouteTableId` from the json returned and save it for the next steps.
+
+```json
+{
+    "RouteTable": {
+        ... 
+        "RouteTableId": "rtb-c1c8faa6", 
+        ...
+    }
+}
+```
+
+[aws ec2 associate-route-table](https://docs.aws.amazon.com/cli/latest/reference/ec2/associate-route-table.html)
+
+```shell
+aws ec2 associate-route-table --region us-east-1 --route-table-id "..." --subnet-id "..."
+```
+
+This will associate the route table with a VPC. You will need to use the VpcId from the first step and the first subnet id from earlier.
+
+### 4\. Attach an internet gateway to make a public subnet
+
+[aws ec2 create-internet-gateway](https://docs.aws.amazon.com/cli/latest/reference/ec2/create-internet-gateway.html)
+
+```shell
+aws ec2 create-internet-gateway --region us-east-1 
+```
+
+This creates an internet gateway and does nothing else. We will still need to attach it to the VPC and route internet traffic to it.
+
+Find the `InternetGatewayId` from the returned json and save it for the next steps.
+
+```json
+{
+  "InternetGateway": {
+      ...
+      "InternetGatewayId": "igw-07d58174",
+      ...
+  }
+}
+```
+
+[aws ec2 attach-internet-gateway](https://docs.aws.amazon.com/cli/latest/reference/ec2/attach-internet-gateway.html)
+
+```shell
+aws ec2 attach-internet-gateway --region us-east-1 --internet-gateway-id "..." --vpc-id "..."
+```
+
+This will attach it to the vpc.
+
+[aws ec2 create-route](https://docs.aws.amazon.com/cli/latest/reference/ec2/create-route.html)
+
+```shell
+aws ec2 create-route --region us-east-1 --route-table-id "..." --destination-cidr-block "0.0.0.0/0" --gateway-id "..." 
+```
+
+This will route internet traffic through the gateway.
+
+At this point the VPC is setup in a good state. We can setup an EC2 instance on the public subnet and install a web server.
+
+### 5\. Create security groups to allow specific traffic
+
+Before we setup a new EC2 instance on the public subnet, we need to create a security group that allows internet traffic on port 80 and 22.
+
+[aws ec2 create-security-group](https://docs.aws.amazon.com/cli/latest/reference/ec2/create-security-group.html)
+
+```shell
+aws ec2 create-security-group --region us-east-1 --description "Allow http access over the internet" --group-name "public-sg" --vpc-id "..."
+```
+
+This will create a security group, and nothing else. Save the `GroupId` from the json.
+
+```json
+{
+    "GroupId": "sg-e1fb8c9a"
+}
+```
+
+[aws ec2 authorize-security-group-ingress](https://docs.aws.amazon.com/cli/latest/reference/ec2/authorize-security-group-ingress.html)
+
+```shell
+aws ec2 authorize-security-group-ingress --region us-east-1 --group-id "..." --protocol "tcp" --port "80" --cidr "0.0.0.0/0"
+aws ec2 authorize-security-group-ingress --region us-east-1 --group-id "..." --protocol "tcp" --port "22" --cidr "0.0.0.0/0"
+```
+
+This will allow all network traffic on port 80 and 22 (HTTP and SSH) for the security group we just created.
+
+### 6\. Create ec2 instances on the subnets
+
+Time to deploy an EC2 instance. If you already have an ssh keypair setup, you can just use that and skip the next step. If you haven’t, or if you want to setup a new ssh key for this instance, run the following command.
+
+[aws ec2 create-key-pair](https://docs.aws.amazon.com/cli/latest/reference/ec2/create-key-pair.html)
+
+```shell
+aws ec2 create-key-pair --key-name MyKeyPair --query 'KeyMaterial' --output text > ~/.ssh/MyKeyPair.pem
+chmod 400  ~/.ssh/MyKeyPair.pem
+```
+
+This will generate a new keypair and store the private key on your machine at `~/.ssh/MyKeyPair.pem`
+
+[aws ec2 run-instances](https://docs.aws.amazon.com/cli/latest/reference/ec2/run-instances.html)
+
+```shell
+# ami-04d29b6f966df1537 = Amazon Linux 2
+aws ec2 run-instances  \
+--region us-east-1 \
+--image-id "ami-04d29b6f966df1537" \
+--count 1 \
+--instance-type t2.micro  \
+--subnet-id "..." \
+--security-group-ids "..." \
+--associate-public-ip-address \
+--key-name "..." \
+--user-data = "
+#!/bin/bash -ex
+
+amazon-linux-extras install nginx1
+echo \"<h1>$(curl https://api.kanye.rest/?format=text)</h1>\" >  /usr/share/nginx/html/index.html 
+systemctl enable nginx
+systemctl start nginx
+"
+```
+
+This sets up a new Amazon Linux 2 ec2 instance with nginx installed. The default home page will display a random Kanye West quote.
+
+You’ll need the ids of the public subnet and security group, and the name of the keypair. Make sure you grab the `InstanceId` from the returned JSON.
+
+```json
+{
+    "Instances": [
+        {
+            ...
+            "InstanceId": "i-1231231230abcdef0",
+            ...
+        }
+    ]
+}
+```
+
+The ec2 instance should be setup now. We will need to describe the instance to get all of the details including the public ip address.
+
+[aws ec2 describe-instances](https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html)
+
+```shell
+aws ec2 describe-instances --region us-east-1 --instance-ids "..."
+```
+
+Find the public ip address in the returned JSON `.Reservations[0].Instances[0].PublicIpAddress`. Wait a minute or two and you should be able to ssh on to the instance or navigate to the ip address in your web browser to see the Kanye West website.
+
+```shell
+ssh ec2-user@public-ip -i "~/.ssh/MyKeyPair.pem"
+```
+
+## Script
+
+Here’s what everything looks like as a single bash script. If you run this script, it will perform all of those steps in one go.
+
+For this to work, you’ll need to have `jq` installed. This will parse the JSON responses so each subsequent step can happen automatically.
+
+```shell
+#!/bin/bash 
+
+vpc_cidr="10.0.0.0/16"
+subnet_cidr="10.0.1.0/24"
+region="us-east-1"
+az="us-east-1a"
+user_data="$(cat <<-EOF
+#!/bin/bash -ex
+
+amazon-linux-extras install nginx1
+echo "<h1>$(curl https://api.kanye.rest/?format=text)</h1>" >  /usr/share/nginx/html/index.html 
+systemctl enable nginx
+systemctl start nginx
+EOF
+)"
+
+# Create a new VPC
+vpc_id=$(
+  aws ec2 create-vpc \
+  --region $region \
+  --cidr-block $vpc_cidr \
+  | jq .Vpc.VpcId | tr -d '"'
+)
+echo "VPC ID $vpc_id"
+
+# Create a new subnet in that VPC
+subnet_id=$(
+  aws ec2 create-subnet \
+  --region $region \
+  --cidr-block $subnet_cidr \
+  --availability-zone $az \
+  --vpc-id $vpc_id \
+  | jq .Subnet.SubnetId | tr -d '"'
+)
+echo "Subnet ID $subnet_id"
+
+## Setup a Route Table for that subnet
+route_table_id=$(
+  aws ec2 create-route-table \
+  --region $region  \
+  --vpc-id $vpc_id \
+  | jq .RouteTable.RouteTableId | tr -d '"'
+)
+echo "Route Table ID $route_table_id"
+
+aws ec2 associate-route-table \
+--region $region  \
+--route-table-id $route_table_id \
+--subnet-id $subnet_id
+
+# Create an internet gateway for that Route Table
+ig_id=$(
+  aws ec2 create-internet-gateway \
+  --region $region \
+  | jq .InternetGateway.InternetGatewayId | tr -d '"'
+)
+echo "Internet Gateway ID $ig_id"
+
+aws ec2 attach-internet-gateway \
+--region $region \
+--internet-gateway-id $ig_id \
+--vpc-id $vpc_id
+
+aws ec2 create-route \
+--region $region \
+--route-table-id $route_table_id \
+--destination-cidr-block "0.0.0.0/0" \
+--gateway-id $ig_id
+
+# Create a security group that allows internet traffic on port 80 and 22
+sg_id=$(
+  aws ec2 create-security-group \
+  --region $region \
+  --description "Allow http access over the internet" \
+  --group-name "public-sg" \
+  --vpc-id $vpc_id \
+  | jq .GroupId | tr -d '"'
+)
+echo "Security Group ID $sg_id"
+
+aws ec2 authorize-security-group-ingress \
+--region $region \
+--group-id $sg_id \
+--protocol "tcp" \
+--port "80" \
+--cidr "0.0.0.0/0"
+
+aws ec2 authorize-security-group-ingress \
+--region $region \
+--group-id $sg_id \
+--protocol "tcp" \
+--port "22" \
+--cidr "0.0.0.0/0"
+
+# Create a new EC2 instance on that subnet with that security group
+# ami-04d29b6f966df1537 = Amazon Linux 2
+instance_id=$(
+  aws ec2 run-instances \
+  --region $region \
+  --image-id "ami-04d29b6f966df1537" \
+  --count 1 \
+  --instance-type t2.micro \
+  --subnet-id $subnet_id \
+  --security-group-ids $sg_id \
+  --associate-public-ip-address \
+  --key-name sam-bcit \
+  --user-data "$user_data" \
+  | jq ".Instances[0].InstanceId" | tr -d '"'
+)
+echo "Instance ID $instance_id"
+
+public_ip=$(
+  aws ec2 describe-instances \
+  --region $region \
+  --instance-ids $instance_id \
+  | jq ".Reservations[0].Instances[0].PublicIpAddress" | tr -d '"'
+)
+
+echo "
+
+Success!!
+
+vpc_cidr: $vpc_cidr
+subnet_cidr: $subnet_cidr
+region: $region
+az: $az
+user_data: $user_data
+vpc_id: $vpc_id
+subnet_id: $subnet_id
+route_table_id: $route_table_id
+ig_id: $ig_id
+sg_id: $sg_id
+instance_id: $instance_id
+public_ip: $public_ip
+vpc_cidr: $vpc_cidr
+subnet_cidr: $subnet_cidr
+region: $region
+az: $az
+
+The public ip address is:
+$public_ip
+"
+```

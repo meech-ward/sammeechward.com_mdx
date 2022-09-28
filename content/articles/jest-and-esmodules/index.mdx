@@ -1,0 +1,44 @@
+---
+id: 319723af-aabd-4b42-b8f5-6406b127245a
+wp_id: 705
+title: 'Jest and ESModules'
+date: '2021-04-01T20:23:48'
+slug: 'jest-and-esmodules'
+image: 'jest-and-esmodules.png'
+status: 'published'
+description: 'If you are already using ESModules in your node application, natively without babel, then this is how you can setup your jest tests to use ESModules in the same way. The official docs for this can be found here: https://jestjs.io/docs/ecmascript-modules Note: For this to work you will need to be using node version 14 or \[…\]'
+tags: []
+---
+
+If you are already using ESModules in your node application, natively without babel, then this is how you can setup your jest tests to use ESModules in the same way. The official docs for this can be found here: https://jestjs.io/docs/ecmascript-modules
+
+Note: For this to work you will need to be using node version 14 or higher.
+
+In your package.json file, you need to do the following things:
+
+1.  Set the type to module
+2.  Disable jest code transforms by passing “transform: {}”
+3.  Run the test with the following env var: `NODE_OPTIONS=--experimental-vm-modules`
+
+**Example package.json:**
+
+```json
+
+  "type": "module",
+  "jest": {
+    "transform": {}
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
+  },
+  "scripts": {
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
+  },
+
+```
+
+Then in your test files, if you need to access the global `jest` object, if you’re using jest mock functions for example, you have to import it like this:
+
+```js
+import { jest } from '@jest/globals';
+```

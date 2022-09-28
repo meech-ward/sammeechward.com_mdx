@@ -1,0 +1,190 @@
+---
+id: 21da53bf-406e-4a3e-9028-beb107d33d1a
+wp_id: 502
+title: 'Concurrency Control'
+date: '2020-03-30T05:05:35'
+slug: 'concurrency-control'
+image: 'concurrency-control.png'
+status: 'published'
+description: 'In this post, we will take a high-level look at how computers execute tasks in parallel and some of the solutions we have for concurrency control.'
+tags: ['concurrency', 'multithreading', 'mvcc', 'parallelism']
+---
+
+Humans like to do multiple things at the same time, it makes us feel more productive and less bored. We go on Instagram while we’re on the toilet, listen to music while working out, and contemplate life decisions while binge-watching Love is Blind.
+
+My morning routine usually goes a little something like this:
+
+*   Get out of bed.
+*   Start a pot of coffee.
+*   Brush teeth.
+*   Go pee.
+*   Shower.
+*   …
+
+This is the order I start things, but not the order that I finish them. The coffee takes about 5 minutes and I don’t just stand there waiting for it to finish. I instead go and brush my teeth while the coffee machine does its thing. Then to really maximize my time, I pee in the shower while brushing my teeth, while my coffee is being made. That’s four things happening at the same time.
+
+All of these tasks, except for the first, can be executed **concurrently**. They can be executed out-of-order or in a partial order, without affecting the final outcome. So I could take half a shower, then turn on the coffee pot, then start brushing my teeth, then finish my shower and go on like this until everything on the list was complete and the final outcome would still be the same.
+
+Since these tasks can be run **concurrently**, I choose to execute some of them at the exact same time. This is executing the tasks in **parallel**.
+
+Not to brag, but I’m pretty good at executing these **concurrent** tasks in **parallel**. Computers, on the other hand, might not be so great. If I told a computer to do my morning routine, I might end up with shower in my bed and pee in my coffee.
+
+To avoid situations like this, applications need a good plan for **concurrency control**. A way of managing simultaneous operations on data without the operations interfering with each other.
+
+In this post, we will take a high-level look at how computers execute tasks in parallel and some of the solutions we have for concurrency control.
+
+### Catstagram
+
+For the examples in this post, we will use a completely fictional app called Catstagram, an app where cats can share images about themselves.
+
+Let’s say we’ve built Catstagram and one of our cats, let’s call her Kitten, posts this image and caption:
+
+![](https://sammeechward.com/wp-content/uploads/2020/03/freelance.png)
+
+If human is on computer, sit on keyboard.
+
+The app is responsible for storing the image and the caption. For this article, we’re going to focus on the caption “If human is on computer, sit on keyboard.” Every time someone loads this post, the app will read the caption into memory to display the user. If Kitten wants to update that caption, the app will have to update the data that is being stored.
+
+### Serial Read
+
+Let’s say there are 8 cats that are trying to view Kitten’s post. If the app only processes one thing at a time, then each read will be processed one after the other. Click the run button below to see a simulation of this:
+
+Initial Value 
+
+Final Value 
+
+Run
+
+#### Data:
+
+If human is on laptop sit on the keyboard.
+
+Processor
+
+#### Read:
+
+### Parallel Read
+
+But these reads can be run concurrently and the hardware is capable of running them at the exact same time (in parallel). So multiple reads could be processed at the same time.
+
+In this example, the app can process up to 5 things in parallel.
+
+Initial Value 
+
+Final Value 
+
+Run
+
+#### Data:
+
+If human is on laptop sit on the keyboard.
+
+Processor
+
+#### Read:
+
+As you can see, this will significantly speed up our app so we can run many more reads in a smaller amount of time. If we need to build an app that scales well, it’s going to need to process multiple things at the same time.
+
+### Parallel Write
+
+Now, what happens if kitten updates her post? What if kitten changes the caption to “My slave human didn’t give me any food so I pooped on the floor.” while other cats are trying to view the post?
+
+Initial Value 
+
+Final Value 
+
+Run
+
+#### Data:
+
+If human is on laptop sit on the keyboard.
+
+Processor
+
+#### Read:
+
+Everything is fine when we have multiple reads happening at the same time, but things get weird when we start writing in parallel. Before the caption is changed, our reads are safe. After the caption is changed, our reads are safe. But while the caption is being changed, our reads look like garbage. This is a big issue!
+
+Scroll through the list of the last results to see what happened.
+
+### Serial Write
+
+So what can we do? Well, we could go back to running everything on after the other:
+
+Initial Value 
+
+Final Value 
+
+Run
+
+#### Data:
+
+If human is on laptop sit on the keyboard.
+
+Processor
+
+#### Read:
+
+But now everything is really slow again. We’re not utilizing the full power of the app, just because there’s one little write involved.
+
+We need some sort of plan for **concurrency control**. We need a way of managing simultaneous operations on the data without the operations interfering with each other.
+
+### Locked Write
+
+The reads can run concurrently, but the writes can’t, so what if we run all of the reads in parallel, and make sure that a write happens in isolation?
+
+Initial Value 
+
+Final Value 
+
+Run
+
+#### Data:
+
+If human is on laptop sit on the keyboard.
+
+Processor
+
+#### Read:
+
+This is referred to as locking. When we lock the write like this, nothing can read or write that piece of data at the same time.
+
+But this is still limiting our performance because every read is always waiting for the write. This app is going to be huge and we can have users waiting around because Kitten is updating her caption. But what other option do we have?
+
+We want the speed and performance of being able to run everything in parallel, but we need to make sure that we never read garbage as we did in the Parallel Write section.
+
+### M**ulti-Version Concurrency Control** (MVCC)
+
+What if we keep track of multiple versions of Kitten’s captions? So as Kitten is updating the caption to a new value, all other cats can only see the old value. Then when the write is completely done, everyone sees the new value.
+
+Initial Value 
+
+Final Value 
+
+Run
+
+#### Data:
+
+If human is on laptop sit on the keyboard.
+
+Processor
+
+#### Read:
+
+If you scroll through the results, you will see that every time we read the data, we get an accurate piece of data. Up until the update is complete, we see the old data, then we see the new data. This is know as **Multi-Version Concurrency Control** and it’s what most relational database systems use.
+
+To avoid conflicts, the app will have to block multiple writes from happening at the same time. So if you have many write transactions, they will all happen one after the other:
+
+Initial Value 
+
+Final Value 
+
+Run
+
+#### Data:
+
+If human is on laptop sit on the keyboard.
+
+Processor
+
+#### Read:

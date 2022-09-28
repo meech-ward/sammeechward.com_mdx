@@ -1,0 +1,345 @@
+---
+id: c7d8fb1f-94e8-4be1-875c-61c41e721cfe
+wp_id: 671
+title: 'Terraform | VPC, Subnets, EC2, and more'
+date: '2021-03-28T20:20:50'
+slug: 'terraform-vpc-subnets-ec2-and-more'
+image: 'terraform-vpc-subnets-ec2-and-more.png'
+status: 'published'
+description: 'Let’s take a look at how to use the aws cli to create a VPC, Subnets, EC2 instances, and more.'
+tags: ['aws', 'ec2', 'terraform', 'vpc']
+---
+
+Let’s take a look at how to use Terraform with AWS to create a VPC, Subnets, EC2 instances, and more.
+
+Terraform is an open-source infrastructure as code software tool that let’s us configure our infrastructure using declarative configuration files.
+
+In this article, we will take a look at how to do the following using terraform:
+
+*   Create a VPC and subnets
+*   Create an internet gateway and route table to make the subnet public
+*   Create security groups
+*   Create an ec2 instance on a public subnet and install nginx
+
+Every block of code in this article needs to be added to a .tf file and run using terraform to setup the infrastructure. Skip to the bottom of the article if you just want the script.
+
+I won’t be going over the basic setup of terraform or the installation instructions, the purpose of this article is to give a real example of a .tf file that sets up some basic infrastructure. For a quick introduction and installation instructions, check out [HashiCorp Learn](https://learn.hashicorp.com/tutorials/terraform/infrastructure-as-code?in=terraform/aws-get-started)
+
+## Terraform and AWS
+
+Terraform can be used with many [providers](https://registry.terraform.io/providers/hashicorp/aws/latest/docs) like aws, azure, or google cloud. To use it with AWS, we first declare the aws provider with the region we’re using to setup our infrastructure.
+
+```r
+provider "aws" {
+  profile = "default"
+  region  = "us-east-1"
+}
+```
+
+## VPC and EC2 instance
+
+When setting up a new VPC to deploy EC2 instances, we usually follow these basic steps.
+
+1.  Create a vpc
+2.  Create subnets for different parts of the infrastructure
+3.  Attach an internet gateway to the VPC
+4.  Create a route table for a public subnet
+5.  Create security groups to allow specific traffic
+6.  Create ec2 instances on the subnets
+
+### 1\. Create a vpc
+
+[Resource: aws\_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc)
+
+```r
+resource "aws_vpc" "some_custom_vpc" {
+  cidr_block = "10.0.0.0/16"
+
+  tags = {
+    Name = "Some Custom VPC"
+  }
+}
+```
+
+This will setup a new VPC with the cidr block `10.0.0.0/16` and the name “Some Custom VPC”. We can reference the VPC locally in the tf file using `some_custom_vpc`.
+
+### 2\. Create subnets for different parts of the infrastructure
+
+[Resource: aws\_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet)
+
+```r
+resource "aws_subnet" "some_public_subnet" {
+  vpc_id            = aws_vpc.some_custom_vpc.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = "1a"
+
+  tags = {
+    Name = "Some Public Subnet"
+  }
+}
+
+resource "aws_subnet" "some_private_subnet" {
+  vpc_id            = aws_vpc.some_custom_vpc.id
+  cidr_block        = "10.0.2.0/24"
+  availability_zone = "1a"
+
+  tags = {
+    Name = "Some Private Subnet"
+  }
+}
+```
+
+This will create two new subnets in az 1a with the cidr blocks `10.0.1.0/24` and `10.0.2.0/24`. We need to use the VpcId from the previous step.
+
+### 3\. Attach an internet gateway to the VPC
+
+[Resource: aws\_internet\_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway)
+
+```r
+resource "aws_internet_gateway" "some_ig" {
+  vpc_id = aws_vpc.some_custom_vpc.id
+
+  tags = {
+    Name = "Some Internet Gateway"
+  }
+}
+```
+
+This creates an internet gateway and attaches it to the custom VPC. Now we need a route table to handle routing to one or more of the subnets.
+
+### 4\. Create a route table for a public subnet
+
+[Resource: aws\_route\_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table)
+
+```r
+resource "aws_route_table" "public_rt" {
+  vpc_id = aws_vpc.some_custom_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.some_ig.id
+  }
+
+  route {
+    ipv6_cidr_block = "::/0"
+    gateway_id      = aws_internet_gateway.some_ig.id
+  }
+
+  tags = {
+    Name = "Public Route Table"
+  }
+}
+```
+
+This will create a new route table on the custom vpc. We can also specify the routes to route internet traffic through the gateway. So the route table and internet gateway are setup on The VPC, now we just need to assiociate any public subnets with the route table.
+
+[Resource: aws\_route\_table\_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association)
+
+```r
+resource "aws_route_table_association" "public_1_rt_a" {
+  subnet_id      = aws_subnet.some_public_subnet.id
+  route_table_id = aws_route_table.public_rt.id
+}
+```
+
+Now `some_public_subnet` is accessible over the public internet.
+
+### 5\. Create security groups to allow specific traffic
+
+Before we setup a new EC2 instance on the public subnet, we need to create a security group that allows internet traffic on port 80 and 22. We’ll also allow outgoing traffic on all ports.
+
+[Resource: aws\_security\_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group)
+
+```r
+resource "aws_security_group" "web_sg" {
+  name   = "HTTP and SSH"
+  vpc_id = aws_vpc.some_custom_vpc.id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+```
+
+### 6\. Create ec2 instances on the subnets
+
+Time to deploy an EC2 instance. If you already have an ssh keypair setup, you can just use that and skip the next step. If you haven’t, or if you want to setup a new ssh key for this instance, run the following command using the aws cli.
+
+```shell
+aws ec2 create-key-pair --key-name MyKeyPair --query 'KeyMaterial' --output text > ~/.ssh/MyKeyPair.pem
+chmod 400  ~/.ssh/MyKeyPair.pem
+```
+
+This will generate a new keypair and store the private key on your machine at `~/.ssh/MyKeyPair.pem`
+
+[Resource: aws\_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#associate_public_ip_address)
+
+```r
+resource "aws_instance" "web_instance" {
+  ami           = "ami-0533f2ba8a1995cf9"
+  instance_type = "t2.micro"
+  key_name      = "MyKeyPair"
+
+  subnet_id                   = aws_subnet.some_public_subnet.id
+  vpc_security_group_ids      = [aws_security_group.web_sg.id]
+  associate_public_ip_address = true
+
+  user_data = <<-EOF
+  #!/bin/bash -ex
+
+  amazon-linux-extras install nginx1 -y
+  echo "<h1>$(curl https://api.kanye.rest/?format=text)</h1>" >  /usr/share/nginx/html/index.html 
+  systemctl enable nginx
+  systemctl start nginx
+  EOF
+
+  tags = {
+    "Name" : "Kanye"
+  }
+}
+```
+
+This sets up a new Amazon Linux 2 ec2 instance with nginx installed. The default home page will display a random Kanye West quote.
+
+## Script
+
+Here's what everything looks like as a single .tf file. Use the following commands to
+
+*   `terraform init`: Setup a new terraform project for this file.
+*   `terraform apply`: Setup the infrastructure as it’s defined in the .tf file.
+*   `terraform destroy`: Tear down everything that terraform created.
+*   `terraform state list`: Show everything that was created by terraform.
+*   `terraform state show aws_instance.web_instance`: Show the details about the ec2 instance that was deployed.
+
+Use that last command to get the public IP address of the ec2 instance so you can visit it in your web browser.
+
+```r
+provider "aws" {
+  profile = "default"
+  region  = "us-east-1"
+}
+
+resource "aws_vpc" "some_custom_vpc" {
+  cidr_block = "10.0.0.0/16"
+
+  tags = {
+    Name = "Some Custom VPC"
+  }
+}
+
+resource "aws_subnet" "some_public_subnet" {
+  vpc_id            = aws_vpc.some_custom_vpc.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = "us-east-1a"
+
+  tags = {
+    Name = "Some Public Subnet"
+  }
+}
+
+resource "aws_subnet" "some_private_subnet" {
+  vpc_id            = aws_vpc.some_custom_vpc.id
+  cidr_block        = "10.0.2.0/24"
+  availability_zone = "us-east-1a"
+
+  tags = {
+    Name = "Some Private Subnet"
+  }
+}
+
+resource "aws_internet_gateway" "some_ig" {
+  vpc_id = aws_vpc.some_custom_vpc.id
+
+  tags = {
+    Name = "Some Internet Gateway"
+  }
+}
+
+resource "aws_route_table" "public_rt" {
+  vpc_id = aws_vpc.some_custom_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.some_ig.id
+  }
+
+  route {
+    ipv6_cidr_block = "::/0"
+    gateway_id      = aws_internet_gateway.some_ig.id
+  }
+
+  tags = {
+    Name = "Public Route Table"
+  }
+}
+
+resource "aws_route_table_association" "public_1_rt_a" {
+  subnet_id      = aws_subnet.some_public_subnet.id
+  route_table_id = aws_route_table.public_rt.id
+}
+
+resource "aws_security_group" "web_sg" {
+  name   = "HTTP and SSH"
+  vpc_id = aws_vpc.some_custom_vpc.id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_instance" "web_instance" {
+  ami           = "ami-0533f2ba8a1995cf9"
+  instance_type = "t2.nano"
+  key_name      = "MyKeyPair2"
+
+  subnet_id                   = aws_subnet.some_public_subnet.id
+  vpc_security_group_ids      = [aws_security_group.web_sg.id]
+  associate_public_ip_address = true
+
+  user_data = <<-EOF
+  #!/bin/bash -ex
+
+  amazon-linux-extras install nginx1 -y
+  echo "<h1>$(curl https://api.kanye.rest/?format=text)</h1>" >  /usr/share/nginx/html/index.html 
+  systemctl enable nginx
+  systemctl start nginx
+  EOF
+
+  tags = {
+    "Name" : "Kanye"
+  }
+}
+```

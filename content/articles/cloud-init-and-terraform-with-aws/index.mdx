@@ -1,0 +1,247 @@
+---
+id: 778f885d-dcd3-49b1-a674-672da0c5d30c
+wp_id: 745
+title: 'Cloud-init and Terraform with AWS'
+date: '2021-10-31T13:03:27'
+slug: 'cloud-init-and-terraform-with-aws'
+image: 'cloud-init-and-terraform-with-aws.png'
+status: 'published'
+description: 'In this article, we’ll look at how to use cloud-init with terraform to install and configure nginx on an EC2 instance.'
+tags: ['aws', 'cloud-init', 'terraform', 'user-data']
+---
+
+In this article, we’ll look at how to use cloud-init with terraform to install and configure nginx on an EC2 instance.
+
+## Why use cloud-init?
+
+When we’re setting up an EC2 instance, using Terraform or the AWS console, or any other method, we might want to perform some automated configuration when it first launches. Without logging onto the instance manually, we might want to create users, install software, define some environment variables or so many other things. These are things that will only run once when the instance is created.
+
+You could use cloud-init to completely configure a bare-bones EC2 instance and replace a tool like packer, but that’s not necessarily what you would to use it for. Creating an AMI that is completely configured to run an application is a good way of deploying infrastructure, however, there may be some things missing when you create the AMI. Environment variables for a web app or IP addresses for a load balancer might not be known when you create the AMI, so you can set up an AMI without these details and use cloud-init to configure those details when the AMI is created.
+
+## What is cloud-init?
+
+Cloud-init is a piece of software that configures a cloud VM when it’s first initialized. We can use cloud-init to customize a VM when we create it by doing things like updating environment variables, configuring custom user data, installing software, etc.
+
+Let’s say you set up a new EC2 instance on AWS, the only user that exists on the instance is root. There are not other users and no SSH keys ohn the instance. But you’re able to access that instance using a non-root user, `ec2-user` for all the centos derivatives, using an SSH key that was just magically already installed on the instance. That’s because there’s a piece of software called cloud-init running on most cloud VMs that will do some work for you the first time you setup an instance. Out of the many things that cloud-init does, it creates a new user and pulls our SSH key onto the instance.
+
+Cloud-init will identify the cloud it is running on during boot, read any provided metadata from the cloud, and initialize the system accordingly. This may involve setting up the network and storage devices to configure SSH access key and many other aspects of a system. Later on, the cloud-init will also parse and process any optional user or vendor data that was passed to the instance.
+
+*   https://cloudinit.readthedocs.io/en/latest/
+
+## EC2
+
+Let’s start with a basic `aws_instance` resource running amazon linux 2.
+
+```ruby
+provider "aws" {
+  region  = "us-west-1"
+}
+
+resource "aws_instance" "web_instances" {
+  ami           = "ami-03ab7423a204da002"
+  instance_type = "t2.micro"
+
+  user_data = ?
+}
+```
+
+`user_data` is something we can pass to this resource to be run when the instance is first created. This could be a script, like a bash script, or it can be a cloud-init configuration.
+
+## cloud-config
+
+A cloud-config file is a YAML file that we can pass to cloud-init to tell it to do things. For this example we are going to create a cloud-config file that:
+
+*   Installs nginx
+*   Updates the default html page for nginx
+*   Starts and enables nginx
+
+### `runcmd`
+
+```yaml
+#cloud-config
+runcmd:
+  - amazon-linux-extras install -y nginx1
+  - systemctl enable --no-block nginx 
+  - systemctl start --no-block nginx 
+```
+
+*   The first line `#cloud-config` is needed to tell the cloud-init program that this is a cloud-config file.
+*   The second line [`runcmd`](https://cloudinit.readthedocs.io/en/latest/topics/examples.html#run-commands-on-first-boot) is one of many directives we can use with cloud-init. It will execute shell commands. For a full list of derectives, check out https://cloudinit.readthedocs.io
+*   The three lines below that are a list of shell commands to be executed on the instance. Adding `--no-block` here is necessary because cloud-init is booted under systemd and could cause a deadlock if it has to wait for systemd to start another service.
+
+So that will be enough to install nginx, but what about updating the default `index.html` file? There are a few ways we can do this, let’s look at `write_files`.
+
+### `write_files`
+
+```yaml
+#cloud-config
+write_files: 
+  - path: /run/myserver/index.html
+    owner: root:root
+    permissions: "0644"
+    content: "<h1>cloud init was here</h1>"
+runcmd:
+  - amazon-linux-extras install -y nginx1
+  - mv /run/myserver/index.html /usr/share/nginx/html/index.html
+  - systemctl enable --no-block nginx 
+  - systemctl start --no-block nginx 
+```
+
+The `write_files` directive will create a file on the instance. I think the options for `write_files` are pretty obvious, but just in case, here’s the docs: https://cloudinit.readthedocs.io/en/latest/topics/examples.html#writing-out-arbitrary-files
+
+Yea, the docs for cloud-init aren’t great.
+
+Notice that we’re writing the file to some random directory in `/run` then moving it to it’s proper location. That’s because write\_files will be executed before runcmd and we need Nginx to be installed before we write the file to its final path `/usr/share/nginx/html/index.html`.
+
+Why `/run` instead of `/tmp`? I’m not entirely sure. Here’s what the docs say:
+
+```html
+# Note: Don't write files to /tmp from cloud-init use /run/somedir instead.
+# Early boot environments can race systemd-tmpfiles-clean LP: #1707222.
+```
+
+Anyway, that’s the complete config file for this, just save it in the terraform directory as `server.yml`, or whatever name you want.
+
+## `cloudinit_config`
+
+Now it’s time to pass this configuration to the EC2 instance as user data, but before we can do that, we need to create a `cloudinit_config` resource:
+
+```ruby
+data "cloudinit_config" "server_config" {
+  gzip          = true
+  base64_encode = true
+  part {
+    content_type = "text/cloud-config"
+    content = file("${path.module}/server.yml")
+  }
+}
+```
+
+This will work as long as `server.yml` is in the same directory as `main.tf`. Then we just tell the EC2 instance to use this configuration.
+
+```ruby
+resource "aws_instance" "web_instances" {
+  ami           = "ami-03ab7423a204da002"
+  instance_type = "t2.micro"
+
+  user_data = data.cloudinit_config.server_config.rendered
+}
+```
+
+And we’re done! Run `terraform apply` and you will have a new ec2 instance with Nginx installed. That displays `cloud init was here`
+
+## `templatefile`
+
+It’s displaying `cloud init was here` because that’s what’s hardcoded into the YAML file:
+
+```yaml
+write_files: 
+    ...
+    content: "<h1>cloud init was here</h1>"
+```
+
+`cloud init was here` is a fun message, but what if we wanted the data to be more dynamic? What if we wanted to be able to display the id of the security group on the web page? I know it sounds kind of dumb but this demonstrates something you might actually want to do. Pass data from terraform to the cloud-config file.
+
+If we set up an Nginx instance to be a load balancer to other instances that are created with Terraform, then we’ll need to pass the config file all of the ip addresses for the instances. If we’re using cloud-init to define environment variables, those too might be coming from terraform in some way. To summarize, we might need to pass data from terraform to the config file.
+
+To do this, we can use `templatefile` instead of `file` in the `cloudinit_config` resource block.
+
+```ruby
+data "cloudinit_config" "server_config" {
+  gzip          = true
+  base64_encode = true
+  part {
+    content_type = "text/cloud-config"
+    content = templatefile("${path.module}/server.yml", {
+      header: aws_security_group.server_sg.id
+    })
+  }
+}
+```
+
+`templatefile` allows us to pass variables directly to the file, in this case passing a variable named `header` to `server.yml`. Now the `server.yml` file can use the value by simply referencing the variable name.
+
+```yaml
+write_files: 
+  ...
+    content: "<h1>${info}</h1>"
+```
+
+Run `terraform apply` again and you’ll see the id of the security group.
+
+## Code
+
+**server.yml**
+
+```yaml
+#cloud-config
+write_files: 
+  - path: /run/myserver/index.html
+    owner: root:root
+    permissions: "0644"
+    content: "<h1>${header}</h1>"
+runcmd:
+  - amazon-linux-extras install -y nginx1
+  - mv /run/myserver/index.html /usr/share/nginx/html/index.html
+  - systemctl enable --no-block nginx 
+  - systemctl start --no-block nginx 
+```
+
+**main.tf**
+
+```ruby
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.27"
+    }
+  }
+
+  required_version = ">= 1.0.0"
+}
+
+provider "aws" {
+  region  = "us-west-1"
+}
+
+resource "aws_security_group" "server_sg" {
+  name = "Load Balancer Security Group"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+data "cloudinit_config" "server_config" {
+  gzip          = true
+  base64_encode = true
+  part {
+    content_type = "text/cloud-config"
+    content = templatefile("${path.module}/server.yml", {
+      header: aws_security_group.server_sg.id
+    })
+  }
+}
+
+resource "aws_instance" "server_instance1" {
+  ami           = "ami-03ab7423a204da002"
+  instance_type = "t2.micro"
+
+  key_name = "CaliKey"
+
+  vpc_security_group_ids      = [aws_security_group.server_sg.id]
+  user_data                   = data.cloudinit_config.server_config.rendered
+  associate_public_ip_address = true
+}
+```

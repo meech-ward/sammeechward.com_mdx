@@ -1,0 +1,228 @@
+---
+id: 38bcc00c-721a-4efc-94fe-eeb95e960b68
+wp_id: 583
+title: 'AWS CLI | Setup an S3 Static Website'
+date: '2020-11-28T08:39:38'
+slug: 'aws-cli-s3-static-website'
+image: 'aws-cli-s3-static-website.png'
+status: 'published'
+description: 'Let’s take a look at how to deploy a website to an S3 bucket using the aws cli.'
+tags: ['aws']
+---
+
+Let’s take a look at how to deploy a website to an S3 bucket using the aws cli.
+
+In this article, we will take a look at how to deploy a website to an S3 bucket using the aws cli.
+
+## AWS CLI
+
+The AWS Command Line Interface (CLI) lets us manage all of our AWS services from the command line, without having to use the web console. So instead of clicking a bunch of buttons to create a new EC2 instance, you could just run a command like this:
+
+```shell
+aws ec2 run-instances  --region $region --image-id "ami-0d4504aaac331dc68" --count 1 --instance-type t2.micro --associate-public-ip-address
+```
+
+In this article, we will take a look at how to setup an S3 bucket to host a static website using the aws cli. Skip to the bottom of the article if you just want the script.
+
+## Setup
+
+If you haven’t setup the AWS CLI already, you can do so using this link: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
+
+The reference for all of the commands used here is available at  
+https://docs.aws.amazon.com/cli/latest/reference/
+
+## S3 Static Website
+
+The steps for hosting a static website using s3 are pretty much the following:
+
+1.  Create a new bucket with a unique name
+2.  Enable public access to the bucket
+3.  Update the bucket policy for public read access:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+      {
+          "Sid": "PublicReadGetObject",
+          "Effect": "Allow",
+          "Principal": "*",
+          "Action": "s3:GetObject",
+          "Resource": "arn:aws:s3:::acit-3640-fall-2020-40126/*"
+      }
+  ]
+}
+```
+
+4.  Enable the s3 bucket to host an `index` and `error` html page
+5.  Upload your website
+
+These steps are covered using the aws console in my [S3 Buckets | Hosting a Static Site](https://www.youtube.com/watch?v=RoY3ekCCxKc&t=89s&ab_channel=SamMeech-Ward)
+
+But that involves a lot of clicking on buttons and stuff, so here’s how to do it using the aws cli.
+
+### 1\. Create a new bucket with a unique name
+
+```shell
+aws s3 mb "s3://your-bucket-name" 
+```
+
+`aws s3 mb` will create a new bucket. Make sure you change `your-bucket-name` to something better.
+
+### 2\. Enable public access to the bucket
+
+```shell
+aws s3api put-public-access-block \
+    --bucket your-bucket-name \
+    --public-access-block-configuration "BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"
+```
+
+`aws s3api put-public-access-block` allows you to configure the public access to the bucket. We’re setting all of the blocks to false to enable public access.
+
+### 3\. Update the bucket policy for public read access:
+
+```shell
+aws s3api put-bucket-policy --bucket your-bucket-name --policy "{
+  \"Version\": \"2012-10-17\",
+  \"Statement\": [
+      {
+          \"Sid\": \"PublicReadGetObject\",
+          \"Effect\": \"Allow\",
+          \"Principal\": \"*\",
+          \"Action\": \"s3:GetObject\",
+          \"Resource\": \"arn:aws:s3:::your-bucket-name/*\"
+      }
+  ]
+}"
+```
+
+`aws s3api put-bucket-policy` allows us to specify a bucket policy which has to be written in JSON. This policy will allow anyone to get the objects ot of the bucket.
+
+### 4\. Enable the s3 bucket to host an `index` and `error` html page
+
+```shell
+aws s3 website "s3://your-bucket-name" --index-document index.html --error-document index.html
+```
+
+`aws s3 website` configures the bucket as a website. We have to include an index and an error page. We could specify a single page for both of these. This is usually what we want for a single page application.
+
+### 5\. Upload your static website
+
+```shell
+aws s3 sync directory-path "s3://your-bucket-name/" 
+```
+
+`aws s3 sync` will update the buckets contents with that of the contents of the local directory.
+
+If we want to just copy a single file, we can use `aws s3 cp`
+
+```shell
+# Copy a file to an s3 bucket
+aws s3 cp path-to-file "s3://your-bucket-name/filename"
+
+# Copy a file from an s3 bucket
+aws s3 cp "s3://your-bucket-name/filename" path-to-file
+```
+
+### `s3` vs `s3api`
+
+`s3api` gives you complete control of S3 buckets. `s3` gives you a higher level of abstraction for some of the more common operations you want to perform on an S3 bucket.
+
+## Single Script
+
+As a single bash script, this code would look like this. There are a few more variables to make the region and profile easier to configure.
+
+```shell
+#!/bin/bash
+
+bucket_name='your-bucket-name'
+website_directory='/path/to/website/'
+
+region='us-east-1'
+profile='default'
+
+# 1. Create a new bucket with a unique name
+aws s3 mb \
+  --profile $profile \
+  --region $region \
+  --region us-east-1 "s3://$bucket_name" 
+
+# 2. Enable public access to the bucket
+aws s3api put-public-access-block \
+  --profile $profile \
+  --region $region \
+  --bucket $bucket_name \
+  --public-access-block-configuration "BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"
+
+# 3. Update the bucket policy for public read access:
+aws s3api put-bucket-policy \
+  --profile $profile \
+  --region $region \
+  --bucket $bucket_name \
+  --policy "{
+  \"Version\": \"2012-10-17\",
+  \"Statement\": [
+      {
+          \"Sid\": \"PublicReadGetObject\",
+          \"Effect\": \"Allow\",
+          \"Principal\": \"*\",
+          \"Action\": \"s3:GetObject\",
+          \"Resource\": \"arn:aws:s3:::$bucket_name/*\"
+      }
+  ]
+}"
+
+# 4. Enable the s3 bucket to host an `index` and `error` html page
+aws s3 website "s3://$bucket_name" \
+  --profile $profile \
+  --region $region \
+  --index-document index.html \
+  --error-document index.html
+
+# # 5. Upload you website
+aws s3 sync \
+  --profile $profile \
+  --region $region \
+  $website_directory "s3://$bucket_name/" 
+```
+
+Once the bucket is created, you only need to run the sync code to push new updates:
+
+```shell
+#!/bin/bash
+
+bucket_name='your-bucket-name'
+website_directory='/path/to/website/'
+
+region='us-east-1'
+profile='default'
+
+
+aws s3 sync \
+  --profile $profile \
+  --region $region \
+  $website_directory "s3://$bucket_name/" 
+```
+
+And if you ever want to completely destroy the bucket:
+
+```shell
+#!/bin/bash
+
+bucket_name='your-bucket-name'
+website_directory='/path/to/website/'
+
+region='us-east-1'
+profile='default'
+
+
+aws s3 rm \
+  --profile $profile \
+  --region $region \
+  --recursive s3://$bucket_name
+  
+aws s3api delete-bucket \
+  --profile $profile \
+  --region $region \
+  --bucket $bucket_name
+```

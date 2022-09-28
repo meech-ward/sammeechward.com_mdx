@@ -1,0 +1,259 @@
+---
+id: 0a3b71cb-683b-47e3-8b23-8d91f7143c77
+wp_id: 298
+title: 'net-socket.io: Sockets in JavaScript'
+date: '2019-07-16T20:52:12'
+slug: 'net-socket-io'
+image: 'net-socket-io.png'
+status: 'published'
+description: 'net-socket.io is a small wrapper around node’s net library, that makes low-level socket programming in JavaScript easy. It is heavily based on Socket.io and Event Emitters.'
+tags: ['ipc', 'javascript', 'library', 'node js', 'sockets', 'tcp']
+---
+
+[net-socket.io](https://www.npmjs.com/package/net-socket.io) is a small wrapper around node’s [`net`](https://nodejs.org/api/events.html) library, that makes low-level socket programming in JavaScript easy. It is heavily based on [Socket.io](https://github.com/socketio/socket.io) and [Event Emitters](https://nodejs.org/api/events.html).
+
+```js
+const { Server } = require('ipc-socket.io');
+const io = Server('/tmp/socket');
+
+io.on('connection', function(socket){
+  socket.emit('message', {
+    text: 'hello',
+    totalClients: io.sockets
+  }); 
+});
+```
+
+## But Why?
+
+The use case for this library is the same as the use case for node’s [`net`](https://nodejs.org/api/events.html) library. Which really just has the same use cases as TCP sockets or UNIX domain sockets. So really, it’s all about sockets.
+
+#### Note:
+
+The net module uses sockets on everything that isn’t Windows and uses named pipes on Windows.
+
+## Sockets
+
+You know, like [Berkeley sockets](https://en.wikipedia.org/wiki/Berkeley_sockets), not [WebSockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API)
+
+The sockets API, available on pretty much all computers, is used for inter-process communication (IPC). So we can use sockets to have two or more applications communicate with each other. These applications could be on the same host (computer), or on different hosts (computers). In fact, we can create an HTTP server and client using sockets. But we could also just create a TCP server and client using sockets, without the overhead of any other protocols like HTTP.
+
+![image](https://i.imgur.com/AxhLEPd.png)
+
+Using sockets, we could create a TCP server application that allows connections from TCP client applications. As you can see, this looks a lot like a standard web server using HTTP and WebSockets, but this is just plain ol’ TCP without any other protocols.
+
+Just for reference, we’ve been able to use sockets to create TCP servers and clients since 1983. HTTP was introduced in 1991, and the WebSockets protocol was introduced in 2011. So this is the \*old\* way of doing things.
+
+### Example Using net-socket.io
+
+**server**
+
+```js
+const { Server } = require('ipc-socket.io');
+const io = Server(3000);
+
+io.on('connection', (socket) => {
+  socket.on('message', (data) => {
+    console.log('socket sent a message', data);
+  })
+});
+```
+
+**client**
+
+```js
+const { Socket } = require('ipc-socket.io');
+const socket = Socket(3000, 'localhost');
+
+socket.on('ready', () => {
+  socket.emit('message', 'hello');
+});
+```
+
+#### Note:
+
+If you actually wanted bidirectional communication between a client and server both connected to The Internet, WebSockets would be a much better option than plain ol’ TCP sockets.
+
+## Unix Domain Socket
+
+Now here’s where things get interesting. What if we have multiple applications running on the **same** computer and we want to enable communication between them?
+
+![image](https://i.imgur.com/wmB6TaC.png)
+
+We can still use sockets, but they don’t have to communicate through TCP. Instead, all of the communication can happen entirely within the operating system’s kernel. The sockets do this by binding to a filesystem pathname.
+
+### Example Using net-socket.io
+
+**server**
+
+```js
+const { Server } = require('ipc-socket.io');
+const io = Server('/tmp/my-app');
+
+io.on('connection', (socket) => {
+  socket.on('message', (data) => {
+    console.log('socket sent a message', data);
+  })
+});
+```
+
+**client**
+
+```js
+const { Socket } = require('ipc-socket.io');
+const socket = Socket('/tmp/my-app');
+
+socket.on('ready', () => {
+  socket.emit('message', 'hello');
+});
+```
+
+And voila, we have applications on the same machine that are able to communicate bidirectionally with each other.
+
+## But Why?
+
+Why might we want to create multiple applications on the same machine that communicate with each other? If all of the applications are running on the same computer, why not just create one big application instead of multiple smaller ones?
+
+There are many many many reasons, but for me, there are two main motivators.
+
+1.  Modularity.
+2.  Language Freedom.
+
+## Language Freedom
+
+Usually, we need to use the same language for everything when we’re writing an application. If we’re writing an app in `JavaScript`, we can only use `JavaScript` and libraries written in `JavaScript`. Of course, there are exceptions, like pretty much every language has a way of importing `C` or `C++` libraries; but let’s say that we’re building a web app that allows users to upload images to be classified by an ML model. We might choose to build the `HTTP` server in `JavaScript` but build the image classification feature in `Python`. Using sockets, we could build multiple applications, in multiple languages, that each represents a single feature, running on the same machine, that communicate with each other to form a single application.
+
+Of course, the [net-socket.io](https://github.com/meech-ward/net-socket.io) library only exists as a JavaScript library. This means that the app written in the other language would need its own [net-socket.io](https://github.com/meech-ward/net-socket.io) library. Or it would have to use the language’s built-in way of using sockets. Here’s a list of some popular languages’ default socket API:
+
+*   [Python](https://docs.python.org/3/library/socket.html)
+*   [Ruby](https://docs.ruby-lang.org/en/2.1.0/Socket.html)
+*   [Go Lang](https://godoc.org/golang.org/x/net/internal/socket)
+*   [PHP](https://www.php.net/manual/en/book.sockets.php)
+*   [C#](https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.socket?view=netframework-4.8)
+*   Some languages like Java and Swift have to rely on the default system socket library `#include <sys/socket.h>`
+
+#### Note:
+
+[The Linux Programming Interface Book](https://amzn.to/2XRZUBb) has some really great chapters on how sockets work.
+
+## Modularity
+
+Let’s talk a little bit about application architecture. When we’re writing software, we generally want to keep our code _**modular**_. We want to keep different parts of our application _**independent**_ of each other making them more _**stable**_ and _**reusable**_.
+
+#### Example:
+
+**Bad:**
+
+```js
+const numbers = [1, 2, 3];
+
+function sumNumbers() {
+  const result = numbers.reduce((n, a) => n+a);
+  console.log(result);
+}
+```
+
+`sumNumbers` relies on other parts of the application to work, in this case, the `numbers` array. It will only work with this array and could break if this array is renamed or changed for some other reason. It also relies on `console.log`, so if we want a function that sums different numbers or does something else with the result, we need to write a new function.
+
+**Good:**
+
+```js
+function sumNumbers(numbers) {
+  const result = numbers.reduce((n, a) => n+a);
+  return result;
+}
+
+const numbers = [1, 2, 3];
+const result =sumNumbers(numbers);
+console.log(result);
+```
+
+This function allows its only dependency, the `numbers` array, to be passed to it. This function is very independent, stable, and reusable. It will work with any array of numbers and will not break if other parts of the application change.
+
+We use language features like functions, modules, and classes to _try_ and write good, modular code. Sometimes we do a good job, but most of the time we don’t.
+
+### Modularity Using Libraries
+
+A great way to enforce modularity and independence is to create libraries for the different parts of our code. If we take any part of our application that _can_ be turned into a library and turn it into a library, we will end up with very modular code.
+
+A library is completely separate from our application, so there’s no chance of _accidentally_ allowing some generic function to _know_ about parts of the application that it shouldn’t know about.
+
+#### Example:
+
+**Sum Numbers Library:**
+
+```js
+function sumNumbers(numbers) {
+  const result = numbers.reduce((n, a) => n+a);
+  return result;
+}
+module.exports = sumNumbers;
+```
+
+There’s no possible way for this library to know about the rest of our application.
+
+**My App:**
+
+```html
+npm install summmmmm-numbers
+```
+
+```js
+const sumNumbers = require('summmmmm-numbers');
+
+const numbers = [1, 2, 3];
+const result = sumNumbers(numbers);
+console.log(result);
+```
+
+I love building an app by building generic libraries. The only thing I love more is building an app out of smaller apps.
+
+### Modularity Using Applications
+
+Now imagine that instead of separating our code into different libraries, we separated it into different applications.
+
+#### Example:
+
+**Sum Numbers Application:**
+
+```js
+const io = require('ipc-socket.io').Server('/tmp/sum_numbers');
+
+function sumNumbers(numbers) {
+  const result = numbers.reduce((n, a) => n+a);
+  return result;
+}
+
+io.on('connection', socket => {
+  socket.on('sum', numbers => {
+    socket.emit('result', sumNumbers(numbers));
+  });
+});
+```
+
+**My App:**
+
+```js
+const socket = require('ipc-socket.io').Socket('/tmp/sum_numbers');
+
+socket.on('result', result => {
+  console.log(result);
+});
+
+socket.on('ready', () => {
+  socket.emit('sum', [1,2,3,4,5,6]);
+});
+```
+
+It doesn’t get much more modular than this. My code is separated into completely separate applications. It leads to cleaner application management too. Every time I deploy an update, I only have to update the app where the change occurred. Everything else can remain untouched.
+
+## Summary
+
+We can use sockets to enable communication between two or more applications. These applications could be on the same computer, or on different computers. This frees us to use more languages and to write applications in different ways that can make our code more modular.
+
+Check out the [net-socket.io](https://github.com/meech-ward/net-socket.io) library to get started.
+
+### See Also
+
+*   [Unix domain socket](https://en.wikipedia.org/wiki/Unix_domain_socket)
+*   [Berkeley sockets](https://en.wikipedia.org/wiki/Berkeley_sockets)

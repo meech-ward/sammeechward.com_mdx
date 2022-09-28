@@ -1,0 +1,236 @@
+---
+id: 54aa24ad-e570-4484-ad68-1892c297a4df
+wp_id: 740
+title: 'Variables and Outputs in Terraform'
+date: '2021-10-31T04:37:15'
+slug: 'variables-and-outputs-in-terraform'
+image: 'variables-and-outputs-in-terraform.png'
+status: 'published'
+description: 'In this post, we’ll go over the basic structure of a terraform module and how to use variables and outputs in the root module.'
+tags: ['aws', 'terraform']
+---
+
+In this post, we’ll go over the basic structure of a terraform module and how to use variables and outputs in the root module.
+
+## Root Module
+
+When we are creating terraform configurations, we are creating a terraform **module**. Every Terraform configuration has at least one module, known as its root module. And we can nest modules to organize our code, but for now, we’ll only focus on the **root** module.
+
+When you create a new terraform module, you should create a new directory with at least the following three files inside:
+
+*   `main.tf`: The primary entrypoint to the entire configuration.
+*   `variables.tf`: Any input variables for the module. This allows the user running terraform to easily customize the configuration.
+*   `outputs.tf`: Any outputs from the module. This allows the user running terraform to easily get data about any resources.
+
+[These are the recommended filenames for a minimal module, even if they’re empty.](https://www.terraform.io/docs/language/modules/develop/structure.html)
+
+We’ll look into variables and outputs more in this article, but for now, just know you should have those files created in your module.
+
+## Region Variable
+
+We’re already familiar with the basic setup of `main.tf`, first we configure terraform and the provider, then we add a bunch of resource blocks.
+
+```ruby
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.27"
+    }
+  }
+
+  required_version = ">= 1.0.0"
+}
+
+provider "aws" {
+  region  = "us-west-2"
+}
+
+# Resources
+```
+
+Even with this small amount of code, we already have a good use case for a variable. See the region is hard coded to `us-west-2`, so if myself or anyone else that I share this code with wants to deploy to a different region, they have to modify the `main.tf` file. But there’s a better way.
+
+We can turn this into a variable by adding the following to the `variables.tf` file:
+
+```ruby
+variable "region" {
+  description = "AWS region"
+  type        = string
+}
+```
+
+This declares a new variable named `region` that has the type `string` and a human readable description. Then we can modify the `main.tf` code to use this variable:
+
+```ruby
+provider "aws" {
+  region  = var.region
+}
+```
+
+Now the provider is using the value defined in the variable, easy! But wait, what’s the value? We haven’t actually specified the region, we’ve only created a variable.
+
+Let’s try running `terraform apply` and see what happens.
+
+```shell
+➜ terraform apply
+var.region
+  AWS region
+
+  Enter a value: 
+```
+
+Terraform knows we need a value for this variable, so the cli is prompting us to input a value, cool. But this kind of sucks for speed and automation.
+
+## `terraform.tfvars`
+
+Let’s add a new file to our module named `terraform.tfvars` with the following code inside:
+
+```ruby
+region = "us-west-2"
+```
+
+This is a _variable definitions file_ where we can define values for any input variables. Now if we run `terraform apply`, it will use the value `us-west-2` for the `region` variable. Now we can define all variable values in this file.
+
+`tfvars` files should **never** be committed into source control, and each person that needs to run `terraform apply` will need to define values for the variables however they want. So any values you put into this file will be just for you, just for your configuration needs. So I might use `us-west-2` and you could use `us-east-1` and none of the actually terraform code needs to change.
+
+Since `tfvars` files never get committed into a VCS, you **can** put sensitive information in there like private keys and passwords. This is kind of like using environment variables to hide sensitive data from the code.
+
+## Default Values
+
+In a case like this where we’re just defining the region that the infrastructure should be built in, it might be nice to provide a default value. So if someone doesn’t specify a region in the `tfvars` file, it will still be able to build.
+
+```ruby
+variable "region" {
+  description = "AWS region"
+  default     = "us-east-1"
+  type        = string
+}
+```
+
+By adding this `default` argument, terraform will first check the `tfvars` file for a value, and use the default one if no other values exist.
+
+## Sensitive Information
+
+Let’s setup a database using RDS. We need to add two resource blocks for this, a security group to allow traffic on port 3306, and the actual RDS resource.
+
+**Security Group**
+
+```ruby
+resource "aws_security_group" "public_db" {
+  name = "Public access to the database"
+
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+```
+
+**Database:**
+
+```ruby
+resource "aws_db_instance" "mydb" {
+  allocated_storage      = 20
+  engine                 = "mysql"
+  engine_version         = "8.0"
+  instance_class         = "db.t2.micro"
+  username               = ?
+  password               = ?
+  skip_final_snapshot    = true
+  publicly_accessible    = true
+  vpc_security_group_ids = [aws_security_group.public_db.id]
+}
+```
+
+This is a really basic RDS setup using MySQL, but i’ve left the username and password arguments blank. These arguments are for the admin’s username and password that can be used to control the entire database. I really don’t want these existing in the code and tracked with source control. But I also want anyone running this script to be able to define their own username and password for these values. So the solution here is variables.
+
+In `variables.tf` we need two new variables:
+
+```ruby
+variable "database_admin_username" {
+  description = "The database's admin user's username"
+  type        = string
+}
+
+variable "database_admin_password" {
+  description = "The database's admin user's password"
+  type        = string
+}
+```
+
+In `main.tf` we can use these variables:
+
+```ruby
+resource "aws_db_instance" "mydb" {
+  ...
+  username               = var.database_admin_username
+  password               = var.database_admin_password
+  ...
+}
+```
+
+And in `terraform.tfvars` we can define values for these variables:
+
+```ruby
+region                  = "us-west-1"
+database_admin_username = "admin"
+database_admin_password = "MyNewPass1!"
+```
+
+Now the database will be setup with those credentials.
+
+**IMPORTANT:** **Don’t commit your `.tfvars` file into version control.**
+
+I recommend adding this gitignore to your project: https://github.com/github/gitignore/blob/master/Terraform.gitignore
+
+## Outputs
+
+Running `terraform apply` at this point will setup the database using the provided variable values. Once this is done, we probably want to access the database using the address, which we can find using `terraform state`. But we can make this process a little bit easier.
+
+In the `outputs.tf` file, we can specify an output for the database’s address.
+
+```ruby
+output "db_address" {
+  value = aws_db_instance.mydb.address
+}
+```
+
+The name is a custom output name, i’ve used `db_address` here. Then the value is set in the normal way we use values in terraform. Since this is a resource we start start with the resource type `aws_db_instance` followed by the name we gave to the resource `mydb`, followed by the argument we want the data for `address`.
+
+Now if we run `terraform apply`, it will create the resource, then print out the `db_address` to the console.
+
+```shell
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+db_address = "terraform-20211030230110222000000001.cytxejtt9yks.us-west-1.rds.amazonaws.com"
+```
+
+## Sub Modules
+
+Just a quick note about submodules. When we’re using variables and outputs with the **root module**:
+
+*   All data comes in to variables from the user running terraform, from the cli or `.tfvars`.
+*   All data comes out of outputs back to the user running terraform, usually just displayed in the cli.
+
+When we use **submodules**, these files work a little bit differently:
+
+*   All data comes in to variables from the **root module**.
+*   All data comes out of outputs back to the **root module**.
+
+This is very important when you need to communicate with submodules. For example, if one submodule creates a security group and another submodule creates an ec2 instance, you would need to get the security group id out of the security group module using an output and pass it down to the ec2 module using a variable.
+
+## Code Examples
+
+All code from this post is on github: [https://github.com/Sam-Meech-Ward/terraform\_vars](https://github.com/Sam-Meech-Ward/terraform_vars)

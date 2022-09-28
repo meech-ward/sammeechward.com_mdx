@@ -1,0 +1,214 @@
+---
+id: 0f7a0538-caef-4adc-910f-cdcdc1fc5629
+wp_id: 357
+title: 'Connecting to MySQL from PHP using Procedural MySQLi'
+date: '2019-10-01T03:37:58'
+slug: 'connecting-to-mysql-from-php-using-procedural-mysqli'
+image: 'connecting-to-mysql-from-php-using-procedural-mysqli.png'
+status: 'published'
+description: 'We can use the mysqli functions to access a MySQL database from PHP. mysqli has a Procedural and an Object-Oriented API. This is a quick tutorial on how to perform some basic queries using procedural mysqli. MySQL Improved Extension The general steps that we will follow when performing an SQL query from PHP will be: \[…\]'
+tags: ['mysql', 'php']
+---
+
+We can use the `mysqli` functions to access a MySQL database from PHP. `mysqli` has a Procedural and an Object-Oriented API. This is a quick tutorial on how to perform some basic queries using procedural `mysqli`.
+
+## MySQL Improved Extension
+
+The general steps that we will follow when performing an SQL query from PHP will be:
+
+1.  Create a connection to the database. Like logging in to `mysql` from terminal.
+2.  Execute an SQL query.
+3.  If the query returns some data, use that data.
+4.  Release any returned data and close the connection to the database.
+
+## Setup
+
+Before we can connect to a database, we will need the following information:
+
+*   The database’s host.
+*   The name of the database.
+*   The username and password of the database user.
+
+For this example, we will be using a `kanye` database on `localhost` accessible with the user `testuser` and password `password`. You can set this up by running the following code on your MySQL database:
+
+```sql
+CREATE DATABASE kanye;
+
+CREATE USER 'testuser'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON kanye.* TO 'testuser'@'localhost';
+
+USE kanye;
+```
+
+While we’re at it, let’s setup a `quotes` table and fill it with Kanye West Quotes. We’ll end up using this later on when we query the database from PHP using mysqli.
+
+```sql
+CREATE TABLE quotes (
+  id INT NOT NULL AUTO_INCREMENT,
+  txt VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+INSERT INTO quotes (txt) 
+VALUES ('Pulling up in the may bike'), 
+  ('I wish I had a friend like me'), 
+  ('Style is genderless'), 
+  ('If I don''t scream, if I don''t say something then no one''s going to say anything.'), 
+  ('Believe in your flyness...conquer your shyness.'), 
+  ('Sometimes you have to get rid of everything');
+```
+
+## 1\. Connect To The Database
+
+Now that we have a database, user and password; we can connect to the database from our PHP app.
+
+```php
+// Database Credentials
+define('DB_HOST', 'localhost');
+define('DB_USER', 'testuser');
+define('DB_PASS', 'password');
+define('DB_NAME', 'kanye');
+
+// Create a connection to the database
+$connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+if(mysqli_connect_errno()) {
+  exit("Database connection failed: (" . mysqli_connect_errno() . ")");
+}
+```
+
+*   First, we create some constants for the credentials. This isn’t completely necessary, but it’s a nice way of organizing this information.
+*   Next, we create a connection to the databases by calling the `mysqli_connect` function. This function returns a reference to the database, that we need to keep track of to use later.
+*   Finally, we make sure that the connection to the database was successful. If there were any issues, then we stop the PHP script with the error message.
+
+## 2\. Execute an SQL query
+
+Now that we have a connection to the database, we can execute a query. We will be executing a query to get all of the quotes from the database.
+
+```php
+$sql = "SELECT * FROM quotes"; // 1
+$results = mysqli_query($connection, $sql); // 2
+if (!$results) { // 3
+  exit("Database query failed.");
+}
+```
+
+1.  Create a variable to hold the SQL query. This is just a PHP string.
+2.  Perform the query against the database by calling `mysqli_query` and passing in the connection to the database, and the query.
+3.  Make sure the query was successful and exit the script if it wasn’t.
+
+The `$results` variable represents the result set obtained from a query, but it doesn’t actually have the data we need. We need to call one more function to get the data out of the database.
+
+## 3\. Use The Data
+
+```php
+$row1 = mysqli_fetch_assoc($results);
+echo $row1["id"]; // 1
+echo $row1["txt"]; // 'Pulling up in the may bike'
+```
+
+Our `$results` represents 6 rows from the `quotes` table. Calling `mysqli_fetch_assoc` and passing in the `$results` gives us a single row from the table as an associated array. If we want to get data from all of the queried rows, then we will have to call `mysqli_fetch_assoc` 6 times.
+
+```php
+$row1 = mysqli_fetch_assoc($results);
+echo $row1["id"]; // 1
+echo $row1["txt"]; // 'Pulling up in the may bike'
+
+$row2 = mysqli_fetch_assoc($results);
+echo $row2["id"]; // 2
+echo $row2["txt"]; // 'I wish I had a friend like me'
+
+$row3 = mysqli_fetch_assoc($results);
+echo $row3["id"]; // 3
+echo $row3["txt"]; // 'Style is genderless'
+
+...
+```
+
+`mysqli_fetch_assoc` will automatically go to the next row in the result set every time we call it. When there are no more rows, the function will return NULL.
+
+Obviously calling the function 6 times like this will never work in a real application. We need a way of putting this logic into a loop.
+
+### For Loop
+
+```php
+$count = mysqli_num_rows($results);
+for ($i = 0; $i < $count; $i++) {
+  $row = mysqli_fetch_assoc($result);
+  echo $row["id"]; 
+  echo $row["txt"];
+}
+```
+
+By using the `mysqli_num_rows` function to get the total number of results from the query, we can create a for loop to get each individual row.
+
+### While Loop
+
+```php
+while ($row = mysqli_fetch_assoc($result)) {
+  echo $row["id"]; 
+  echo $row["txt"];
+}
+```
+
+Because the `mysqli_fetch_assoc` function returns null when there’s no more rows, we can use a while loop like this to write less code.
+
+#### Note:
+
+  
+Either the for loop or while loop will work, choose which ever one works best for you.  
+
+## 4\. Close The Connection
+
+```php
+mysqli_free_result($results); // 1
+mysqli_close($connection); // 2
+```
+
+1.  Free up the memory that’s being used up by the data.
+2.  Close the connection to the database.
+
+## The Final Code
+
+Here’s an example of the previous steps put together to make a script that outputs the `quotes` as JSON.
+
+```php
+<?php
+
+define('DB_HOST', 'localhost');
+define('DB_USER', 'testuser');
+define('DB_PASS', 'password');
+define('DB_NAME', 'kanye');
+
+$connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+if(mysqli_connect_errno()) {
+  exit("Database connection failed: (" . mysqli_connect_errno() . ")");
+}
+
+$sql = "SELECT * FROM quotes ";
+$results = mysqli_query($connection, $sql);
+if (!$results) {
+  exit("Database query failed.");
+}
+
+$count = mysqli_num_rows($results);
+$quotes = [];
+for ($i = 0; $i < $count; $i++) {
+  $row = mysqli_fetch_assoc($results);
+  $quotes[] = $row["txt"];
+}
+
+mysqli_free_result($results);
+mysqli_close($connection);
+
+header("Content-type: application/json");
+echo json_encode(["quotes" => $quotes]);
+```
+
+## Summary
+
+This was a quick overview of how to connect to and query a MySQL database from PHP using `mysqli`. Here are the basic steps you can follow for a query:
+
+1.  Create a connection to the database. Like logging in to `mysql` from terminal.
+2.  Execute an SQL query.
+3.  If the query returns some data, use that data.
+4.  Release any returned data and close the connection to the database.

@@ -1,0 +1,300 @@
+---
+id: 9ffcaa29-6955-498f-bc29-c899198b54a2
+wp_id: 743
+title: 'S3 and IAM with Terraform'
+date: '2021-10-31T06:00:03'
+slug: 's3-and-iam-with-terraform'
+image: 's3-and-iam-with-terraform.png'
+status: 'published'
+description: 'In this post, we will look at how to set up an S3 bucket and an EC2 instance using terraform. The S3 bucket will be set up so it can only be accessed privately and the EC2 instance will get access to the S3 bucket using IAM. I’ll be using the standard module configuration for \[…\]'
+tags: ['aws', 'iac', 'terraform']
+---
+
+In this post, we will look at how to set up an S3 bucket and an EC2 instance using terraform. The S3 bucket will be set up so it can only be accessed privately and the EC2 instance will get access to the S3 bucket using IAM.
+
+I’ll be using the standard module configuration for this, so if you haven’t already, check out my post on [Variables and Outputs in Terraform](https://sammeechward.com/variables-and-outputs-in-terraform/)
+
+## S3 (`aws_s3_bucket`)
+
+Just like when using the web console, creating an s3 bucket in terraform is one of the easiest things to do.
+
+```ruby
+resource "aws_s3_bucket" "some-bucket" {
+  bucket = "my-bucket-name"
+}
+```
+
+Easy Done! But wait, there are two things we should know about this simple implementation:
+
+1.  The S3 bucket will allow public access by default, which we don’t want in this case. We want it to be private.
+2.  The S3 bucket can’t be deleted by terraform if it contains any files. So running `terraform destroy` won’t work.
+
+Our S3 bucket needs to be private so we can only access it from the EC2 instance. I’m also assuming that I’m setting up a test environment. I want to be able to create and destroy the S3 bucket with the rest of my infrastructure as I see necessary when I’m testing the application. In production, I would never want to delete the S3 bucket, but I’m not there yet.
+
+So let’s make some changes. First, let’s allow terraform to destroy the bucket:
+
+```ruby
+resource "aws_s3_bucket" "some_bucket" {
+  bucket = "my-bucket-name"
+  force_destroy = true
+}
+```
+
+And let’s make this bucket private:
+
+```ruby
+resource "aws_s3_bucket_public_access_block" "some_bucket_access" {
+  bucket = aws_s3_bucket.some_bucket.id
+
+  block_public_acls   = true
+  block_public_policy = true
+  ignore_public_acls  = true
+}
+```
+
+Ok so a little bit more code, but at least the bucket is private and we can delete it.
+
+The bucket is created and we’ll set up the EC2 instance soon, but before we can do that, we need to create an IAM role and policy. If you need a refresher on IAM, check out this video: https://youtu.be/BSodkwWB-8s
+
+## IAM Policy (`aws_iam_policy`)
+
+First, let’s create the policy that will allow access to the S3 bucket. This is going to be for a web app to store images, so we’ll need `PutObject`, `GetObject`, `ListBucket`, and `DeleteObject`.
+
+```ruby
+resource "aws_iam_policy" "bucket_policy" {
+  name        = "my-bucket-policy"
+  path        = "/"
+  description = "Allow "
+  policy = ?
+}
+```
+
+This resource block will create a policy, but we need to define the rules of the policy. IAM policies are written in JSON so we need to define these rules as valid IAM JSON. Maybe you’re able to write IAM policy JSON from scratch, or maybe you use the web console to determine the correct JSON, either way, you’ll end up with the following JSON:
+
+```ruby
+{
+  "Version" : "2012-10-17",
+  "Statement" : [
+    {
+      "Sid" : "VisualEditor0",
+      "Effect" : "Allow",
+      "Action" : [
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:DeleteObject"
+      ],
+      "Resource" : [
+        "arn:aws:s3:::*/*",
+        "arn:aws:s3:::my-bucket-name"
+      ]
+    }
+  ]
+}
+```
+
+There are a few ways we can attach this JSON to the policy, the simplest option is to use `jsonencode`.
+
+```ruby
+resource "aws_iam_policy" "bucket_policy" {
+  name        = "my-bucket-policy"
+  path        = "/"
+  description = "Allow "
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "VisualEditor0",
+        "Effect" : "Allow",
+        "Action" : [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:ListBucket",
+          "s3:DeleteObject"
+        ],
+        "Resource" : [
+          "arn:aws:s3:::*/*",
+          "arn:aws:s3:::my-bucket-name"
+        ]
+      }
+    ]
+  })
+}
+```
+
+Terraform has a `jsonencode` function that will convert the JSON looking code above into valid JSON syntax for the policy.
+
+## IAM Role (`aws_iam_role`)
+
+The next thing we need to do is create an IAM role. We can assign the S3 bucket policy to this role, and any other policies we might need, then we can attach this single role to the EC2 instance we create. The important thing to note right now is that the IAM role is going to be used by an EC2 instance.
+
+```ruby
+resource "aws_iam_role" "some_role" {
+  name = "my_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      },
+    ]
+  })
+}
+```
+
+We’re using the `jsonencode` function again to create an IAM role for an EC2 instance. This role does nothing right now, we still need to attach the S3 policy.
+
+## Policy Attachment (`aws_iam_role_policy_attachment`)
+
+Another resource block is needed to attach the policy to the role.
+
+```ruby
+resource "aws_iam_role_policy_attachment" "some_bucket_policy" {
+  role       = aws_iam_role.some_role.name
+  policy_arn = aws_iam_policy.bucket_policy.arn
+}
+```
+
+That’s it, an `aws_iam_role_policy_attachment` needs a role name and a policy arn. Since we’re making the bucket policy with terraform, we can get the ARN from the resource using it’s local name. If we wanted to add a policy that already existed on AWS, we could just hard-code the arn. For example, this is what it would look like if we wanted to attach the cloudwatch agent server policy:
+
+```ruby
+resource "aws_iam_role_policy_attachment" "cloud_watch_policy" {
+  role       = aws_iam_role.some_role.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+```
+
+## aws\_iam\_instance\_profile
+
+Ok, so there’s one more step that’s kind of hidden when we’re using the AWS web console. We can’t just attach an IAM role to an ec2 instance, we actually need an IAM instance profile resource to connect the EC2 instance and the policy. It’s pretty much nothing, but it’s something you need to make:
+
+```ruby
+resource "aws_iam_instance_profile" "some_profile" {
+  name = "some-profile"
+  role = aws_iam_role.some_role.name
+}
+```
+
+## EC2
+
+Now we can actually create the EC2 instance. Your resource will hopefully contain more arguments, but here’s the bare minimum:
+
+```ruby
+resource "aws_instance" "web_instances" {
+  ami           = "ami-03ab7423a204da002"
+  instance_type = "t2.micro"
+
+  iam_instance_profile = aws_iam_instance_profile.some_profile.id
+}
+```
+
+This will create a new instance with `PutObject`, `GetObject`, `ListBucket`, and `DeleteObject` access on the S3 bucket. So we could log onto the instance using SSH and start accessing the bucket or host a web app that uses the S3 bucket for storage. Whatever, the EC2 instance has access to the bucket.
+
+## Complete Code
+
+```ruby
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.27"
+    }
+  }
+
+  required_version = ">= 1.0.0"
+}
+
+provider "aws" {
+  region  = "us-west-2"
+}
+
+resource "aws_s3_bucket" "some-bucket" {
+  bucket = "my-bucket-name"
+}
+
+resource "aws_s3_bucket" "some_bucket" {
+  bucket = "my-bucket-name"
+  force_destroy = true
+}
+
+resource "aws_s3_bucket_public_access_block" "some_bucket_access" {
+  bucket = aws_s3_bucket.some_bucket.id
+
+  block_public_acls   = true
+  block_public_policy = true
+  ignore_public_acls  = true
+}
+
+resource "aws_iam_policy" "bucket_policy" {
+  name        = "my-bucket-policy"
+  path        = "/"
+  description = "Allow "
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "VisualEditor0",
+        "Effect" : "Allow",
+        "Action" : [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:ListBucket",
+          "s3:DeleteObject"
+        ],
+        "Resource" : [
+          "arn:aws:s3:::*/*",
+          "arn:aws:s3:::my-bucket-name"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role" "some_role" {
+  name = "my_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      },
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "some_bucket_policy" {
+  role       = aws_iam_role.some_role.name
+  policy_arn = aws_iam_policy.bucket_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "cloud_watch_policy" {
+  role       = aws_iam_role.some_role.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+
+resource "aws_iam_instance_profile" "some_profile" {
+  name = "some-profile"
+  role = aws_iam_role.some_role.name
+}
+
+resource "aws_instance" "web_instances" {
+  ami           = "ami-03ab7423a204da002"
+  instance_type = "t2.micro"
+
+  iam_instance_profile = aws_iam_instance_profile.some_profile.id
+}
+```

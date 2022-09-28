@@ -1,0 +1,429 @@
+---
+id: dad83797-cdf1-4f44-b205-c114a33c67ea
+wp_id: 759
+title: 'Terraform Modules'
+date: '2021-11-21T10:10:20'
+slug: 'terraform-modules'
+image: 'terraform-modules.png'
+status: 'published'
+description: 'A terraform file can get very large very quickly as you add more and more resource blocks. Custom modules are a great way of organizing your terraform code into logical pieces. You might have one module that handles the VPC set up, one that handles RDS, and another for EC2 instances. In this post, we’ll \[…\]'
+tags: ['aws', 'terraform']
+---
+
+A terraform file can get very large very quickly as you add more and more resource blocks. Custom modules are a great way of organizing your terraform code into logical pieces. You might have one module that handles the VPC set up, one that handles RDS, and another for EC2 instances. In this post, we'll look at how to make custom modules in terraform.
+
+If you haven’t already, read the [Variables and Outputs in Terraform](https://sammeechward.com/variables-and-outputs-in-terraform/) article.
+
+## Module Setup
+
+When you create a new terraform module, you should create a new directory with at least the following three files inside:
+
+*   main.tf: The primary entrypoint to the entire configuration.
+*   variables.tf: Any input variables for the module. This allows the user running terraform to easily customize the configuration.
+*   outputs.tf: Any outputs from the module. This allows the user running terraform to easily get data about any resources.
+
+These are the recommended filenames for a minimal module, even if they're empty.
+
+## Project Setup
+
+When you create a new terraform project, you should add these three files to the root directory.
+
+*   terraform\_project
+*   `main.tf`
+*   `variables.tf`
+*   `outputs.tf`
+
+This is a terraform module, it’s the root module. This is all you need to start using terraform, but we want to organize our code a little better using modules. So we can add a new `modules` directory to the project and add other modules in there.
+
+Create the following project structure:
+
+*   terraform\_project
+    *   `main.tf`
+    *   `variables.tf`
+    *   `outputs.tf`
+    *   modules
+        *   vpc
+            *   `main.tf`
+            *   `variables.tf`
+            *   `outputs.tf`
+        *   ec2
+            *   `main.tf`
+            *   `variables.tf`
+            *   `outputs.tf`
+
+It’s the same structure as the root module. Each sub-module is its own isolated set of blocks that can be used and reused by the root module.
+
+## VPC Module
+
+The code in this module is taken from the [Terraform | VPC, Subnets, EC2, and more](https://sammeechward.com/terraform-vpc-subnets-ec2-and-more/) article.
+
+The following terraform code defines resources for:
+
+*   A VPC
+*   One public and one private subnet
+*   A route table
+*   An internet gateway
+*   A security group allowing access on port 80 from anywhere
+
+Although each project will have different requirements, it will most likely need all of these pieces with some customizations.
+
+Add the following code to `modules/vpc/main.tf`:
+
+```ruby
+resource "aws_vpc" "some_custom_vpc" {
+  cidr_block = "10.0.0.0/16"
+}
+
+resource "aws_subnet" "some_public_subnet" {
+  vpc_id            = aws_vpc.some_custom_vpc.id
+  cidr_block        = "10.0.1.0/24"
+}
+
+resource "aws_subnet" "some_private_subnet" {
+  vpc_id            = aws_vpc.some_custom_vpc.id
+  cidr_block        = "10.0.2.0/24"
+}
+
+resource "aws_internet_gateway" "some_ig" {
+  vpc_id = aws_vpc.some_custom_vpc.id
+}
+
+resource "aws_route_table" "public_rt" {
+  vpc_id = aws_vpc.some_custom_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.some_ig.id
+  }
+}
+
+resource "aws_route_table_association" "public_1_rt_a" {
+  subnet_id      = aws_subnet.some_public_subnet.id
+  route_table_id = aws_route_table.public_rt.id
+}
+
+resource "aws_security_group" "web_sg" {
+  name   = "HTTP and SSH"
+  vpc_id = aws_vpc.some_custom_vpc.id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+```
+
+## Root Module
+
+All of the VPC resources have been defined in `modules/vpc/main.tf`, but running terraform apply would do nothing because there’s nothing in the **root** module’s `main.tf`.
+
+Add the following code to the **root** module’s `main.tf`:
+
+```ruby
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.27"
+    }
+  }
+
+  required_version = ">= 1.0.0"
+}
+
+provider "aws" {
+  region = var.region
+}
+
+module "my_vpc" {
+  source = "./modules/vpc"
+}
+```
+
+The first part is just the basic aws setup code, but under that is a `module` block. This will tell terraform to add the resources from the `modules/vpc` module.
+
+Add the following code to **root** module’s `variables.tf` file:
+
+```ruby
+variable "region" {
+  description = "AWS region"
+  type        = string
+  default     = "us-west-2"
+}
+```
+
+Just to make it easy to change the region that’s used.
+
+If you run `terraform init` to setup the project, then `terraform apply`, this will create all of the resources in the VPC module.
+
+## Module Variables
+
+Currently, the CIDR blocks for the VPC and subnets are hardcoded into the VPC module. So this module will always use those CIDR blocks no matter what.
+
+```ruby
+resource "aws_vpc" "some_custom_vpc" {
+  cidr_block = "10.0.0.0/16"
+}
+
+resource "aws_subnet" "some_public_subnet" {
+  vpc_id            = aws_vpc.some_custom_vpc.id
+  cidr_block        = "10.0.1.0/24"
+}
+
+resource "aws_subnet" "some_private_subnet" {
+  vpc_id            = aws_vpc.some_custom_vpc.id
+  cidr_block        = "10.0.2.0/24"
+}
+```
+
+Let’s make these more dynamic using variables.
+
+In `modules/vpc/variables.tf` add the following variables:
+
+```ruby
+variable "vpc_cidr" {
+  description = "CIDR block for the entire VPC"
+  type        = string
+}
+
+variable "public_sub_1_cidr" {
+  description = "CIDR block for the public subnet"
+  type        = string
+}
+
+variable "private_sub_1_cidr" {
+  description = "CIDR block for the private subnet"
+  type        = string
+}
+```
+
+Then in `modules/vpc/main.tf` modify the resource blocks to use the variables:
+
+```ruby
+resource "aws_vpc" "some_custom_vpc" {
+  cidr_block = var.vpc_cidr
+}
+
+resource "aws_subnet" "some_public_subnet" {
+  vpc_id            = aws_vpc.some_custom_vpc.id
+  cidr_block        = var.public_sub_1_cidr
+}
+
+resource "aws_subnet" "some_private_subnet" {
+  vpc_id            = aws_vpc.some_custom_vpc.id
+  cidr_block        = var.private_sub_1_cidr
+}
+```
+
+Now the CIDR values are coming from terraform variables, but where do we define the values for these variables?
+
+Modify the root module’s `main.tf` module block:
+
+```ruby
+module "my_vpc" {
+  source = "./modules/vpc"
+
+  vpc_cidr           = "10.0.0.0/16"
+  public_sub_1_cidr  = "10.0.1.0/24"
+  private_sub_1_cidr = "10.0.2.0/24"
+}
+```
+
+If a sub-module defines variables in the variables.tf file, then the root module can pass in values when it defines the module block. And modules can be reused, so you could easily make multiple VPCs by just defining more of these blocks.
+
+```ruby
+module "my_vpc_1" {
+  source = "./modules/vpc"
+
+  vpc_cidr           = "10.0.0.0/16"
+  public_sub_1_cidr  = "10.0.1.0/24"
+  private_sub_1_cidr = "10.0.2.0/24"
+}
+
+module "my_vpc_2" {
+  source = "./modules/vpc"
+
+  vpc_cidr           = "192.168.0.0/16"
+  public_sub_1_cidr  = "192.168.1.0/24"
+  private_sub_1_cidr = "192.168.2.0/24"
+}
+```
+
+And we don’t have to duplicate all of the VPC setup code.
+
+## Module Outputs
+
+The VPC is set up and we have a public subnet and security group. We could use this to deploy an ec2 instance running an HTTP server.
+
+Modify the root’s `main.tf` file to create a new ec2 instance:
+
+```ruby
+module "my_vpc" {
+  source = "./modules/vpc"
+
+  vpc_cidr           = "10.0.0.0/16"
+  public_sub_1_cidr  = "10.0.1.0/24"
+  private_sub_1_cidr = "10.0.2.0/24"
+}
+
+data "aws_ami" "amz_linux_2" {
+  most_recent = true
+  name_regex  = "amzn2-ami-hvm-2.*.1-x86_64-gp2"
+  owners      = ["amazon"]
+}
+
+resource "aws_instance" "web_instance" {
+  ami           = data.aws_ami.amz_linux_2.id
+  instance_type = "t2.nano"
+
+  subnet_id                   = ?
+  vpc_security_group_ids      = ?
+  associate_public_ip_address = true
+
+  user_data = <<-EOF
+  #!/bin/bash -ex
+  amazon-linux-extras install nginx1 -y
+  systemctl enable nginx
+  systemctl start nginx
+  EOF
+}
+```
+
+First, we set up the VPC, then we set up a new EC2 instance running Nginx. But notice that we need to provide the subnet id and the security group id from the resources that are defined in the VPC module. We can’t access those here because they’re in a different module, so we need to **output** them from the module.
+
+Add the following code to `modules/vpc/output.tf`:
+
+```ruby
+output "public_subnet_id" {
+  value = aws_subnet.some_public_subnet.id
+}
+
+output "public_sg_id" {
+  value = aws_security_group.public_sg.id
+}
+```
+
+This will output the public subnet and public security group ids. If this were done in the root module then we would see this data printed to the console after running `terraform apply`. But in a submodule, outputs are used to access data outside of the module.
+
+Modify the root module’s `aws_instance` block to use these values:
+
+```ruby
+resource "aws_instance" "web_instance" {
+  ...
+
+  subnet_id                   = module.my_vpc.public_subnet_id
+  vpc_security_group_ids      = [module.my_vpc.public_sg_id]
+
+  ...
+}
+```
+
+Now we are accessing the needed values from the vpc module’s outputs. If you run `terraform apply` now, you will have an ec2 instance running nginx on the public subnet of the custom VPC.
+
+Add the following output to the root module’s `outputs.tf`
+
+```ruby
+output "public_ip" {
+  value = aws_instance.web_instance.public_ip
+}
+```
+
+And now the public ip address of the ec2 instance will get logged to the console.
+
+## EC2 Module
+
+Even though it’s only a small amount of code, let’s move the ec2 code into it’s own module. This is what the ec2 module should look like:
+
+`modules/ec2/variables.tf`:
+
+```ruby
+variable "public_sg_id" {
+  description = "ID of the security group for the public subnet"
+  type        = string
+}
+
+variable "public_subnet_id" {
+  description = "ID of the public subnet"
+  type        = string
+}
+```
+
+`modules/ec2/outputs.tf`:
+
+```ruby
+output "public_ip" {
+  value = aws_instance.web_instance.public_ip
+}
+```
+
+`modules/ec2/main.tf`:
+
+```ruby
+data "aws_ami" "amz_linux_2" {
+  most_recent = true
+  name_regex  = "amzn2-ami-hvm-2.*.1-x86_64-gp2"
+  owners      = ["amazon"]
+}
+
+resource "aws_instance" "web_instance" {
+  ami           = data.aws_ami.amz_linux_2.id
+  instance_type = "t2.nano"
+
+  subnet_id                   = var.public_subnet_id
+  vpc_security_group_ids      = [var.public_sg_id]
+  associate_public_ip_address = true
+
+  user_data = <<-EOF
+  #!/bin/bash -ex
+  amazon-linux-extras install nginx1 -y
+  systemctl enable nginx
+  systemctl start nginx
+  EOF
+}
+```
+
+Now the subnet and security group id values need to be passed into the ec2 module’s variables so they can be used by the `ec2_instnace` resource block.
+
+Modify the root module’s `main.tf` file:
+
+```ruby
+module "my_vpc" {
+  source = "./modules/vpc"
+
+  vpc_cidr           = "10.0.0.0/16"
+  public_sub_1_cidr  = "10.0.1.0/24"
+  private_sub_1_cidr = "10.0.2.0/24"
+}
+
+module "my_ec2" {
+  source = "./modules/ec2"
+
+  public_subnet_id          = module.my_vpc.public_subnet_id
+  public_sg_id  = module.my_vpc.public_sg_id
+}
+```
+
+Now we are getting the subnet and security group ids from the vpc module’s outputs and passing them to the ec2 module’s variables.
+
+One more thing, the ec2 module is outputting the public IP address. It would be nice to still see that on the console when this is done.
+
+Modify the root module’s `outputs.tf`:
+
+```ruby
+output "public_ip" {
+  value = module.my_ec2.public_ip
+}
+```
+
+Now run terraform apply. This will setup the VPC and the ec2 instance and output the public ip address to terminal.
+
+Complete Code Example: [https://github.com/Sam-Meech-Ward/terraform\_modules](https://github.com/Sam-Meech-Ward/terraform_modules)
