@@ -1,21 +1,33 @@
 import fs from 'fs'
 import path from 'path'
 import parseMarkdown from 'front-matter-markdown'
-import gitChangedFiles from 'git-changed-files'
+import sharp from 'sharp'
+import { hashElement } from 'folder-hash'
+
+import currentBuild from './build.json' assert {type: "json"}
  
 const __dirname = path.resolve()
 
 const isDir = (path) => fs.lstatSync(path).isDirectory()
 const isFile = (path) => fs.lstatSync(path).isFile()
 
-const rootContentDir = '/content'
 const contentDir = path.resolve(__dirname, 'content')
 const content = fs.readdirSync(contentDir)
 
-const entityName = "index.mdx"
-function getEntities(dirPath) {
-  const files = fs.readdirSync(dirPath)
+function getEntity(sections, id) {
+  for (let section in sections) {
+    const entity = sections[section].entities.find(e => e.id === id)
+    if (entity) {
+      return entity
+    }
+  }
+}
 
+
+async function getEntities(dirPath) {
+  const files = fs.readdirSync(dirPath)
+  
+  const entityName = "index.mdx"
   if (files.includes(entityName)) {
     const filePath = path.join(dirPath, entityName)
     const content = fs.readFileSync(filePath, 'utf8')
@@ -25,18 +37,50 @@ function getEntities(dirPath) {
       return 
     }
 
+
+    // Get current version
+    const currentVersion = getEntity(currentBuild, metaData.id)
+
+    // Check for changes 
+    const hash = await hashElement(dirPath, {encoding: 'hex'})
+    const folderHash = hash.hash
+    if (currentVersion && currentVersion.hash === folderHash) {
+      return currentVersion
+    }
+    
+    console.log("Building", metaData.id, metaData.title)
+
+
     // //delete file
     // if (fs.existsSync(path.join(dirPath, 'images/images.json'))) {
     //   fs.unlinkSync(path.join(dirPath, 'images/images.json'))
     // }
+
+    // Auto width and height
+    if (metaData.image && !metaData.image.width || !metaData.image.height) {
+      const imageFile = fs.readFileSync(path.join(dirPath, 'images', metaData.image.name))
+      const image = await sharp(imageFile);
+      const imageMetadata = await image.metadata();
+      metaData.image.width = imageMetadata.width
+      metaData.image.height = imageMetadata.height
+      console.log(metaData.image)
+    }
+
+    // hash for caching 
+
+    // console.log("hash", JSON.parse(hash.toString()).hash)
+
     
     return {
+      ...metaData,
       dirPath: relativeDirPath,
       indexPath: path.relative(__dirname, filePath),
       imagesPath: path.join(relativeDirPath, 'images'),
-      imageUrl: metaData.image ? path.join(relativeDirPath, 'images', metaData.image) : null,
-      ...metaData,
-      // content
+      image: {
+        ...metaData.image,
+        url: metaData.image?.name ? path.join(relativeDirPath, 'images', metaData.image?.name) : null,
+      },
+      hash: folderHash
     }
   }
 
@@ -44,7 +88,7 @@ function getEntities(dirPath) {
   for (let file of files) {
     const filePath = path.join(dirPath, file)
     if (isDir(filePath)) {
-      entities.push(getEntities(filePath))
+      entities.push(await getEntities(filePath))
     }
   }
 
@@ -56,7 +100,7 @@ function getEntities(dirPath) {
  * Within a section, compile all entities/pages (index.mdx)
  * @returns 
  */
-function getSections() {
+async function getSections() {
   let sections = {}
   for (let section of content) {
     // check is a dir
@@ -65,44 +109,15 @@ function getSections() {
       continue
     }
     
-    const entities = getEntities(sectionPath)
+    const entities = await getEntities(sectionPath)
     sections[section] = {
       entities: entities.sort((a, b) => new Date(b.date) - new Date(a.date))
     }
   }
   return sections
+}
 
-    const fileNames = fs.readdirSync(sectionPath)
-    const files = fileNames
-      .map((name) => {
-        const entityPath = path.join(rootContentDir, section, name)
-        return {
-          name,
-          path: entityPath,
-          imagesPath: path.join(entityPath, 'images'),
-          filePath: path.resolve(sectionPath, name)
-        }
-      })
-      .filter((file) => isFile(file.filePath))
-      .map(file => {
-        const content = fs.readFileSync(file.filePath, 'utf8')
-        return {
-          ...file,
-          ...parseMarkdown(content),
-          // content
-        }
-      })
-
-    sections[section] = files
-  }
-//   return sections
-// }
-
-const sections = getSections()
-// console.log(sections.articles)
-// sections = sections.sort((a, b) => +a.section.weight - +b.section.weight)
-
-
+const sections = await getSections()
 
 // Check for any duplicates
 const uuids = {}
@@ -123,6 +138,3 @@ for (let section in sections) {
 
 
 fs.writeFileSync(path.resolve(__dirname, 'build.json'), JSON.stringify(sections, null, 2))
-
-let committedGitFiles = await gitChangedFiles();
-console.log(committedGitFiles)

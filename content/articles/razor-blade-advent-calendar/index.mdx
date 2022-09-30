@@ -1,10 +1,13 @@
 ---
-id: d09ff4fe-38e2-4479-b9c3-0d8c7d0743f6
+id: 647c7734-fe9c-4ae1-9a87-bb2dbdbbe1b7
 wp_id: 319
 title: 'Razor Blade Advent Calendar'
 date: '2018-12-05T11:45:03'
 slug: 'razor-blade-advent-calendar'
-image: 'razor-blade-advent-calendar.png'
+image: 
+  name: 'razor-blade-advent-calendar.png'
+  width: 1280
+  height: 720
 status: 'published'
 description: 'Problem: Build an advent calendar that automatically unlocks candy each day. Solution: Use razor blades… Obviously!'
 tags: ['arduino', 'C', 'christmas', 'node js']
@@ -17,7 +20,7 @@ This year, I decided to make my girlfriend April an advent calendar full of her 
 
 My semi-successful solution was to tie each door to the calendar using a piece of string. Then I connected a razor blade to some CNC parts and had the stepper motor move the motor and cut the string, releasing the door for that day.
 
-![](https://sammeechward.com/wp-content/uploads/2019/07/calendar_1-1024x520.png)
+<Image src="images/calendar_1-1024x520.png" width={1024} height={520} quality={100} />
 
 ## YouTube Video
 
@@ -51,7 +54,7 @@ I didn’t want to try controlling 25 separate locks, I wanted it to be simpler 
 
 So I attached razor blades to these pieces, with hot glue of course, so that I could just control the stepper motors that would cut some string holding on the calendar doors.
 
-![](https://sammeechward.com/wp-content/uploads/2019/07/razor_glue-1024x680.jpg)
+<Image src="images/razor_glue-1024x680.jpg" width={1024} height={680} quality={100} />
 
 I used a cheap plastic rail that I found at home depot, and some blank circuit boards hot glued to the nut. This worked way better than expected to guide the nut in a straight line.
 
@@ -60,7 +63,7 @@ Wire up an arduino to the stepper motors.
 
 With the calendar setup and the razor blades in place, I needed to put together the circuit to control the motors from my Arduino. I purchased some [A4988 stepper motor drivers](https://www.ebay.com/itm/221921771119) and used the following blog post to help me wire everything and write the first piece of code. https://howtomechatronics.com/tutorials/arduino/how-to-control-stepper-motor-with-a4988-driver-and-arduino/
 
-![](https://sammeechward.com/wp-content/uploads/2019/07/circuit-1024x536.jpg)
+<Image src="images/circuit-1024x536.jpg" width={1024} height={536} quality={100} />
 
   
 Program the arduino  
@@ -82,7 +85,7 @@ Now that the calendar is pretty much completely setup, the only thing left to do
 
 April’s favorite candies right now are the herbaland gummy candies, so I bought a bunch of those. To mix things up, I also got some lint chocolates and a fidget spinner.
 
-![](https://sammeechward.com/wp-content/uploads/2019/07/candy-1024x647.jpg)
+<Image src="images/candy-1024x647.jpg" width={1024} height={647} quality={100} />
 
 Putting the candy in the calendar was easy, tying up all of the doors was a long and mundane task. I could never be a sewer, I don’t have the patience to thread anything.
 

@@ -1,10 +1,13 @@
 ---
-id: 21da53bf-406e-4a3e-9028-beb107d33d1a
+id: f0570ddc-96b6-43f0-8719-26d82f4dae13
 wp_id: 502
 title: 'Concurrency Control'
 date: '2020-03-30T05:05:35'
 slug: 'concurrency-control'
-image: 'concurrency-control.png'
+image: 
+  name: 'concurrency-control.png'
+  width: 2048
+  height: 512
 status: 'published'
 description: 'In this post, we will take a high-level look at how computers execute tasks in parallel and some of the solutions we have for concurrency control.'
 tags: ['concurrency', 'multithreading', 'mvcc', 'parallelism']
@@ -39,7 +42,7 @@ For the examples in this post, we will use a completely fictional app called Cat
 
 Let’s say we’ve built Catstagram and one of our cats, let’s call her Kitten, posts this image and caption:
 
-![](https://sammeechward.com/wp-content/uploads/2020/03/freelance.png)
+<Image src="images/freelance.png" width={512} height={512} quality={100} />
 
 If human is on computer, sit on keyboard.
 

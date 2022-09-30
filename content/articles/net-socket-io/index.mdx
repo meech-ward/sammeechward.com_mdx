@@ -1,10 +1,13 @@
 ---
-id: 0a3b71cb-683b-47e3-8b23-8d91f7143c77
+id: 0a9554e2-7825-475c-982d-d47221d60296
 wp_id: 298
 title: 'net-socket.io: Sockets in JavaScript'
 date: '2019-07-16T20:52:12'
 slug: 'net-socket-io'
-image: 'net-socket-io.png'
+image: 
+  name: 'net-socket-io.png'
+  width: 2048
+  height: 1050
 status: 'published'
 description: 'net-socket.io is a small wrapper around node’s net library, that makes low-level socket programming in JavaScript easy. It is heavily based on Socket.io and Event Emitters.'
 tags: ['ipc', 'javascript', 'library', 'node js', 'sockets', 'tcp']
@@ -38,7 +41,7 @@ You know, like [Berkeley sockets](https://en.wikipedia.org/wiki/Berkeley_sockets
 
 The sockets API, available on pretty much all computers, is used for inter-process communication (IPC). So we can use sockets to have two or more applications communicate with each other. These applications could be on the same host (computer), or on different hosts (computers). In fact, we can create an HTTP server and client using sockets. But we could also just create a TCP server and client using sockets, without the overhead of any other protocols like HTTP.
 
-![image](https://i.imgur.com/AxhLEPd.png)
+<Image src="images/AxhLEPd.png" width={581} height={271} quality={100} />
 
 Using sockets, we could create a TCP server application that allows connections from TCP client applications. As you can see, this looks a lot like a standard web server using HTTP and WebSockets, but this is just plain ol’ TCP without any other protocols.
 
@@ -78,7 +81,7 @@ If you actually wanted bidirectional communication between a client and server b
 
 Now here’s where things get interesting. What if we have multiple applications running on the **same** computer and we want to enable communication between them?
 
-![image](https://i.imgur.com/wmB6TaC.png)
+<Image src="images/wmB6TaC.png" width={561} height={251} quality={100} />
 
 We can still use sockets, but they don’t have to communicate through TCP. Instead, all of the communication can happen entirely within the operating system’s kernel. The sockets do this by binding to a filesystem pathname.
 

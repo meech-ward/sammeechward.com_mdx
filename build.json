@@ -2,16 +2,17 @@
   "articles": {
     "entities": [
       {
-        "dirPath": "content/articles/connect-to-mysql-from-node",
-        "indexPath": "content/articles/connect-to-mysql-from-node/index.mdx",
-        "imagesPath": "content/articles/connect-to-mysql-from-node/images",
-        "imageUrl": "content/articles/connect-to-mysql-from-node/images/connect-to-mysql-from-node.png",
-        "id": "86e98705-04d3-4038-a362-dea19ca2a639",
+        "id": "efe90db6-3d28-4704-b82b-115da147bd28",
         "wp_id": 805,
         "title": "Connect to MySQL from Node",
         "date": "2022-06-20T19:56:17",
         "slug": "connect-to-mysql-from-node",
-        "image": "connect-to-mysql-from-node.png",
+        "image": {
+          "name": "connect-to-mysql-from-node.png",
+          "width": 1584,
+          "height": 396,
+          "url": "content/articles/connect-to-mysql-from-node/images/connect-to-mysql-from-node.png"
+        },
         "status": "published",
         "description": "Any web app needs to persist data somehow, and relational databases are always a good option for any web app. In this article i’m going to show you how to connect a node application to a MySQL database.",
         "tags": [
@@ -19,19 +20,24 @@
           "mysql",
           "node js"
         ],
-        "skipSize": 478
+        "skipSize": 515,
+        "dirPath": "content/articles/connect-to-mysql-from-node",
+        "indexPath": "content/articles/connect-to-mysql-from-node/index.mdx",
+        "imagesPath": "content/articles/connect-to-mysql-from-node/images",
+        "hash": "a75272ea7ce9b72cd9ca98a25b080ef1b602ea2c"
       },
       {
-        "dirPath": "content/articles/async-callback-functions-in-javascript",
-        "indexPath": "content/articles/async-callback-functions-in-javascript/index.mdx",
-        "imagesPath": "content/articles/async-callback-functions-in-javascript/images",
-        "imageUrl": "content/articles/async-callback-functions-in-javascript/images/async-callback-functions-in-javascript.png",
-        "id": "42add2fc-3772-41f0-bad2-762b76079fe1",
+        "id": "e077c8a7-709d-4422-b152-8276c142b8b6",
         "wp_id": 799,
         "title": "Async Callback Functions in JavaScript",
         "date": "2022-06-13T18:35:02",
         "slug": "async-callback-functions-in-javascript",
-        "image": "async-callback-functions-in-javascript.png",
+        "image": {
+          "name": "async-callback-functions-in-javascript.png",
+          "width": 1584,
+          "height": 396,
+          "url": "content/articles/async-callback-functions-in-javascript/images/async-callback-functions-in-javascript.png"
+        },
         "status": "published",
         "description": "In this article, we will look at how to use async callbacks in JavaScript.",
         "tags": [
@@ -39,56 +45,71 @@
           "callback",
           "javascript"
         ],
-        "skipSize": 387
+        "skipSize": 424,
+        "dirPath": "content/articles/async-callback-functions-in-javascript",
+        "indexPath": "content/articles/async-callback-functions-in-javascript/index.mdx",
+        "imagesPath": "content/articles/async-callback-functions-in-javascript/images",
+        "hash": "cd72140aa6ee450bc097cca045c6cf2f6b0aff82"
       },
       {
-        "dirPath": "content/articles/javascript-callback-functions",
-        "indexPath": "content/articles/javascript-callback-functions/index.mdx",
-        "imagesPath": "content/articles/javascript-callback-functions/images",
-        "imageUrl": "content/articles/javascript-callback-functions/images/javascript-callback-functions.png",
-        "id": "a10f7214-4df6-4c32-bb51-b0c27ea6d967",
+        "id": "0389dcf4-414a-4db1-894f-2f5caa8401f2",
         "wp_id": 789,
         "title": "JavaScript Callback Functions",
         "date": "2022-05-28T04:33:18",
         "slug": "javascript-callback-functions",
-        "image": "javascript-callback-functions.png",
+        "image": {
+          "name": "javascript-callback-functions.png",
+          "width": 1584,
+          "height": 396,
+          "url": "content/articles/javascript-callback-functions/images/javascript-callback-functions.png"
+        },
         "status": "published",
         "description": "By the end of this article i’m going to make sure you understand how to use callback functions in JavaScript.",
         "tags": [
           "javascript"
         ],
-        "skipSize": 374
+        "skipSize": 411,
+        "dirPath": "content/articles/javascript-callback-functions",
+        "indexPath": "content/articles/javascript-callback-functions/index.mdx",
+        "imagesPath": "content/articles/javascript-callback-functions/images",
+        "hash": "fca3aeb69011a7f5b5a44d41d420b5e787ced916"
       },
       {
-        "dirPath": "content/articles/terraform-modules",
-        "indexPath": "content/articles/terraform-modules/index.mdx",
-        "imagesPath": "content/articles/terraform-modules/images",
-        "imageUrl": "content/articles/terraform-modules/images/terraform-modules.png",
-        "id": "dad83797-cdf1-4f44-b205-c114a33c67ea",
+        "id": "e1525229-1e2e-4661-86e4-1df283e8ec01",
         "wp_id": 759,
         "title": "Terraform Modules",
         "date": "2021-11-21T10:10:20",
         "slug": "terraform-modules",
-        "image": "terraform-modules.png",
+        "image": {
+          "name": "terraform-modules.png",
+          "width": 6912,
+          "height": 3456,
+          "url": "content/articles/terraform-modules/images/terraform-modules.png"
+        },
         "status": "published",
         "description": "A terraform file can get very large very quickly as you add more and more resource blocks. Custom modules are a great way of organizing your terraform code into logical pieces. You might have one module that handles the VPC set up, one that handles RDS, and another for EC2 instances. In this post, we’ll \\[…\\]",
         "tags": [
           "aws",
           "terraform"
         ],
-        "skipSize": 545
+        "skipSize": 583,
+        "dirPath": "content/articles/terraform-modules",
+        "indexPath": "content/articles/terraform-modules/index.mdx",
+        "imagesPath": "content/articles/terraform-modules/images",
+        "hash": "07999462cec1868e47d62f4153981d4e180e8a57"
       },
       {
-        "dirPath": "content/articles/cloud-init-and-terraform-with-aws",
-        "indexPath": "content/articles/cloud-init-and-terraform-with-aws/index.mdx",
-        "imagesPath": "content/articles/cloud-init-and-terraform-with-aws/images",
-        "imageUrl": "content/articles/cloud-init-and-terraform-with-aws/images/cloud-init-and-terraform-with-aws.png",
-        "id": "778f885d-dcd3-49b1-a674-672da0c5d30c",
+        "id": "207d6793-bf28-4729-a4ce-16fb5777bf73",
         "wp_id": 745,
         "title": "Cloud-init and Terraform with AWS",
         "date": "2021-10-31T13:03:27",
         "slug": "cloud-init-and-terraform-with-aws",
-        "image": "cloud-init-and-terraform-with-aws.png",
+        "image": {
+          "name": "cloud-init-and-terraform-with-aws.png",
+          "width": 6912,
+          "height": 3456,
+          "url": "content/articles/cloud-init-and-terraform-with-aws/images/cloud-init-and-terraform-with-aws.png"
+        },
         "status": "published",
         "description": "In this article, we’ll look at how to use cloud-init with terraform to install and configure nginx on an EC2 instance.",
         "tags": [
@@ -97,19 +118,24 @@
           "terraform",
           "user-data"
         ],
-        "skipSize": 428
+        "skipSize": 466,
+        "dirPath": "content/articles/cloud-init-and-terraform-with-aws",
+        "indexPath": "content/articles/cloud-init-and-terraform-with-aws/index.mdx",
+        "imagesPath": "content/articles/cloud-init-and-terraform-with-aws/images",
+        "hash": "d77962af2532c143a28aaee65b33001ec86d3231"
       },
       {
-        "dirPath": "content/articles/s3-and-iam-with-terraform",
-        "indexPath": "content/articles/s3-and-iam-with-terraform/index.mdx",
-        "imagesPath": "content/articles/s3-and-iam-with-terraform/images",
-        "imageUrl": "content/articles/s3-and-iam-with-terraform/images/s3-and-iam-with-terraform.png",
-        "id": "9ffcaa29-6955-498f-bc29-c899198b54a2",
+        "id": "7614f8cc-4ffc-4d0f-85be-be03beef1dc6",
         "wp_id": 743,
         "title": "S3 and IAM with Terraform",
         "date": "2021-10-31T06:00:03",
         "slug": "s3-and-iam-with-terraform",
-        "image": "s3-and-iam-with-terraform.png",
+        "image": {
+          "name": "s3-and-iam-with-terraform.png",
+          "width": 6912,
+          "height": 3456,
+          "url": "content/articles/s3-and-iam-with-terraform/images/s3-and-iam-with-terraform.png"
+        },
         "status": "published",
         "description": "In this post, we will look at how to set up an S3 bucket and an EC2 instance using terraform. The S3 bucket will be set up so it can only be accessed privately and the EC2 instance will get access to the S3 bucket using IAM. I’ll be using the standard module configuration for \\[…\\]",
         "tags": [
@@ -117,102 +143,132 @@
           "iac",
           "terraform"
         ],
-        "skipSize": 548
+        "skipSize": 586,
+        "dirPath": "content/articles/s3-and-iam-with-terraform",
+        "indexPath": "content/articles/s3-and-iam-with-terraform/index.mdx",
+        "imagesPath": "content/articles/s3-and-iam-with-terraform/images",
+        "hash": "a756e0ee12ceac8cdaad4f15dcc7acb2f462b9da"
       },
       {
-        "dirPath": "content/articles/variables-and-outputs-in-terraform",
-        "indexPath": "content/articles/variables-and-outputs-in-terraform/index.mdx",
-        "imagesPath": "content/articles/variables-and-outputs-in-terraform/images",
-        "imageUrl": "content/articles/variables-and-outputs-in-terraform/images/variables-and-outputs-in-terraform.png",
-        "id": "54aa24ad-e570-4484-ad68-1892c297a4df",
+        "id": "750c82bc-3f9e-4234-b70e-b83ff35e397b",
         "wp_id": 740,
         "title": "Variables and Outputs in Terraform",
         "date": "2021-10-31T04:37:15",
         "slug": "variables-and-outputs-in-terraform",
-        "image": "variables-and-outputs-in-terraform.png",
+        "image": {
+          "name": "variables-and-outputs-in-terraform.png",
+          "width": 6912,
+          "height": 3456,
+          "url": "content/articles/variables-and-outputs-in-terraform/images/variables-and-outputs-in-terraform.png"
+        },
         "status": "published",
         "description": "In this post, we’ll go over the basic structure of a terraform module and how to use variables and outputs in the root module.",
         "tags": [
           "aws",
           "terraform"
         ],
-        "skipSize": 412
+        "skipSize": 450,
+        "dirPath": "content/articles/variables-and-outputs-in-terraform",
+        "indexPath": "content/articles/variables-and-outputs-in-terraform/index.mdx",
+        "imagesPath": "content/articles/variables-and-outputs-in-terraform/images",
+        "hash": "aafcdd91d71268d051d2d61d99bb1347189db24a"
       },
       {
-        "dirPath": "content/articles/https-on-amazon-linux-with-nginx",
-        "indexPath": "content/articles/https-on-amazon-linux-with-nginx/index.mdx",
-        "imagesPath": "content/articles/https-on-amazon-linux-with-nginx/images",
-        "imageUrl": "content/articles/https-on-amazon-linux-with-nginx/images/https-on-amazon-linux-with-nginx.png",
-        "id": "6fd85509-fc13-4dff-8cdb-cb468444ffa5",
+        "id": "87f38961-8b9c-4199-b651-8eceb5e8f815",
         "wp_id": 725,
         "title": "HTTPS on Amazon Linux with Nginx",
         "date": "2021-10-02T19:58:23",
         "slug": "https-on-amazon-linux-with-nginx",
-        "image": "https-on-amazon-linux-with-nginx.png",
+        "image": {
+          "name": "https-on-amazon-linux-with-nginx.png",
+          "width": 6912,
+          "height": 3456,
+          "url": "content/articles/https-on-amazon-linux-with-nginx/images/https-on-amazon-linux-with-nginx.png"
+        },
         "status": "published",
         "description": "Learn how to setup an Amazon Linux 2 EC2 instance with nginx to accept HTTPS requests. https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-amazon-linux-2.html#letsencrypt Setup First you need to create a new amazon linux 2 ec2 instance with Nginx installed. You can follow one of these videos to get started: Nginx Reverse Proxy on AWS EC2 Amazon Linux 2: https://youtu.be/\\_EBARqreeao Setting Up \\[…\\]",
         "tags": [],
-        "skipSize": 671
+        "skipSize": 709,
+        "dirPath": "content/articles/https-on-amazon-linux-with-nginx",
+        "indexPath": "content/articles/https-on-amazon-linux-with-nginx/index.mdx",
+        "imagesPath": "content/articles/https-on-amazon-linux-with-nginx/images",
+        "hash": "5a384335e0465044edb9c57109c02663370f3a6b"
       },
       {
-        "dirPath": "content/articles/jest-and-esmodules",
-        "indexPath": "content/articles/jest-and-esmodules/index.mdx",
-        "imagesPath": "content/articles/jest-and-esmodules/images",
-        "imageUrl": "content/articles/jest-and-esmodules/images/jest-and-esmodules.png",
-        "id": "319723af-aabd-4b42-b8f5-6406b127245a",
+        "id": "8fb894ce-4f98-4775-b43a-1603cc7ee10b",
         "wp_id": 705,
         "title": "Jest and ESModules",
         "date": "2021-04-01T20:23:48",
         "slug": "jest-and-esmodules",
-        "image": "jest-and-esmodules.png",
+        "image": {
+          "name": "jest-and-esmodules.png",
+          "width": 1500,
+          "height": 500,
+          "url": "content/articles/jest-and-esmodules/images/jest-and-esmodules.png"
+        },
         "status": "published",
         "description": "If you are already using ESModules in your node application, natively without babel, then this is how you can setup your jest tests to use ESModules in the same way. The official docs for this can be found here: https://jestjs.io/docs/ecmascript-modules Note: For this to work you will need to be using node version 14 or \\[…\\]",
         "tags": [],
-        "skipSize": 547
+        "skipSize": 584,
+        "dirPath": "content/articles/jest-and-esmodules",
+        "indexPath": "content/articles/jest-and-esmodules/index.mdx",
+        "imagesPath": "content/articles/jest-and-esmodules/images",
+        "hash": "e481766f4b7df75949563a7ea46cd45a7cabe848"
       },
       {
-        "dirPath": "content/articles/mocking-a-database-with-jest-in-javascript",
-        "indexPath": "content/articles/mocking-a-database-with-jest-in-javascript/index.mdx",
-        "imagesPath": "content/articles/mocking-a-database-with-jest-in-javascript/images",
-        "imageUrl": "content/articles/mocking-a-database-with-jest-in-javascript/images/mocking-a-database-with-jest-in-javascript.png",
-        "id": "6c35bcb8-24e4-491b-98bd-3361eba69989",
+        "id": "a69c7c6c-6d82-47c8-b934-6e54e86c404f",
         "wp_id": 691,
         "title": "Mocking a Database in Node with Jest",
         "date": "2021-04-01T08:50:46",
         "slug": "mocking-a-database-with-jest-in-javascript",
-        "image": "mocking-a-database-with-jest-in-javascript.png",
+        "image": {
+          "name": "mocking-a-database-with-jest-in-javascript.png",
+          "width": 1500,
+          "height": 500,
+          "url": "content/articles/mocking-a-database-with-jest-in-javascript/images/mocking-a-database-with-jest-in-javascript.png"
+        },
         "status": "published",
         "description": "In a previous article, we tested an express api that created a user. We only tested the http interface though, we never actually got to testing the database because we didn’t know about dependency injection yet. Now that we know how to inject the database, we can learn about mocking. In this article, we will \\[…\\]",
         "tags": [],
-        "skipSize": 601
+        "skipSize": 638,
+        "dirPath": "content/articles/mocking-a-database-with-jest-in-javascript",
+        "indexPath": "content/articles/mocking-a-database-with-jest-in-javascript/index.mdx",
+        "imagesPath": "content/articles/mocking-a-database-with-jest-in-javascript/images",
+        "hash": "d8eee7d75b4a37b0cc9f2879a60533f8c56779b4"
       },
       {
-        "dirPath": "content/articles/dependency-injection-in-javascript",
-        "indexPath": "content/articles/dependency-injection-in-javascript/index.mdx",
-        "imagesPath": "content/articles/dependency-injection-in-javascript/images",
-        "imageUrl": "content/articles/dependency-injection-in-javascript/images/dependency-injection-in-javascript.png",
-        "id": "8aff1ca7-64d6-408e-b7fc-3200a28c9c00",
+        "id": "100b2146-8acc-4d19-a785-b1e5a30052ef",
         "wp_id": 689,
         "title": "Dependency Injection in JavaScript",
         "date": "2021-04-01T08:50:14",
         "slug": "dependency-injection-in-javascript",
-        "image": "dependency-injection-in-javascript.png",
+        "image": {
+          "name": "dependency-injection-in-javascript.png",
+          "width": 1500,
+          "height": 500,
+          "url": "content/articles/dependency-injection-in-javascript/images/dependency-injection-in-javascript.png"
+        },
         "status": "published",
         "description": "There are a few benefits to using dependency injection, but the best, most useful benefit and biggest reason to use dependency injection is to make your code more testable. In this article we’re going to take a look at what dependency injection is by using an example of an express app that stores data in \\[…\\]",
         "tags": [],
-        "skipSize": 579
+        "skipSize": 616,
+        "dirPath": "content/articles/dependency-injection-in-javascript",
+        "indexPath": "content/articles/dependency-injection-in-javascript/index.mdx",
+        "imagesPath": "content/articles/dependency-injection-in-javascript/images",
+        "hash": "7f311ddb7af1c66e287fa765c4281f751ed99e6c"
       },
       {
-        "dirPath": "content/articles/testing-an-express-app-with-supertest-and-jest",
-        "indexPath": "content/articles/testing-an-express-app-with-supertest-and-jest/index.mdx",
-        "imagesPath": "content/articles/testing-an-express-app-with-supertest-and-jest/images",
-        "imageUrl": "content/articles/testing-an-express-app-with-supertest-and-jest/images/testing-an-express-app-with-supertest-and-jest.png",
-        "id": "a5796370-7a47-4dd2-8f91-af0e746e464c",
+        "id": "7eb04006-f32a-4645-b324-dcee8af35302",
         "wp_id": 687,
         "title": "Testing an Express App With Supertest and Jest",
         "date": "2021-04-01T08:49:05",
         "slug": "testing-an-express-app-with-supertest-and-jest",
-        "image": "testing-an-express-app-with-supertest-and-jest.png",
+        "image": {
+          "name": "testing-an-express-app-with-supertest-and-jest.png",
+          "width": 1500,
+          "height": 500,
+          "url": "content/articles/testing-an-express-app-with-supertest-and-jest/images/testing-an-express-app-with-supertest-and-jest.png"
+        },
         "status": "published",
         "description": "In this article, we’re going to look at how to use TDD to test an express API using the supertest and jest frameworks. Jest is a javascript test runner for running automated tests, and supertest provides a high-level abstraction for testing HTTP. The app that we will be testing will will contain a single endpoint \\[…\\]",
         "tags": [
@@ -221,19 +277,24 @@
           "node js",
           "tdd"
         ],
-        "skipSize": 659
+        "skipSize": 696,
+        "dirPath": "content/articles/testing-an-express-app-with-supertest-and-jest",
+        "indexPath": "content/articles/testing-an-express-app-with-supertest-and-jest/index.mdx",
+        "imagesPath": "content/articles/testing-an-express-app-with-supertest-and-jest/images",
+        "hash": "b432e3abc609e09cbabe7514b732e33c3647ad14"
       },
       {
-        "dirPath": "content/articles/terraform-vpc-subnets-ec2-and-more",
-        "indexPath": "content/articles/terraform-vpc-subnets-ec2-and-more/index.mdx",
-        "imagesPath": "content/articles/terraform-vpc-subnets-ec2-and-more/images",
-        "imageUrl": "content/articles/terraform-vpc-subnets-ec2-and-more/images/terraform-vpc-subnets-ec2-and-more.png",
-        "id": "c7d8fb1f-94e8-4be1-875c-61c41e721cfe",
+        "id": "185e5bee-471b-4c0d-8209-bda5063ebe95",
         "wp_id": 671,
         "title": "Terraform | VPC, Subnets, EC2, and more",
         "date": "2021-03-28T20:20:50",
         "slug": "terraform-vpc-subnets-ec2-and-more",
-        "image": "terraform-vpc-subnets-ec2-and-more.png",
+        "image": {
+          "name": "terraform-vpc-subnets-ec2-and-more.png",
+          "width": 6912,
+          "height": 3456,
+          "url": "content/articles/terraform-vpc-subnets-ec2-and-more/images/terraform-vpc-subnets-ec2-and-more.png"
+        },
         "status": "published",
         "description": "Let’s take a look at how to use the aws cli to create a VPC, Subnets, EC2 instances, and more.",
         "tags": [
@@ -242,38 +303,48 @@
           "terraform",
           "vpc"
         ],
-        "skipSize": 399
+        "skipSize": 437,
+        "dirPath": "content/articles/terraform-vpc-subnets-ec2-and-more",
+        "indexPath": "content/articles/terraform-vpc-subnets-ec2-and-more/index.mdx",
+        "imagesPath": "content/articles/terraform-vpc-subnets-ec2-and-more/images",
+        "hash": "0e164ba3cbf9217fb7fe801ecaf8b61d0c7d54ff"
       },
       {
-        "dirPath": "content/articles/uploading-images-express-and-react",
-        "indexPath": "content/articles/uploading-images-express-and-react/index.mdx",
-        "imagesPath": "content/articles/uploading-images-express-and-react/images",
-        "imageUrl": "content/articles/uploading-images-express-and-react/images/uploading-images-express-and-react.png",
-        "id": "4717a00c-a0f6-40f5-857f-dbd5e30525f3",
+        "id": "4c8e7e21-1e05-4985-a3a6-294e85ad11be",
         "wp_id": 657,
         "title": "Uploading Images – Express and React",
         "date": "2021-03-01T04:05:42",
         "slug": "uploading-images-express-and-react",
-        "image": "uploading-images-express-and-react.png",
+        "image": {
+          "name": "uploading-images-express-and-react.png",
+          "width": 2560,
+          "height": 1280,
+          "url": "content/articles/uploading-images-express-and-react/images/uploading-images-express-and-react.png"
+        },
         "status": "published",
         "description": "In this article I’m going to show you how to upload an image from a react app to an express server using a library called multer. This will allow us to store the image in the server’s file system so they can be uploaded and downloaded by any client. React Let’s start with a basic \\[…\\]",
         "tags": [
           "javascript",
           "node"
         ],
-        "skipSize": 576
+        "skipSize": 614,
+        "dirPath": "content/articles/uploading-images-express-and-react",
+        "indexPath": "content/articles/uploading-images-express-and-react/index.mdx",
+        "imagesPath": "content/articles/uploading-images-express-and-react/images",
+        "hash": "2dda84db34365a330d9ab8cd1f291664b622e972"
       },
       {
-        "dirPath": "content/articles/aws-cli-vpc-subnets-ec2-and-more",
-        "indexPath": "content/articles/aws-cli-vpc-subnets-ec2-and-more/index.mdx",
-        "imagesPath": "content/articles/aws-cli-vpc-subnets-ec2-and-more/images",
-        "imageUrl": "content/articles/aws-cli-vpc-subnets-ec2-and-more/images/aws-cli-vpc-subnets-ec2-and-more.png",
-        "id": "dc3928e7-9446-40e0-b4d9-2447aae2ac5c",
+        "id": "61c5294f-415c-4bba-bc62-30c656267d96",
         "wp_id": 596,
         "title": "AWS CLI | VPC, Subnets, EC2, and more",
         "date": "2020-11-28T19:47:00",
         "slug": "aws-cli-vpc-subnets-ec2-and-more",
-        "image": "aws-cli-vpc-subnets-ec2-and-more.png",
+        "image": {
+          "name": "aws-cli-vpc-subnets-ec2-and-more.png",
+          "width": 1280,
+          "height": 720,
+          "url": "content/articles/aws-cli-vpc-subnets-ec2-and-more/images/aws-cli-vpc-subnets-ec2-and-more.png"
+        },
         "status": "published",
         "description": "Let’s take a look at how to use the aws cli to create a VPC, Subnets, EC2 instances, and more.",
         "tags": [
@@ -281,56 +352,71 @@
           "ec2",
           "vpc"
         ],
-        "skipSize": 380
+        "skipSize": 417,
+        "dirPath": "content/articles/aws-cli-vpc-subnets-ec2-and-more",
+        "indexPath": "content/articles/aws-cli-vpc-subnets-ec2-and-more/index.mdx",
+        "imagesPath": "content/articles/aws-cli-vpc-subnets-ec2-and-more/images",
+        "hash": "d971dd86faa68b700ba6c3421a3fe5c23d9216da"
       },
       {
-        "dirPath": "content/articles/aws-cli-s3-static-website",
-        "indexPath": "content/articles/aws-cli-s3-static-website/index.mdx",
-        "imagesPath": "content/articles/aws-cli-s3-static-website/images",
-        "imageUrl": "content/articles/aws-cli-s3-static-website/images/aws-cli-s3-static-website.png",
-        "id": "38bcc00c-721a-4efc-94fe-eeb95e960b68",
+        "id": "f0b7f719-5b40-4c07-9c61-117b6dd1a82c",
         "wp_id": 583,
         "title": "AWS CLI | Setup an S3 Static Website",
         "date": "2020-11-28T08:39:38",
         "slug": "aws-cli-s3-static-website",
-        "image": "aws-cli-s3-static-website.png",
+        "image": {
+          "name": "aws-cli-s3-static-website.png",
+          "width": 1280,
+          "height": 720,
+          "url": "content/articles/aws-cli-s3-static-website/images/aws-cli-s3-static-website.png"
+        },
         "status": "published",
         "description": "Let’s take a look at how to deploy a website to an S3 bucket using the aws cli.",
         "tags": [
           "aws"
         ],
-        "skipSize": 336
+        "skipSize": 373,
+        "dirPath": "content/articles/aws-cli-s3-static-website",
+        "indexPath": "content/articles/aws-cli-s3-static-website/index.mdx",
+        "imagesPath": "content/articles/aws-cli-s3-static-website/images",
+        "hash": "5f5829f9c8cb4d5825eaf1bf843f979e65baad4f"
       },
       {
-        "dirPath": "content/articles/beginning-ios-development-for-not-beginners",
-        "indexPath": "content/articles/beginning-ios-development-for-not-beginners/index.mdx",
-        "imagesPath": "content/articles/beginning-ios-development-for-not-beginners/images",
-        "imageUrl": "content/articles/beginning-ios-development-for-not-beginners/images/beginning-ios-development-for-not-beginners.png",
-        "id": "29753b09-f11c-4791-a9b3-319261203015",
+        "id": "a65e91a0-6560-4fd3-92e2-504f0c7adbe5",
         "wp_id": 540,
         "title": "Beginning iOS Development for Not Beginners",
         "date": "2020-06-06T23:15:15",
         "slug": "beginning-ios-development-for-not-beginners",
-        "image": "beginning-ios-development-for-not-beginners.png",
+        "image": {
+          "name": "beginning-ios-development-for-not-beginners.png",
+          "width": 1280,
+          "height": 720,
+          "url": "content/articles/beginning-ios-development-for-not-beginners/images/beginning-ios-development-for-not-beginners.png"
+        },
         "status": "published",
         "description": "In this video, I’m going to show you how to get started making iOS apps by building a basic Rock, Paper, Scissors game. We will be writing a little bit of Swift, so to get the most out of this video, you should be familiar with some sort of programming language. You don’t have to \\[…\\]",
         "tags": [
           "ios",
           "swift"
         ],
-        "skipSize": 595
+        "skipSize": 632,
+        "dirPath": "content/articles/beginning-ios-development-for-not-beginners",
+        "indexPath": "content/articles/beginning-ios-development-for-not-beginners/index.mdx",
+        "imagesPath": "content/articles/beginning-ios-development-for-not-beginners/images",
+        "hash": "131e8f59c374f308885a69e5bd94e376af37053b"
       },
       {
-        "dirPath": "content/articles/concurrency-control",
-        "indexPath": "content/articles/concurrency-control/index.mdx",
-        "imagesPath": "content/articles/concurrency-control/images",
-        "imageUrl": "content/articles/concurrency-control/images/concurrency-control.png",
-        "id": "21da53bf-406e-4a3e-9028-beb107d33d1a",
+        "id": "f0570ddc-96b6-43f0-8719-26d82f4dae13",
         "wp_id": 502,
         "title": "Concurrency Control",
         "date": "2020-03-30T05:05:35",
         "slug": "concurrency-control",
-        "image": "concurrency-control.png",
+        "image": {
+          "name": "concurrency-control.png",
+          "width": 2048,
+          "height": 512,
+          "url": "content/articles/concurrency-control/images/concurrency-control.png"
+        },
         "status": "published",
         "description": "In this post, we will take a high-level look at how computers execute tasks in parallel and some of the solutions we have for concurrency control.",
         "tags": [
@@ -339,73 +425,93 @@
           "mvcc",
           "parallelism"
         ],
-        "skipSize": 423
+        "skipSize": 460,
+        "dirPath": "content/articles/concurrency-control",
+        "indexPath": "content/articles/concurrency-control/index.mdx",
+        "imagesPath": "content/articles/concurrency-control/images",
+        "hash": "0f75224d5ffa47b266927bf287961f4b89090195"
       },
       {
-        "dirPath": "content/articles/a-quick-guide-to-creating-tables",
-        "indexPath": "content/articles/a-quick-guide-to-creating-tables/index.mdx",
-        "imagesPath": "content/articles/a-quick-guide-to-creating-tables/images",
-        "imageUrl": "content/articles/a-quick-guide-to-creating-tables/images/a-quick-guide-to-creating-tables.png",
-        "id": "1f5c5783-1895-489e-b20d-b1573c461cc9",
+        "id": "f59a825c-91d2-4f75-9ff6-4226489e28e4",
         "wp_id": 451,
         "title": "SQL & DDL: A Quick Guide to Creating Tables",
         "date": "2020-02-02T23:39:19",
         "slug": "a-quick-guide-to-creating-tables",
-        "image": "a-quick-guide-to-creating-tables.png",
+        "image": {
+          "name": "a-quick-guide-to-creating-tables.png",
+          "width": 3176,
+          "height": 2088,
+          "url": "content/articles/a-quick-guide-to-creating-tables/images/a-quick-guide-to-creating-tables.png"
+        },
         "status": "published",
         "description": "Relational databases are all about tables. In order to store, organize, or query data; we must first create the tables. In this article, we will use the Data Definition Language (DDL) to learn about the basics of creating tables, choosing data types, adding constraints and default values.",
         "tags": [
           "mysql"
         ],
-        "skipSize": 569
+        "skipSize": 607,
+        "dirPath": "content/articles/a-quick-guide-to-creating-tables",
+        "indexPath": "content/articles/a-quick-guide-to-creating-tables/index.mdx",
+        "imagesPath": "content/articles/a-quick-guide-to-creating-tables/images",
+        "hash": "571c0bdb4d7818098d375dde285f8a460122a42e"
       },
       {
-        "dirPath": "content/articles/sql-injection-sql-is-demon-spawn",
-        "indexPath": "content/articles/sql-injection-sql-is-demon-spawn/index.mdx",
-        "imagesPath": "content/articles/sql-injection-sql-is-demon-spawn/images",
-        "imageUrl": "content/articles/sql-injection-sql-is-demon-spawn/images/sql-injection-sql-is-demon-spawn.png",
-        "id": "7d135a25-43f4-41c4-90bf-887cfae71aa3",
+        "id": "c85f6471-23a0-486c-9285-284e1b091727",
         "wp_id": 403,
         "title": "SQL Injection | SQL is demon spawn",
         "date": "2020-01-20T16:22:01",
         "slug": "sql-injection-sql-is-demon-spawn",
-        "image": "sql-injection-sql-is-demon-spawn.png",
+        "image": {
+          "name": "sql-injection-sql-is-demon-spawn.png",
+          "width": 480,
+          "height": 360,
+          "url": "content/articles/sql-injection-sql-is-demon-spawn/images/sql-injection-sql-is-demon-spawn.png"
+        },
         "status": "published",
         "description": "In this video, we will take a look at how to perform some SQL injection attacks on a site, and we’ll learn how to protect our sites from attacks.",
         "tags": [
           "mysql"
         ],
-        "skipSize": 416
+        "skipSize": 452,
+        "dirPath": "content/articles/sql-injection-sql-is-demon-spawn",
+        "indexPath": "content/articles/sql-injection-sql-is-demon-spawn/index.mdx",
+        "imagesPath": "content/articles/sql-injection-sql-is-demon-spawn/images",
+        "hash": "d98878cd8b3e362771922bdb7aac7651a7fd9629"
       },
       {
-        "dirPath": "content/articles/how-to-lose-an-entire-afternoon-reading-about-javascript",
-        "indexPath": "content/articles/how-to-lose-an-entire-afternoon-reading-about-javascript/index.mdx",
-        "imagesPath": "content/articles/how-to-lose-an-entire-afternoon-reading-about-javascript/images",
-        "imageUrl": "content/articles/how-to-lose-an-entire-afternoon-reading-about-javascript/images/how-to-lose-an-entire-afternoon-reading-about-javascript.png",
-        "id": "8841c95d-755d-42ad-897f-54b07d570091",
+        "id": "ee85c482-be19-4d94-b582-1383d0ce5d11",
         "wp_id": 392,
         "title": "How to lose an entire afternoon reading about JavaScript",
         "date": "2020-01-06T13:29:05",
         "slug": "how-to-lose-an-entire-afternoon-reading-about-javascript",
-        "image": "how-to-lose-an-entire-afternoon-reading-about-javascript.png",
+        "image": {
+          "name": "how-to-lose-an-entire-afternoon-reading-about-javascript.png",
+          "width": 512,
+          "height": 512,
+          "url": "content/articles/how-to-lose-an-entire-afternoon-reading-about-javascript/images/how-to-lose-an-entire-afternoon-reading-about-javascript.png"
+        },
         "status": "published",
         "description": "Interested in losing an entire afternoon reading about JavaScript? 1. Our journey starts at the hello world page on reactjs.org. But don’t worry, we won’t stay there long, we ended up there by accident looking for the create react app docs. About 1 minute in, we’ll come across the most interesting paragraph on the page: \\[…\\]",
         "tags": [
           "javascript"
         ],
-        "skipSize": 673
+        "skipSize": 709,
+        "dirPath": "content/articles/how-to-lose-an-entire-afternoon-reading-about-javascript",
+        "indexPath": "content/articles/how-to-lose-an-entire-afternoon-reading-about-javascript/index.mdx",
+        "imagesPath": "content/articles/how-to-lose-an-entire-afternoon-reading-about-javascript/images",
+        "hash": "65debfe53df154f3994ff68f2d2dad7a7b61e1be"
       },
       {
-        "dirPath": "content/articles/we-surprised-her-with-another-motorized-advent-calendar",
-        "indexPath": "content/articles/we-surprised-her-with-another-motorized-advent-calendar/index.mdx",
-        "imagesPath": "content/articles/we-surprised-her-with-another-motorized-advent-calendar/images",
-        "imageUrl": "content/articles/we-surprised-her-with-another-motorized-advent-calendar/images/we-surprised-her-with-another-motorized-advent-calendar.png",
-        "id": "7e3862e5-81e8-4681-879d-df3a26b6ef5c",
+        "id": "f9366e6e-8948-4f8c-8c9a-c7e796ed4c73",
         "wp_id": 386,
         "title": "We Surprised Her With Another Motorized Advent Calendar",
         "date": "2019-12-11T23:29:51",
         "slug": "we-surprised-her-with-another-motorized-advent-calendar",
-        "image": "we-surprised-her-with-another-motorized-advent-calendar.png",
+        "image": {
+          "name": "we-surprised-her-with-another-motorized-advent-calendar.png",
+          "width": 1440,
+          "height": 1440,
+          "url": "content/articles/we-surprised-her-with-another-motorized-advent-calendar/images/we-surprised-her-with-another-motorized-advent-calendar.png"
+        },
         "status": "published",
         "description": "We Surprised Her With Another Motorized Advent Calendar.",
         "tags": [
@@ -413,54 +519,69 @@
           "ios",
           "raspberry pi"
         ],
-        "skipSize": 419
+        "skipSize": 457,
+        "dirPath": "content/articles/we-surprised-her-with-another-motorized-advent-calendar",
+        "indexPath": "content/articles/we-surprised-her-with-another-motorized-advent-calendar/index.mdx",
+        "imagesPath": "content/articles/we-surprised-her-with-another-motorized-advent-calendar/images",
+        "hash": "8ddff32e221e129cd89ad1a8636404b461560102"
       },
       {
-        "dirPath": "content/articles/using-the-wordpress-rest-api-to-build-a-chrome-extension",
-        "indexPath": "content/articles/using-the-wordpress-rest-api-to-build-a-chrome-extension/index.mdx",
-        "imagesPath": "content/articles/using-the-wordpress-rest-api-to-build-a-chrome-extension/images",
-        "imageUrl": "content/articles/using-the-wordpress-rest-api-to-build-a-chrome-extension/images/using-the-wordpress-rest-api-to-build-a-chrome-extension.png",
-        "id": "b922f106-d727-47b6-bcfd-168307a2f068",
+        "id": "97fcace7-dece-4537-a5f4-283bda5ea76e",
         "wp_id": 371,
         "title": "Using the WordPress REST API to Build a Chrome Extension",
         "date": "2019-11-13T19:29:45",
         "slug": "using-the-wordpress-rest-api-to-build-a-chrome-extension",
-        "image": "using-the-wordpress-rest-api-to-build-a-chrome-extension.png",
+        "image": {
+          "name": "using-the-wordpress-rest-api-to-build-a-chrome-extension.png",
+          "width": 2754,
+          "height": 916,
+          "url": "content/articles/using-the-wordpress-rest-api-to-build-a-chrome-extension/images/using-the-wordpress-rest-api-to-build-a-chrome-extension.png"
+        },
         "status": "published",
         "description": "The WordPress REST API provides us with a way to communicate with our WordPress sites using JSON. To some people, this might not mean much, but to every web and application developer, this is kind of huge. We can use WordPress to easily set up a CMS while taking complete control of the front end \\[…\\]",
         "tags": [],
-        "skipSize": 636
+        "skipSize": 673,
+        "dirPath": "content/articles/using-the-wordpress-rest-api-to-build-a-chrome-extension",
+        "indexPath": "content/articles/using-the-wordpress-rest-api-to-build-a-chrome-extension/index.mdx",
+        "imagesPath": "content/articles/using-the-wordpress-rest-api-to-build-a-chrome-extension/images",
+        "hash": "1d134ed58472cedb4d43cc15ddeaa31c62f03ac3"
       },
       {
-        "dirPath": "content/articles/connecting-to-mysql-from-php-using-procedural-mysqli",
-        "indexPath": "content/articles/connecting-to-mysql-from-php-using-procedural-mysqli/index.mdx",
-        "imagesPath": "content/articles/connecting-to-mysql-from-php-using-procedural-mysqli/images",
-        "imageUrl": "content/articles/connecting-to-mysql-from-php-using-procedural-mysqli/images/connecting-to-mysql-from-php-using-procedural-mysqli.png",
-        "id": "0f7a0538-caef-4adc-910f-cdcdc1fc5629",
+        "id": "fdebb13f-0a07-413b-8c11-f0bfa6c37892",
         "wp_id": 357,
         "title": "Connecting to MySQL from PHP using Procedural MySQLi",
         "date": "2019-10-01T03:37:58",
         "slug": "connecting-to-mysql-from-php-using-procedural-mysqli",
-        "image": "connecting-to-mysql-from-php-using-procedural-mysqli.png",
+        "image": {
+          "name": "connecting-to-mysql-from-php-using-procedural-mysqli.png",
+          "width": 2194,
+          "height": 952,
+          "url": "content/articles/connecting-to-mysql-from-php-using-procedural-mysqli/images/connecting-to-mysql-from-php-using-procedural-mysqli.png"
+        },
         "status": "published",
         "description": "We can use the mysqli functions to access a MySQL database from PHP. mysqli has a Procedural and an Object-Oriented API. This is a quick tutorial on how to perform some basic queries using procedural mysqli. MySQL Improved Extension The general steps that we will follow when performing an SQL query from PHP will be: \\[…\\]",
         "tags": [
           "mysql",
           "php"
         ],
-        "skipSize": 659
+        "skipSize": 696,
+        "dirPath": "content/articles/connecting-to-mysql-from-php-using-procedural-mysqli",
+        "indexPath": "content/articles/connecting-to-mysql-from-php-using-procedural-mysqli/index.mdx",
+        "imagesPath": "content/articles/connecting-to-mysql-from-php-using-procedural-mysqli/images",
+        "hash": "d083bac2de3201ba376efa53c59f16d679310a50"
       },
       {
-        "dirPath": "content/articles/ajax-php-a-get-and-post-server",
-        "indexPath": "content/articles/ajax-php-a-get-and-post-server/index.mdx",
-        "imagesPath": "content/articles/ajax-php-a-get-and-post-server/images",
-        "imageUrl": "content/articles/ajax-php-a-get-and-post-server/images/ajax-php-a-get-and-post-server.png",
-        "id": "70970afd-ce12-404f-9ccd-a108026dbf92",
+        "id": "908ed91d-8b17-4457-bfb8-29d5a44c1d60",
         "wp_id": 347,
         "title": "AJAX & PHP – A GET and POST Server",
         "date": "2019-09-16T17:35:20",
         "slug": "ajax-php-a-get-and-post-server",
-        "image": "ajax-php-a-get-and-post-server.png",
+        "image": {
+          "name": "ajax-php-a-get-and-post-server.png",
+          "width": 2048,
+          "height": 926,
+          "url": "content/articles/ajax-php-a-get-and-post-server/images/ajax-php-a-get-and-post-server.png"
+        },
         "status": "published",
         "description": "When we’re building modern single-page web applications, or when we’re building native mobile and desktop applications, we need an API that accepts and returns data in formats other than HTML. URL encoded data is a common format for sending data to servers, and JSON is common for sending data from a server to a client. \\[…\\]",
         "tags": [
@@ -468,19 +589,24 @@
           "http",
           "php"
         ],
-        "skipSize": 607
+        "skipSize": 644,
+        "dirPath": "content/articles/ajax-php-a-get-and-post-server",
+        "indexPath": "content/articles/ajax-php-a-get-and-post-server/index.mdx",
+        "imagesPath": "content/articles/ajax-php-a-get-and-post-server/images",
+        "hash": "5d08e089b5834196bada0724841402e720a3b98c"
       },
       {
-        "dirPath": "content/articles/installing-node-js-on-any-raspberry-pi",
-        "indexPath": "content/articles/installing-node-js-on-any-raspberry-pi/index.mdx",
-        "imagesPath": "content/articles/installing-node-js-on-any-raspberry-pi/images",
-        "imageUrl": "content/articles/installing-node-js-on-any-raspberry-pi/images/installing-node-js-on-any-raspberry-pi.png",
-        "id": "40fbc30e-2531-45b5-a366-7c1558da474e",
+        "id": "8f06bfa3-098a-43bd-aba7-70b277d9e623",
         "wp_id": 344,
         "title": "Installing Node.js on Any Raspberry Pi",
         "date": "2019-09-10T04:49:47",
         "slug": "installing-node-js-on-any-raspberry-pi",
-        "image": "installing-node-js-on-any-raspberry-pi.png",
+        "image": {
+          "name": "installing-node-js-on-any-raspberry-pi.png",
+          "width": 1280,
+          "height": 720,
+          "url": "content/articles/installing-node-js-on-any-raspberry-pi/images/installing-node-js-on-any-raspberry-pi.png"
+        },
         "status": "published",
         "description": "JavaScript is one of the most simple yet powerful languages that we can use make apps for pretty much anything. This includes apps for the raspberry pi. In this tutorial, we will learn how to install NodeJs on any raspberry pi. For those of you that would prefer a video, here’s one that I prepared \\[…\\]",
         "tags": [
@@ -489,38 +615,48 @@
           "node js",
           "raspberry pi"
         ],
-        "skipSize": 630
+        "skipSize": 667,
+        "dirPath": "content/articles/installing-node-js-on-any-raspberry-pi",
+        "indexPath": "content/articles/installing-node-js-on-any-raspberry-pi/index.mdx",
+        "imagesPath": "content/articles/installing-node-js-on-any-raspberry-pi/images",
+        "hash": "c19026e5ad1f7d12c51a5bbec91f03b755891e4b"
       },
       {
-        "dirPath": "content/articles/swift-array-methods",
-        "indexPath": "content/articles/swift-array-methods/index.mdx",
-        "imagesPath": "content/articles/swift-array-methods/images",
-        "imageUrl": "content/articles/swift-array-methods/images/swift-array-methods.png",
-        "id": "a4869432-4e3b-4867-a004-14ff81cf6cc4",
+        "id": "38888b32-6647-45a1-94a1-bbe14feff258",
         "wp_id": 336,
         "title": "Swift Array Transformation Examples",
         "date": "2019-08-13T21:51:43",
         "slug": "swift-array-methods",
-        "image": "swift-array-methods.png",
+        "image": {
+          "name": "swift-array-methods.png",
+          "width": 1468,
+          "height": 498,
+          "url": "content/articles/swift-array-methods/images/swift-array-methods.png"
+        },
         "status": "published",
         "description": "Just some examples of some of the built-in methods you can call on a swift array. Let’s start with some data. A sentence that is split into an array of words. forEach Execute a closure once for each item in an array. map Create a new array based on an existing array. filter Create a \\[…\\]",
         "tags": [
           "programming",
           "swift"
         ],
-        "skipSize": 550
+        "skipSize": 587,
+        "dirPath": "content/articles/swift-array-methods",
+        "indexPath": "content/articles/swift-array-methods/index.mdx",
+        "imagesPath": "content/articles/swift-array-methods/images",
+        "hash": "53a07cb45757259c51045b1c97d46732865dbaba"
       },
       {
-        "dirPath": "content/articles/net-socket-io",
-        "indexPath": "content/articles/net-socket-io/index.mdx",
-        "imagesPath": "content/articles/net-socket-io/images",
-        "imageUrl": "content/articles/net-socket-io/images/net-socket-io.png",
-        "id": "0a3b71cb-683b-47e3-8b23-8d91f7143c77",
+        "id": "0a9554e2-7825-475c-982d-d47221d60296",
         "wp_id": 298,
         "title": "net-socket.io: Sockets in JavaScript",
         "date": "2019-07-16T20:52:12",
         "slug": "net-socket-io",
-        "image": "net-socket-io.png",
+        "image": {
+          "name": "net-socket-io.png",
+          "width": 2048,
+          "height": 1050,
+          "url": "content/articles/net-socket-io/images/net-socket-io.png"
+        },
         "status": "published",
         "description": "net-socket.io is a small wrapper around node’s net library, that makes low-level socket programming in JavaScript easy. It is heavily based on Socket.io and Event Emitters.",
         "tags": [
@@ -531,19 +667,24 @@
           "sockets",
           "tcp"
         ],
-        "skipSize": 459
+        "skipSize": 497,
+        "dirPath": "content/articles/net-socket-io",
+        "indexPath": "content/articles/net-socket-io/index.mdx",
+        "imagesPath": "content/articles/net-socket-io/images",
+        "hash": "a8a9fa2adfd38973ce171dc1589ffa523ae20dcf"
       },
       {
-        "dirPath": "content/articles/raspberry-pi-for-developers-getting-started",
-        "indexPath": "content/articles/raspberry-pi-for-developers-getting-started/index.mdx",
-        "imagesPath": "content/articles/raspberry-pi-for-developers-getting-started/images",
-        "imageUrl": "content/articles/raspberry-pi-for-developers-getting-started/images/raspberry-pi-for-developers-getting-started.png",
-        "id": "f9310164-1c1f-4eef-af56-5c235149c355",
+        "id": "8061b07a-77f5-411a-a925-907239550ceb",
         "wp_id": 246,
         "title": "Raspberry Pi for Developers: Getting Started",
         "date": "2019-07-13T13:07:06",
         "slug": "raspberry-pi-for-developers-getting-started",
-        "image": "raspberry-pi-for-developers-getting-started.png",
+        "image": {
+          "name": "raspberry-pi-for-developers-getting-started.png",
+          "width": 1280,
+          "height": 720,
+          "url": "content/articles/raspberry-pi-for-developers-getting-started/images/raspberry-pi-for-developers-getting-started.png"
+        },
         "status": "published",
         "description": "How to get started making things with a raspberry pi. Learn how to write code that interacts with the physical world. It is targeted at existing developers but will be helpful to you no matter what your background is.",
         "tags": [
@@ -552,38 +693,48 @@
           "node js",
           "raspberry pi"
         ],
-        "skipSize": 559
+        "skipSize": 596,
+        "dirPath": "content/articles/raspberry-pi-for-developers-getting-started",
+        "indexPath": "content/articles/raspberry-pi-for-developers-getting-started/index.mdx",
+        "imagesPath": "content/articles/raspberry-pi-for-developers-getting-started/images",
+        "hash": "868309f3863e0d47de86e7e3a789ba97b64039a9"
       },
       {
-        "dirPath": "content/articles/internet-controlled-hand-for-remote-lectures",
-        "indexPath": "content/articles/internet-controlled-hand-for-remote-lectures/index.mdx",
-        "imagesPath": "content/articles/internet-controlled-hand-for-remote-lectures/images",
-        "imageUrl": "content/articles/internet-controlled-hand-for-remote-lectures/images/internet-controlled-hand-for-remote-lectures.png",
-        "id": "2ec371ae-08d6-4c59-b872-11ad61e3e8a0",
+        "id": "9fd58c4b-b47d-4ef7-8d82-ece35ec84bac",
         "wp_id": 147,
         "title": "Internet Controlled Hand for Remote Lectures",
         "date": "2019-03-17T12:48:00",
         "slug": "internet-controlled-hand-for-remote-lectures",
-        "image": "internet-controlled-hand-for-remote-lectures.png",
+        "image": {
+          "name": "internet-controlled-hand-for-remote-lectures.png",
+          "width": 1280,
+          "height": 720,
+          "url": "content/articles/internet-controlled-hand-for-remote-lectures/images/internet-controlled-hand-for-remote-lectures.png"
+        },
         "status": "published",
         "description": "A cohort in Calgary was getting upset that I was neglecting them during a lecture, so I made them a present. A hand that connects to slack and waves in front of me every time someone in Calgary has a question. You’re welcome neglected Calgary students.",
         "tags": [
           "arduino",
           "node js"
         ],
-        "skipSize": 570
+        "skipSize": 607,
+        "dirPath": "content/articles/internet-controlled-hand-for-remote-lectures",
+        "indexPath": "content/articles/internet-controlled-hand-for-remote-lectures/index.mdx",
+        "imagesPath": "content/articles/internet-controlled-hand-for-remote-lectures/images",
+        "hash": "81ed50896c2a8d6986117f7d43de71be7e27ad84"
       },
       {
-        "dirPath": "content/articles/razor-blade-advent-calendar",
-        "indexPath": "content/articles/razor-blade-advent-calendar/index.mdx",
-        "imagesPath": "content/articles/razor-blade-advent-calendar/images",
-        "imageUrl": "content/articles/razor-blade-advent-calendar/images/razor-blade-advent-calendar.png",
-        "id": "d09ff4fe-38e2-4479-b9c3-0d8c7d0743f6",
+        "id": "647c7734-fe9c-4ae1-9a87-bb2dbdbbe1b7",
         "wp_id": 319,
         "title": "Razor Blade Advent Calendar",
         "date": "2018-12-05T11:45:03",
         "slug": "razor-blade-advent-calendar",
-        "image": "razor-blade-advent-calendar.png",
+        "image": {
+          "name": "razor-blade-advent-calendar.png",
+          "width": 1280,
+          "height": 720,
+          "url": "content/articles/razor-blade-advent-calendar/images/razor-blade-advent-calendar.png"
+        },
         "status": "published",
         "description": "Problem: Build an advent calendar that automatically unlocks candy each day. Solution: Use razor blades… Obviously!",
         "tags": [
@@ -592,19 +743,24 @@
           "christmas",
           "node js"
         ],
-        "skipSize": 400
+        "skipSize": 437,
+        "dirPath": "content/articles/razor-blade-advent-calendar",
+        "indexPath": "content/articles/razor-blade-advent-calendar/index.mdx",
+        "imagesPath": "content/articles/razor-blade-advent-calendar/images",
+        "hash": "f652a9f5e93ca778c1998a5924a81ae70d58b461"
       },
       {
-        "dirPath": "content/articles/making-my-first-c-library",
-        "indexPath": "content/articles/making-my-first-c-library/index.mdx",
-        "imagesPath": "content/articles/making-my-first-c-library/images",
-        "imageUrl": "content/articles/making-my-first-c-library/images/making-my-first-c-library.png",
-        "id": "491aa8fe-eaed-45fc-8031-8c89f4a44249",
+        "id": "15a859d1-2cb0-4b49-8528-b02dd5439da1",
         "wp_id": 10,
         "title": "Making My First C Library",
         "date": "2018-08-15T09:48:54",
         "slug": "making-my-first-c-library",
-        "image": "making-my-first-c-library.png",
+        "image": {
+          "name": "making-my-first-c-library.png",
+          "width": 3206,
+          "height": 1370,
+          "url": "content/articles/making-my-first-c-library/images/making-my-first-c-library.png"
+        },
         "status": "published",
         "description": "I’ve been playing around with C code the last couple of weekends. Specifically the libav\\* libraries from FFmpeg. And it occurred to me that I’ve never made my own C library.",
         "tags": [
@@ -614,19 +770,24 @@
           "programming",
           "sockets"
         ],
-        "skipSize": 464
+        "skipSize": 502,
+        "dirPath": "content/articles/making-my-first-c-library",
+        "indexPath": "content/articles/making-my-first-c-library/index.mdx",
+        "imagesPath": "content/articles/making-my-first-c-library/images",
+        "hash": "eb56fff6658edae3c3519da03440b3e84fcf29d0"
       },
       {
-        "dirPath": "content/articles/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2",
-        "indexPath": "content/articles/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2/index.mdx",
-        "imagesPath": "content/articles/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2/images",
-        "imageUrl": "content/articles/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2/images/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2.png",
-        "id": "0b1e7359-2d44-4bfc-a4d9-76e5687b2c24",
+        "id": "036676af-5a95-45ab-8798-9f9b8378f8c2",
         "wp_id": 192,
         "title": "Let’s Build a Temperature Sensor with a Raspberry Pi – Part 2",
         "date": "2018-07-15T19:43:40",
         "slug": "lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2",
-        "image": "lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2.png",
+        "image": {
+          "name": "lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2.png",
+          "width": 1280,
+          "height": 720,
+          "url": "content/articles/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2/images/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2.png"
+        },
         "status": "published",
         "description": "I set up a raspberry pi to emit temperature and humidity data using BLE advertising packets. Then I made an iPhone app that can read that data and display it to me.",
         "tags": [
@@ -636,19 +797,24 @@
           "raspberry pi",
           "swift"
         ],
-        "skipSize": 555
+        "skipSize": 592,
+        "dirPath": "content/articles/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2",
+        "indexPath": "content/articles/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2/index.mdx",
+        "imagesPath": "content/articles/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2/images",
+        "hash": "2a9339e975f857f50a5f543e3135db73f0c5615e"
       },
       {
-        "dirPath": "content/articles/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-1",
-        "indexPath": "content/articles/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-1/index.mdx",
-        "imagesPath": "content/articles/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-1/images",
-        "imageUrl": "content/articles/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-1/images/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-1.png",
-        "id": "bae152f3-bc58-4a82-9e0b-6f1ed83bdc39",
+        "id": "15e935c8-9679-4556-b396-999b8095449a",
         "wp_id": 8,
         "title": "Let’s Build a Temperature Sensor with a Raspberry Pi – Part 1",
         "date": "2018-07-05T09:34:30",
         "slug": "lets-build-a-temperature-sensor-with-a-raspberry-pi-part-1",
-        "image": "lets-build-a-temperature-sensor-with-a-raspberry-pi-part-1.png",
+        "image": {
+          "name": "lets-build-a-temperature-sensor-with-a-raspberry-pi-part-1.png",
+          "width": 1280,
+          "height": 720,
+          "url": "content/articles/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-1/images/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-1.png"
+        },
         "status": "published",
         "description": "I had a temperature sensor in my box of things, and I wanted to know the temperature.",
         "tags": [
@@ -657,22 +823,27 @@
           "raspberry pi",
           "temperature sensor"
         ],
-        "skipSize": 480
+        "skipSize": 517,
+        "dirPath": "content/articles/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-1",
+        "indexPath": "content/articles/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-1/index.mdx",
+        "imagesPath": "content/articles/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-1/images",
+        "hash": "10491352fb55c5204600a75356d8019d2dd8d369"
       }
     ]
   },
   "videos": {
     "entities": [
       {
-        "dirPath": "content/videos/express/mysql-with-nodejs",
-        "indexPath": "content/videos/express/mysql-with-nodejs/index.mdx",
-        "imagesPath": "content/videos/express/mysql-with-nodejs/images",
-        "imageUrl": "content/videos/express/mysql-with-nodejs/images/mysql.png",
         "id": "a2033028-30ae-4a45-91c0-15e570e5e2b6",
         "title": "MySQL with Node.js",
         "description": "Learn how to use MySQL with Node.js",
         "slug": "mysql-with-nodejs",
-        "image": "mysql.png",
+        "image": {
+          "name": "mysql.png",
+          "width": 100,
+          "height": 100,
+          "url": "content/videos/express/mysql-with-nodejs/images/mysql.png"
+        },
         "videoId": "Hej48pi_lOc",
         "status": "published",
         "date": "2022-09-26",
@@ -680,18 +851,23 @@
           "nodejs",
           "mysql"
         ],
-        "skipSize": 261
+        "skipSize": 297,
+        "dirPath": "content/videos/express/mysql-with-nodejs",
+        "indexPath": "content/videos/express/mysql-with-nodejs/index.mdx",
+        "imagesPath": "content/videos/express/mysql-with-nodejs/images",
+        "hash": "1bbc83d328db88e26417e5fb4eb883f920fd62f1"
       },
       {
-        "dirPath": "content/videos/react/10_What is React",
-        "indexPath": "content/videos/react/10_What is React/index.mdx",
-        "imagesPath": "content/videos/react/10_What is React/images",
-        "imageUrl": "content/videos/react/10_What is React/images/what-is-react.png",
         "id": "286d2934-ad27-4cce-bb97-59252204ae13",
         "title": "What is React.js?",
         "description": "Get started with React using Vite",
         "slug": "what-is-react-js",
-        "image": "what-is-react.png",
+        "image": {
+          "name": "what-is-react.png",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/react/10_What is React/images/what-is-react.png"
+        },
         "videoId": "-DTUdOJv8w8",
         "status": "published",
         "date": "2022-09-10",
@@ -700,18 +876,23 @@
           "react",
           "javascript"
         ],
-        "skipSize": 279
+        "skipSize": 288,
+        "dirPath": "content/videos/react/10_What is React",
+        "indexPath": "content/videos/react/10_What is React/index.mdx",
+        "imagesPath": "content/videos/react/10_What is React/images",
+        "hash": "fa3b3b9fe5ec022d7ad9ba83694ca4883192c946"
       },
       {
-        "dirPath": "content/videos/react/20_creating-components-in-react",
-        "indexPath": "content/videos/react/20_creating-components-in-react/index.mdx",
-        "imagesPath": "content/videos/react/20_creating-components-in-react/images",
-        "imageUrl": "content/videos/react/20_creating-components-in-react/images/creating-components-in-react.png",
         "id": "0e16a8fe-d7b5-47e5-a01e-48678ed5bf03",
         "title": "Creating Components in React",
         "description": "Learn how to Creating Components in React",
         "slug": "creating-components-in-react",
-        "image": "creating-components-in-react.png",
+        "image": {
+          "name": "creating-components-in-react.png",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/react/20_creating-components-in-react/images/creating-components-in-react.png"
+        },
         "videoId": "PbkwqVZsUgs",
         "status": "published",
         "date": "2022-09-10",
@@ -720,18 +901,23 @@
           "react",
           "javascript"
         ],
-        "skipSize": 325
+        "skipSize": 334,
+        "dirPath": "content/videos/react/20_creating-components-in-react",
+        "indexPath": "content/videos/react/20_creating-components-in-react/index.mdx",
+        "imagesPath": "content/videos/react/20_creating-components-in-react/images",
+        "hash": "78a76a71192520fa2c962726ca8f97bc72f277a2"
       },
       {
-        "dirPath": "content/videos/react/30-react-props",
-        "indexPath": "content/videos/react/30-react-props/index.mdx",
-        "imagesPath": "content/videos/react/30-react-props/images",
-        "imageUrl": "content/videos/react/30-react-props/images/react-props-explained.png",
         "id": "31bd893e-0e98-4760-acac-dd0caae5f40c",
         "title": "React Props Explained",
         "description": "Learn how to use props in react to pass data to child components",
         "slug": "react-props-explained",
-        "image": "react-props-explained.png",
+        "image": {
+          "name": "react-props-explained.png",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/react/30-react-props/images/react-props-explained.png"
+        },
         "videoId": "hpZmKR9FmQw",
         "status": "published",
         "date": "2022-09-10",
@@ -740,18 +926,23 @@
           "react",
           "javascript"
         ],
-        "skipSize": 327
+        "skipSize": 336,
+        "dirPath": "content/videos/react/30-react-props",
+        "indexPath": "content/videos/react/30-react-props/index.mdx",
+        "imagesPath": "content/videos/react/30-react-props/images",
+        "hash": "a5f210f0cb9de7935af4410e757a618d15609699"
       },
       {
-        "dirPath": "content/videos/react/40_Rendering lists",
-        "indexPath": "content/videos/react/40_Rendering lists/index.mdx",
-        "imagesPath": "content/videos/react/40_Rendering lists/images",
-        "imageUrl": "content/videos/react/40_Rendering lists/images/rendering-a-list-of-components.png",
         "id": "1317e0c2-2a41-4b1b-88c2-ab81033fc1f7",
         "title": "Rendering a List of Components",
         "description": "Learn how to render a list of components in react using the map function.",
         "slug": "rendering-a-list-of-components",
-        "image": "rendering-a-list-of-components.png",
+        "image": {
+          "name": "rendering-a-list-of-components.png",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/react/40_Rendering lists/images/rendering-a-list-of-components.png"
+        },
         "videoId": "f640Z6QZawc",
         "status": "published",
         "date": "2022-09-10",
@@ -760,7 +951,11 @@
           "react",
           "javascript"
         ],
-        "skipSize": 363
+        "skipSize": 375,
+        "dirPath": "content/videos/react/40_Rendering lists",
+        "indexPath": "content/videos/react/40_Rendering lists/index.mdx",
+        "imagesPath": "content/videos/react/40_Rendering lists/images",
+        "hash": "d8863c88e0d7039562a9ae44235886ddb78abf65"
       }
     ]
   }
