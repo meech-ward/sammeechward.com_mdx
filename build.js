@@ -125,14 +125,14 @@ const slugs = {}
 for (let section in sections) {
   for (let entity of sections[section].entities) {
     if (uuids[entity.id]) {
-      throw 'Duplicate UUID' + JSON.stringify(uuids[entity.id], null, 2) + JSON.stringify(entity, null, 2)
+      throw 'Duplicate UUID ' + JSON.stringify(uuids[entity.id], null, 2) + JSON.stringify(entity, null, 2)
     }
     uuids[entity.id] = entity
     
     if (slugs[entity.slug]) {
-      throw 'Duplicate slug' + JSON.stringify(slugs[entity.slug], null, 2) + JSON.stringify(entity, null, 2)
+      throw 'Duplicate slug ' + JSON.stringify(slugs[entity.slug], null, 2) + JSON.stringify(entity, null, 2)
     }
-    slugs[entity.slug] = true
+    slugs[entity.slug] = entity
   }
 }
 

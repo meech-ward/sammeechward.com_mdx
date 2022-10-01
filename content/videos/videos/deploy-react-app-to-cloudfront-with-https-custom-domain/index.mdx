@@ -1,0 +1,46 @@
+---
+id: 0e13c008-edad-4902-8d19-ba372ef50753
+yt_id: VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmxQVmdmU1hURTFZ
+videoId: lPVgfSXTE1Y
+title: "Deploy React App to CloudFront with HTTPS Custom Domain"
+date: "2022-06-30T14:00:20Z"
+slug: "deploy-react-app-to-cloudfront-with-https-custom-domain"
+image: 
+  name: "deploy-react-app-to-cloudfront-with-https-custom-domain.jpg"
+  alt: "Deploy React App to CloudFront with HTTPS Custom Domain"
+  width: 1280
+  height: 720
+status: 'published'
+description: "Learn how to deploy a react app, or any static website, to a Cloud Front distribution custom domain name and SSL Certificate."
+tags: []
+---
+
+Learn how to deploy a react app, or any static website, to a Cloud Front distribution custom domain name and SSL Certificate.
+
+## Chapters:
+
+* 0:00​ Intro
+* 0:59 Building the react app
+* 1:35 Create an S3 bucket
+* 2:37 Create CloudFront Distribution
+* 4:16 Custom Domain Name
+* 5:19 SSL Certificate
+* 7:08 DNS Record in Route 53
+* 8:26 Custom Error Page for React
+* 10:46 Updating the Website
+* 12:05 CloudFront Invalidate Files
+* 13:06 AWS CLI
+
+aws s3 sync directory-path "s3://your-bucket-name/" 
+aws cloudfront create-invalidation --distribution-id your-distribution-id --paths '/*'
+
+🔗Route 53 Domain Name
+[https://youtu.be/jDz4j_kkyLA](https://youtu.be/jDz4j_kkyLA)
+
+🔗 AWS CLI
+[https://youtu.be/_DIRSI07kxY](https://youtu.be/_DIRSI07kxY)
+
+🔗S3 Static Website AWS CLI
+[https://sammeechward.com/aws-cli-s3-static-website/](https://sammeechward.com/aws-cli-s3-static-website/)
+
+

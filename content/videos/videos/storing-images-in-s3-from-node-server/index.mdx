@@ -1,0 +1,65 @@
+---
+id: 6a3d954f-2e81-4634-9e53-67fe877c3b18
+yt_id: VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmVRQUlvamNBclJZ
+videoId: eQAIojcArRY
+title: "Storing Images in S3 from Node Server"
+date: "2022-07-25T14:00:16Z"
+slug: "storing-images-in-s3-from-node-server"
+image: 
+  name: "storing-images-in-s3-from-node-server.jpg"
+  alt: "Storing Images in S3 from Node Server"
+  width: 1280
+  height: 720
+status: 'published'
+description: "Learn how to store your web app's files in an s3 bucket. Upload, Download, Update, and Delete images from the s3 bucket. "
+tags: []
+---
+
+Learn how to store your web app's files in an s3 bucket. Upload, Download, Update, and Delete images from the s3 bucket. 
+
+
+Uploading an image goes through the express server allowing us to modify the image before it's stored in the s3 bucket. Downloading the image happens directly from the s3 bucket to put less strain on the server and make it easier to integrate our bucket with a CDN in the future. 
+
+
+🔗Code: [https://github.com/meech-ward/s3-get-put-and-delete](https://github.com/meech-ward/s3-get-put-and-delete)
+
+🔗CloudFront CDN: [https://youtu.be/kbI7kRWAU-w](https://youtu.be/kbI7kRWAU-w)
+
+
+## Chapters:
+
+* 0:00​ Intro
+* 3:17 Post a photo with multipart/form-data
+* 5:06 Multer
+* 8:40 Create an S3 Bucket
+* 11:38 IAM User and Policy
+* 16:36 AWS SDK S3 Client
+* 19:00 Uploading an image to S3
+* 22:07 Updating an image
+* 23:18 Random Image Names
+* 25:16 Resizing Images
+* 27:36 Saving data to the database
+* 29:55 Getting images with signed url
+* 35:28 Deleting an image
+* 38:19 Summary
+
+🔗Libraries
+Multer: [https://www.npmjs.com/package/multer](https://www.npmjs.com/package/multer)
+AWS S3 Client: [https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-s3/index.html](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-s3/index.html)
+S3 request presigner: [https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/modules/_aws_sdk_s3_request_presigner.html](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/modules/_aws_sdk_s3_request_presigner.html)
+
+
+
+🔗AWS & Cloud Computing tutorials:
+Intro to IAM Roles and Policies on AWS: [https://youtu.be/BSodkwWB-8s](https://youtu.be/BSodkwWB-8s)
+AWS CLI: [https://youtu.be/_DIRSI07kxY](https://youtu.be/_DIRSI07kxY)
+S3 bucket for static website: [https://youtu.be/RoY3ekCCxKc](https://youtu.be/RoY3ekCCxKc)
+
+
+🔗Other tutorials:
+Older version of this tutorial: [https://youtu.be/NZElg91l_ms](https://youtu.be/NZElg91l_ms)
+Upload Images Directly to S3 from Front End: [https://youtu.be/yGYeYJpRWPM](https://youtu.be/yGYeYJpRWPM)
+Image upload with mutler without s3: [https://sammeechward.com/uploading-images-express-and-react/](https://sammeechward.com/uploading-images-express-and-react/)
+
+
+

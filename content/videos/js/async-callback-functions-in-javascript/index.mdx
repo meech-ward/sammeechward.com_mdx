@@ -1,0 +1,297 @@
+---
+id: 254c12b7-3bf4-418d-bb08-dd94359deb18
+yt_id: VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmJMcGtveXJzQUxj
+videoId: bLpkoyrsALc
+title: "Async Callback Functions in Javascript"
+date: "2022-06-09T14:00:16Z"
+slug: "async-callback-functions-in-javascript"
+image: 
+  name: "async-callback-functions-in-javascript.jpg"
+  alt: "Async Callback Functions in Javascript"
+  width: 1280
+  height: 720
+status: 'published'
+description: "There are different types of callback functions in JavaScript. This video goes over them and how to successfully use callback functions to handle asynchronous, non-blocking code in JavaScript. "
+tags: []
+---
+
+There are different types of callback functions in JavaScript. This video goes over them and how to successfully use callback functions to handle asynchronous, non-blocking code in JavaScript. 
+
+## Chapters:
+
+* 0:00​ Intro
+* 0:57 Synchronous Callback Functions
+* 2:16 Event Based Async Callbacks
+* 6:31 Blocking Code 
+* 10:30 Performance Async Callbacks
+* 14:45 Summary
+
+🔗Intro to callback functions
+[https://youtu.be/Pk3AoFgSiU0](https://youtu.be/Pk3AoFgSiU0)
+
+🔗Code
+[https://codesandbox.io/embed/young-shadow-um5bm5?fontsize=14&hidenavigation=1&theme=dark](https://codesandbox.io/embed/young-shadow-um5bm5?fontsize=14&hidenavigation=1&theme=dark)
+
+
+There are main types of callback functions in JavaScript:
+
+*   syncronous callback functions like the `forEach` and `map`
+*   async even based like `addEventListener("click"` or `app.get("/", req, res)`
+*   async performance based callback functions like `$.get()` or `fs.readFile()`
+
+Let’s take a look at each of them.
+
+Code examples can be found here: [https://codesandbox.io/embed/young-shadow-um5bm5](https://codesandbox.io/embed/young-shadow-um5bm5)
+
+## Syncronous Callbacks
+
+I already went over these types of callback functions in a different article, so I suggest you take a look at that one first if you haven’t already. But basically, synchronouse callback functions are callback functions that get called synchronously.
+
+```js
+console.log("before forEach");
+
+[1, 2, 3].forEach((item) => {
+  console.log(item)
+})
+
+console.log("after forEach")
+```
+
+The callback function passed to `forEach` will get exectuted for each item in the array, so three times in this case. The callback function will get called synchronously so the code below `forEach` will wait for `forEach` to complete before it’s exectectued. Everything happens in order and output should be no surprise:
+
+```shell
+> before forEach
+> 1
+> 2
+> 3
+> after forEach
+```
+
+## Event Based Async Callbacks
+
+Lets say we have a web page that has a button on it and we want to know when that button is clicked so we can run some custom code. This could be for a `React` or `Vue` or `Angular` app, but i’ll keep things vanilla for this example.
+
+```js
+const button = document.querySelector("button")
+
+button.addEventListener("click", () => {
+  console.log("button clicked")
+})
+```
+
+We can use the `addEventListener` function to listen for a click event on the button. `addEventListener` **needs** us to pass in a callback function that gets called when the button is clicked. How many times will a button on a web page be clicked? It could be once, maybe 100 times, maybe 0 times, who knows? But when it gets clicked, we need to execute some custom logic.
+
+If we run the following code, what will the output be?
+
+```js
+const button = document.querySelector("button")
+
+console.log("before click")
+
+button.addEventListener("click", () => {
+  console.log("button clicked")
+})
+
+console.log("after click")
+```
+
+```shell
+> before click
+> after click
+```
+
+That’s it, we won’t see `"button clicked"` printed to the console until the user actually clicks the button, if they ever even click the button. We **must** use callback functions for events in JavaScript because we need to be able to write the code that will get exectued when the event happens, but we are not going to call the function. We pass the function to the event listener to call it when the event actually happens.
+
+These types of async callback functions **can’t** ever be replaced with promises or async/await. These types of callback functions are going to be around forever.
+
+This doesn’t just apply to button clicks though, there are so many things in JavaScript that are event based. If you’ve ever made an `express` app, every route in your server is using an event based async callback function
+
+```js
+const app = express()
+
+app.get("/", (req, res) => { // <-- this is an event based async callback function
+  console.log("we don't know how many times this will get called")
+  res.send("Hello World")
+})
+```
+
+## Performance Async Callbacks
+
+The third type of callback functions are async callback functions that only exist for performance reasons. These are the ones you use when you’re making an HTTP request, or a database query, or reading from a file.
+
+```js
+request('https://api.kanye.rest', (error, response, body) {
+
+})
+
+query('SELECT * FROM whatever', (err, result) => {
+
+})
+
+fs.readFile('file.txt', (err, data) => {
+
+})
+```
+
+We could do all of these things without callback functions, but using callbacks here make our apps perform better. It’s all about performance. As a side note, these are the types of callback functions that can be replaced with `promises` or `async/await`. But that’s a topic for another article.
+
+## Blocking Code Without Callbacks
+
+Let’s see what life would be like without performance callback functions. For this I want to go back to the previous example with the button.
+
+```js
+const button = document.querySelector("button")
+
+button.addEventListener("click", () => {
+  button.animate([ { transform: "rotate(0)" }, { transform: "rotate(360deg)" } ], { duration: 3000, iterations: 1 })
+})
+```
+
+Remember that we have no other choice with events, we have to use callback functions. When this button gets clicked, it’s now going to do a simple rotation animation.
+
+Now let’s say we also want to hash a string using `bcrypt` when this button is clicked. Realistically, you wouldn’t do this, it would more likely be something like an AJAX request, but bcrypt is better for demonstration purposes.
+
+```js
+const button = document.querySelector("button")
+
+button.addEventListener("click", () => {
+  const hash = bcrypt.hashSync("some text", 13)
+  console.log(hash)
+
+  button.animate([ { transform: "rotate(0)" }, { transform: "rotate(360deg)" } ], { duration: 3000, iterations: 1 })
+})
+```
+
+`bcrypt` will hash a peice of text and return a hashed string. It does this very slowly and every time we add one to the second parameter, it takes twice as long to hash the string. With `13` it should take about 2 seconds to hash, so if we change it to `14` it should take about 4 seconds to hash.
+
+This function takes a little while to complete and it **blocks** the rest of our code from running. So while it’s busy hashing that text, no animations can happen and the user can’t interact with the web page at all. If this code was running on a server, the entire server would not be able to respond to the user’s request. This code is syncronous and it’s blocking and it’s bad.
+
+What we want is for this hashing to kind of just happen in the background. We want users to be able to still interact with the web page while this is happening. We want to be able to click the button and see the animation, still have the user interact with the application, then handle the hashed text once the hasing function finishes.
+
+## Non Blocking Code With Callbacks
+
+```js
+const button = document.querySelector("button")
+
+button.addEventListener("click", () => {
+  console.log("before hash")
+
+  bcrypt.hash("some text", 13, (err, hash) => {
+    console.log(hash)
+  })
+
+  console.log("after hash")
+
+  button.animate([ { transform: "rotate(0)" }, { transform: "rotate(360deg)" } ], { duration: 3000, iterations: 1 })
+})
+```
+
+In this example, I’m using a version of the hashing function that accepts a callback function. I tell bcrypt to start hashing and call the callback function when it’s done. When it calls my callback function, it will pass me the hashed password as a parameter (or an error, but we’ll ignore that for now). This callback function will only ever be called once, when bcrypt is done hashing the text. We don’t put the code in a function so it can be executed multiple times, we put it in a function so it can be executed just once, but at some point in the future.
+
+Nothing is blocked, the animation still happens, the user can interact with the web page, and we handle the hash when it’s done.
+
+The output to the console will be:
+
+```shell
+> before hash
+> after hash
+> <hashed password>
+```
+
+Everything is still happening in the correct order, but the code inside of the callback function won’t be executed until the hashing function is done. This does mean that won’t be able to access `hash` outside of the callback function, so any code that is dependent on the hash has to go inside of the callback function. It makes the code slightly more complex to work with, but it’s totally worth it for performance.
+
+```js
+const button = document.querySelector("button")
+
+button.addEventListener("click", () => {
+
+
+  bcrypt.hash("some text", 13, (err, hash) => {
+    console.log(hash)
+    // Any code that is dependent on the hash has to go inside of this function
+  })
+
+  // hash does not exist out here, only inside the callback function
+})
+```
+
+Imagine you’re sitting at your desk scrolling through online articles about JavaScript, trying and understand this language that controls the world. Suddenly you realize it’s lunch time and you’re hungry and you need food and you don’t want to spend your precious energy making yourself food so you pull out your phone and order some takeout. Your app tells you that your food will be delivered in about 30 minutes but you know it could take up to an hour because it’s lunch time and for some reason uber eats allows people to deliver food on foot now which kind of seems to defeat the purpose of delivery. Anyway. You know it’s going to take somewhere between 30 minutes and an hour for your food to be delivered, what do you do with that time?
+
+If your life didn’t have callbacks and all tasks were blocking, you would just sit there blocked, stuck, paralyzed just waiting for the food to be delivered. But that would be a terrible user experience, so let’s reimplement that with callbacks. You place your order and now switch your attention to watching TikTok videos because you’ve earned a break from all these JavaScript tutorials. You spend about 40 minutes in TikTok which is about 39 minutes too long to spend on TikTok, but hey, better than just sitting there doing nothing I guess. The food arrives deliverer knocks on your door, you are aware the food is here but you can finish up what you were doing before you go get it. So you wait until the end of your current TikTok video to figure out if Amber Heard was Punching or just hitting Johnny Depp.
+
+## Handling Errors
+
+```js
+bcrypt.hash("some text", 13, (err, hash) => {
+  console.log(hash)
+})
+```
+
+Notice that the callback function has two parameters. The first is an error, and the second is the hash. If there was an error hashing the password, bcrypt would have passed in an error as the first argument and nothing for hash. So we should always check if there was an error and handle that first, because if there is an error, then there is no point in continuing.
+
+```js
+bcrypt.hash("some text", 13, (err, hash) => {
+  if (err) {
+    console.log("error hashing password")
+  } else {
+    console.log(hash)
+  }
+})
+```
+
+Bcrypt will only ever call the callback function once and I will either get the desired outcome or an error. It’s really important to remember that we should always handle any error cases.
+
+In node js, all performance async callback functions work like this. So reading a file’s contents would look something like this:
+
+```js
+fs.readFile("file.txt", (err, data) => {
+  if (err) {
+    console.log("error reading file")
+  } else {
+    console.log(data)
+  }
+})
+```
+
+## The Future
+
+It’s very uncommon that you will actually need to use these perforamnce based async functions in your code. These types of callback functions are being replaced with the use of promises and async/await. So the previous bcrypt code would actually look like this:
+
+```js
+// Promise
+bcrypt.hash("some text", 13)
+  .then(hash => {
+    console.log(hash)
+  })
+  .catch(err => {
+    console.log("error hashing password")
+  })
+```
+
+```js
+// Async/Await
+try {
+  const hash = await bcrypt.hash("some text", 13)
+  console.log(hash)
+} catch (err) {
+  console.log("error hashing password")
+}
+```
+
+I still have handle the success and error cases, and the code is very similar, but it’s newer so it’s better right? And some modern libraries don’t even have an API for using plain callbacks anymore. For example, axios, the most popular http library, has a promise based API:
+
+```js
+axios.get("https://api.kanye.rest")
+  .then(res => {
+    console.log(res.data)
+  })
+  .catch(err => {
+    console.log("error getting user")
+  })
+```
+
+## Summary
+
+*   Callbacks can be sync or async
+*   Event based callbacks are completely necessary, but others callbacks only exist to make our apps perform better.
+*   Performance async callbacks are being replaced with promises and async/await.

@@ -1,0 +1,82 @@
+---
+id: 31bd893e-0e98-4760-acac-dd0caae5f40c
+
+title: 'React Props Explained'
+description: 'Learn how to use props in react to pass data to child components'
+slug: 'react-props-explained'
+image: 
+  name: 'react-props-explained.png'
+videoId: hpZmKR9FmQw
+
+status: 'published'
+date: '2022-09-10'
+tags: ['nodejs', 'react', 'javascript']
+---
+
+## Destructing Props
+
+All properties that are passed into a component are passed in as a single object. 
+
+Remember that the following three examples are equivalent:
+
+```jsx
+export default function Joke({ rating = 0, joke }) {
+```
+
+```jsx
+export default function Joke(props) {
+  let { rating = 0, joke } = props
+```
+
+
+```jsx
+export default function Joke(props) {
+  let rating = props.rating || 0
+  let joke = props.joke
+```
+
+
+## Code
+
+
+```jsx
+export default function Joke({ rating = 0, joke }) {
+   
+  let stars = ""
+  for (let i = 0; i < 5; i++) {
+    if (i < rating) {
+      stars += "⭐"
+    } else {
+      stars += "☆"
+    }
+  }
+
+  return (
+    <div>
+      <p>{joke}</p>
+      <p>{stars}</p>
+    </div>
+  )
+}
+```
+
+**App.jsx**
+
+```jsx
+import './App.css'
+import Joke from './Joke'
+
+function App() {
+  
+  return (
+    <div className="">
+      <h1>Dad Jokes</h1>
+
+      <Joke joke={"I used to be a banker, but then I lost interest!"} rating={3} />
+
+    </div>
+  )
+}
+
+export default App
+```

@@ -1,0 +1,91 @@
+---
+id: 1317e0c2-2a41-4b1b-88c2-ab81033fc1f7
+
+title: 'Rendering a List of Components'
+description: 'Learn how to render a list of components in react using the map function.'
+slug: 'rendering-a-list-of-components'
+image: 
+  name: 'rendering-a-list-of-components.png'
+  
+videoId: f640Z6QZawc
+
+status: 'published'
+date: '2022-09-10'
+tags: ['nodejs', 'react', 'javascript']
+---
+
+```jsx
+jokes.map(joke => (
+  <Joke key={joke.id} joke={joke.joke} rating={joke.rating} />
+))
+```
+
+Using map like this is super common in React. You need to know how this code works and how to use it.
+
+
+A component can be stored in an array and we can just dump the array of components into jsx and it will render them:
+
+
+```js
+const jokes = [
+  {
+    id: 1,
+    joke: "What do you call a cow with no legs?",
+    rating: 4,
+  },
+  {
+    id: 2,
+    joke: "What do you call a cow with two legs?",
+    rating: 3,
+  }
+]
+
+const jokesComponents = [
+  <Joke joke={joke.joke} rating={joke.rating} />,
+  <Joke joke={joke.joke} rating={joke.rating} />
+]
+
+return (
+  <div>
+    {jokesComponents}
+  </div>
+)
+```
+
+But this is a very hard coded brute force approach, let's make it a little bit more dynamic
+
+## For Loop
+
+One way of making this dynamic is to use a normal for loop:
+
+```js
+const jokesComponents = []
+for (let i = 0; i < jokes.length; i++) {
+  const joke = jokes[i]
+  jokesComponents.push(<Joke joke={joke.joke} rating={joke.rating} />)
+}
+```
+
+But since we're just creating a new array, we can use the map function instead:
+
+## Map
+
+```js
+const jokesComponents = jokes.map(joke => (
+  <Joke joke={joke.joke} rating={joke.rating} />
+))
+```
+
+And map is the preferred way of doing this.
+
+## Keys
+
+We just need to make sure we include a key for each component in the array:
+
+```js
+const jokesComponents = jokes.map(joke => (
+  <Joke key={joke.id} joke={joke.joke} rating={joke.rating} />
+))
+```
+
+Read more about [**Why does React need keys?](https://beta.reactjs.org/learn/rendering-lists#why-does-react-need-keys)

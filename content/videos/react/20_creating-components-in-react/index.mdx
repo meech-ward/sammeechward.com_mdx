@@ -1,0 +1,170 @@
+---
+id: 0e16a8fe-d7b5-47e5-a01e-48678ed5bf03
+
+title: 'Creating Components in React'
+description: 'Learn how to Creating Components in React'
+slug: 'creating-components-in-react'
+image: 
+  name: 'creating-components-in-react.png'
+videoId: PbkwqVZsUgs
+
+status: 'published'
+date: '2022-09-10'
+tags: ['nodejs', 'react', 'javascript']
+---
+
+
+Start by making a new react app using vite. For this, make sure you've got yarn installed. You can do this with 
+
+```
+npm i -g yarn
+```
+
+Then run 
+
+```
+yarn create vite
+```
+
+Select `react`, you could also selected `react-ts` if you want to try out using typescript. 
+
+Once you've got your app created, cd into it and run 
+
+```
+yarn
+```
+
+To install dependencies.
+
+To run the dev server, use the following command:
+
+```
+yarn dev
+```
+
+Now we've got all that **placeholder** code inside of **App.jsx**, let's delete it all. Also, delete everything in App.css except for `#root` . App.jsx is the entry point to the application, so try adding some HTML.
+
+```js
+function App() {
+  return (
+    <h1>Hello</h1>
+  )
+}
+
+export default App
+```
+
+## JSX
+
+### The rules of jsx... and tsx
+
+* Return a single root element, div or empty tag `<>`
+* All tags must close, so you can `<img></img>` or self close tags like `<img />`
+* This is js, not html, so any reserved word in JavaScript has a different name here like `className` instead of `class`
+
+```js
+return (
+    <div>
+      <h1 className="header">Hello</h1>
+      <h2>World</h2>
+      <img className="image" src="https://picsum.photos/200" alt="random"></img>
+    </div>
+  )
+```
+
+## CSS in JS
+
+There are countless ways of using CSS in a react project. And each way deserves it's own video, so for now, in the beginning, we'll keep it simple. When you want to add a style add a classname, then add a style
+
+```js
+<div className="someName">
+```
+
+And since this is in App.js, we can add the style to App.css
+
+```js
+.someName {
+  color: red;
+}
+```
+
+## JavaScript in JSX
+
+So like I said, this is js, so you can inject js into jsx. 
+
+**Not rendered as JS:**
+
+<p>6 + 9</p>
+
+**Rendered as JS:**
+
+<p>{6 + 9}</p>
+
+Try adding more JS things to your markup:
+
+```js
+return (
+    <div className="App">
+      <h1 className="heading">Hello</h1>
+      <h2>World</h2>
+      <h3>{new Date().toString()}</h3>
+    </div>
+)
+```
+
+or 
+
+A component couples the UI logic and markup together in the same file. So instead of separating your js and html into separate files, it all goes in the same file and we split the app into separate components instead. 
+
+**Rendering logic and markup live together in the same place—components.**
+
+
+## More components and Child components
+
+If we want to create another component, we can just create a new function with an uppercase character that returns markup:
+
+```jsx
+function SomeNewComponent() {
+  return (
+    <h1>Some Markup</h1>
+  )
+}
+```
+
+Usually we put each component in their own file, even if they're very small like this one, so create a new file with the same name as the component and put it in there:
+
+```
+SomeNewComponent.jsx
+```
+
+`import` and `export` using esmodules synax:
+
+**SomeNewComponent.jsx**
+```jsx
+export default function SomeNewComponent() {
+  return (
+    <h1>Some Markup</h1>
+  )
+}
+```
+
+**App.jsx**
+```jsx
+import SomeNewComponent from './SomeNewComponent.jsx'
+```
+
+
+Then include it in the markup:
+
+```jsx
+function App() {
+  return (
+    <div className="App">
+      <h1 className="heading">Hello</h1>
+      <h2>World</h2>
+      <h3>{new Date().toString()}</h3>
+      <SomeNewComponent />
+    </div>
+  )
+}
+```
