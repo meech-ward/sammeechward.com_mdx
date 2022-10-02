@@ -23,7 +23,7 @@ function getEntity(sections, id) {
   }
 }
 
-
+let changed = []
 async function getEntities(dirPath) {
   const files = fs.readdirSync(dirPath)
   
@@ -48,8 +48,8 @@ async function getEntities(dirPath) {
       return currentVersion
     }
     
-    console.log("Building", metaData.id, metaData.title)
-
+    // console.log("Building", metaData.id, metaData.title)
+    changed.push(metaData.id)
 
     // //delete file
     // if (fs.existsSync(path.join(dirPath, 'images/images.json'))) {
@@ -138,3 +138,4 @@ for (let section in sections) {
 
 
 fs.writeFileSync(path.resolve(__dirname, 'build.json'), JSON.stringify(sections, null, 2))
+console.log(changed)
