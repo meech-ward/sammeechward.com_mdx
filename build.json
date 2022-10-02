@@ -2,31 +2,6 @@
   "articles": {
     "entities": [
       {
-        "id": "efe90db6-3d28-4704-b82b-115da147bd28",
-        "wp_id": 805,
-        "title": "Connect to MySQL from Node",
-        "date": "2022-06-20T19:56:17",
-        "slug": "connect-to-mysql-from-node",
-        "image": {
-          "name": "connect-to-mysql-from-node.png",
-          "width": 1584,
-          "height": 396,
-          "url": "content/articles/connect-to-mysql-from-node/images/connect-to-mysql-from-node.png"
-        },
-        "status": "published",
-        "description": "Any web app needs to persist data somehow, and relational databases are always a good option for any web app. In this article i’m going to show you how to connect a node application to a MySQL database.",
-        "tags": [
-          "javascript",
-          "mysql",
-          "node js"
-        ],
-        "skipSize": 515,
-        "dirPath": "content/articles/connect-to-mysql-from-node",
-        "indexPath": "content/articles/connect-to-mysql-from-node/index.mdx",
-        "imagesPath": "content/articles/connect-to-mysql-from-node/images",
-        "hash": "a75272ea7ce9b72cd9ca98a25b080ef1b602ea2c"
-      },
-      {
         "id": "e1525229-1e2e-4661-86e4-1df283e8ec01",
         "wp_id": 759,
         "title": "Terraform Modules",
@@ -189,27 +164,6 @@
         "hash": "d8eee7d75b4a37b0cc9f2879a60533f8c56779b4"
       },
       {
-        "id": "100b2146-8acc-4d19-a785-b1e5a30052ef",
-        "wp_id": 689,
-        "title": "Dependency Injection in JavaScript",
-        "date": "2021-04-01T08:50:14",
-        "slug": "dependency-injection-in-javascript",
-        "image": {
-          "name": "dependency-injection-in-javascript.png",
-          "width": 1500,
-          "height": 500,
-          "url": "content/articles/dependency-injection-in-javascript/images/dependency-injection-in-javascript.png"
-        },
-        "status": "published",
-        "description": "There are a few benefits to using dependency injection, but the best, most useful benefit and biggest reason to use dependency injection is to make your code more testable. In this article we’re going to take a look at what dependency injection is by using an example of an express app that stores data in \\[…\\]",
-        "tags": [],
-        "skipSize": 616,
-        "dirPath": "content/articles/dependency-injection-in-javascript",
-        "indexPath": "content/articles/dependency-injection-in-javascript/index.mdx",
-        "imagesPath": "content/articles/dependency-injection-in-javascript/images",
-        "hash": "7f311ddb7af1c66e287fa765c4281f751ed99e6c"
-      },
-      {
         "id": "7eb04006-f32a-4645-b324-dcee8af35302",
         "wp_id": 687,
         "title": "Testing an Express App With Supertest and Jest",
@@ -332,30 +286,6 @@
         "indexPath": "content/articles/aws-cli-s3-static-website/index.mdx",
         "imagesPath": "content/articles/aws-cli-s3-static-website/images",
         "hash": "5f5829f9c8cb4d5825eaf1bf843f979e65baad4f"
-      },
-      {
-        "id": "a65e91a0-6560-4fd3-92e2-504f0c7adbe5",
-        "wp_id": 540,
-        "title": "Beginning iOS Development for Not Beginners",
-        "date": "2020-06-06T23:15:15",
-        "slug": "beginning-ios-development-for-not-beginners",
-        "image": {
-          "name": "beginning-ios-development-for-not-beginners.png",
-          "width": 1280,
-          "height": 720,
-          "url": "content/articles/beginning-ios-development-for-not-beginners/images/beginning-ios-development-for-not-beginners.png"
-        },
-        "status": "published",
-        "description": "In this video, I’m going to show you how to get started making iOS apps by building a basic Rock, Paper, Scissors game. We will be writing a little bit of Swift, so to get the most out of this video, you should be familiar with some sort of programming language. You don’t have to \\[…\\]",
-        "tags": [
-          "ios",
-          "swift"
-        ],
-        "skipSize": 632,
-        "dirPath": "content/articles/beginning-ios-development-for-not-beginners",
-        "indexPath": "content/articles/beginning-ios-development-for-not-beginners/index.mdx",
-        "imagesPath": "content/articles/beginning-ios-development-for-not-beginners/images",
-        "hash": "131e8f59c374f308885a69e5bd94e376af37053b"
       },
       {
         "id": "f0570ddc-96b6-43f0-8719-26d82f4dae13",
@@ -652,30 +582,6 @@
         "hash": "868309f3863e0d47de86e7e3a789ba97b64039a9"
       },
       {
-        "id": "9fd58c4b-b47d-4ef7-8d82-ece35ec84bac",
-        "wp_id": 147,
-        "title": "Internet Controlled Hand for Remote Lectures",
-        "date": "2019-03-17T12:48:00",
-        "slug": "internet-controlled-hand-for-remote-lectures",
-        "image": {
-          "name": "internet-controlled-hand-for-remote-lectures.png",
-          "width": 1280,
-          "height": 720,
-          "url": "content/articles/internet-controlled-hand-for-remote-lectures/images/internet-controlled-hand-for-remote-lectures.png"
-        },
-        "status": "published",
-        "description": "A cohort in Calgary was getting upset that I was neglecting them during a lecture, so I made them a present. A hand that connects to slack and waves in front of me every time someone in Calgary has a question. You’re welcome neglected Calgary students.",
-        "tags": [
-          "arduino",
-          "node js"
-        ],
-        "skipSize": 607,
-        "dirPath": "content/articles/internet-controlled-hand-for-remote-lectures",
-        "indexPath": "content/articles/internet-controlled-hand-for-remote-lectures/index.mdx",
-        "imagesPath": "content/articles/internet-controlled-hand-for-remote-lectures/images",
-        "hash": "81ed50896c2a8d6986117f7d43de71be7e27ad84"
-      },
-      {
         "id": "647c7734-fe9c-4ae1-9a87-bb2dbdbbe1b7",
         "wp_id": 319,
         "title": "Razor Blade Advent Calendar",
@@ -786,7 +692,7 @@
   "videos": {
     "entities": [
       {
-        "id": "f7b95fd1-709e-4647-91ca-8c0ce0077836",
+        "id": "fe7a0b1b-7c8b-457d-aade-47a3bb7042f3",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmM4UjRDYmE3UFBZ",
         "videoId": "c8R4Cba7PPY",
         "title": "useEffect Everything You Need To Know",
@@ -806,10 +712,10 @@
         "dirPath": "content/videos/videos/useeffect-everything-you-need-to-know",
         "indexPath": "content/videos/videos/useeffect-everything-you-need-to-know/index.mdx",
         "imagesPath": "content/videos/videos/useeffect-everything-you-need-to-know/images",
-        "hash": "d8e79ac311b4fc4b8ee6328b3a6cc995e4695611"
+        "hash": "ca7e9442367abd474fc20e011640448f674e42d5"
       },
       {
-        "id": "161c7d0f-71f4-4c3e-be97-377a4cc0aabf",
+        "id": "e76ab411-cf21-4b42-b1ee-2d02fd899952",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLnhSS3ZqV0RabFc4",
         "videoId": "xRKvjWDZlW8",
         "title": "Conditional Rendering Components in React",
@@ -829,34 +735,10 @@
         "dirPath": "content/videos/videos/conditional-rendering-components-in-react",
         "indexPath": "content/videos/videos/conditional-rendering-components-in-react/index.mdx",
         "imagesPath": "content/videos/videos/conditional-rendering-components-in-react/images",
-        "hash": "21f49c10b62f3dc9263dab48cc68ff3fca10e5da"
+        "hash": "4ec00e9e631153ef2153d62d4eae56d7a501bc5c"
       },
       {
-        "id": "a2033028-30ae-4a45-91c0-15e570e5e2b6",
-        "title": "MySQL with Node.js",
-        "description": "Learn how to use MySQL with Node.js",
-        "slug": "mysql-with-nodejs",
-        "image": {
-          "name": "mysql.png",
-          "width": 100,
-          "height": 100,
-          "url": "content/videos/express/mysql-with-nodejs/images/mysql.png"
-        },
-        "videoId": "Hej48pi_lOc",
-        "status": "published",
-        "date": "2022-09-26",
-        "tags": [
-          "nodejs",
-          "mysql"
-        ],
-        "skipSize": 297,
-        "dirPath": "content/videos/express/mysql-with-nodejs",
-        "indexPath": "content/videos/express/mysql-with-nodejs/index.mdx",
-        "imagesPath": "content/videos/express/mysql-with-nodejs/images",
-        "hash": "1bbc83d328db88e26417e5fb4eb883f920fd62f1"
-      },
-      {
-        "id": "262ed7cd-19c5-4fa3-a341-3b75df66abe8",
+        "id": "45ad6aca-d03b-431f-ab89-47e1ea5bfbd5",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLjk1cjlBNV90YU5v",
         "videoId": "95r9A5_taNo",
         "title": "React State Array of Objects",
@@ -876,10 +758,10 @@
         "dirPath": "content/videos/videos/react-state-array-of-objects",
         "indexPath": "content/videos/videos/react-state-array-of-objects/index.mdx",
         "imagesPath": "content/videos/videos/react-state-array-of-objects/images",
-        "hash": "7aebe90e0ae19dabdd7b50fab7cbb17ec8ba46ec"
+        "hash": "58ca819e6ded9d050292e92f08445797074f10a1"
       },
       {
-        "id": "f34623f8-bf98-42fd-98ad-41a226febb9d",
+        "id": "2d549a93-1cce-4eb0-8348-2a58ff074db2",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLnBQaWFaU05SOW9B",
         "videoId": "pPiaZSNR9oA",
         "title": "$100 DIY EBIKE",
@@ -899,10 +781,10 @@
         "dirPath": "content/videos/videos/$100-diy-ebike",
         "indexPath": "content/videos/videos/$100-diy-ebike/index.mdx",
         "imagesPath": "content/videos/videos/$100-diy-ebike/images",
-        "hash": "d65a159e4dafa1e61c9cdf9e565e1f924aa80cb1"
+        "hash": "37744af90a7bc67206d1ce7e07312a7e9498f775"
       },
       {
-        "id": "b0ed0b25-a37b-4a7c-aadb-b1da440b3d4d",
+        "id": "d746c2e9-092d-48ee-8d5c-a6c5b316fc10",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLl93UEdjcG9aUW44",
         "videoId": "_wPGcpoZQn8",
         "title": "useState",
@@ -922,10 +804,10 @@
         "dirPath": "content/videos/videos/usestate",
         "indexPath": "content/videos/videos/usestate/index.mdx",
         "imagesPath": "content/videos/videos/usestate/images",
-        "hash": "625bcd1bb9c09c15ae186279c2115b57552a7e82"
+        "hash": "cfd0dc31745866e5faecb20d92f1e1387bfeb805"
       },
       {
-        "id": "c2f2f011-55d9-436c-8c38-d5f10c19139f",
+        "id": "2c839fa0-e61d-410d-a074-a39e97571ef2",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmxFMzFfMGNYZUFn",
         "videoId": "lE31_0cXeAg",
         "title": "Event Listeners in React",
@@ -945,7 +827,7 @@
         "dirPath": "content/videos/videos/event-listeners-in-react",
         "indexPath": "content/videos/videos/event-listeners-in-react/index.mdx",
         "imagesPath": "content/videos/videos/event-listeners-in-react/images",
-        "hash": "127a7af3f19ebeb26b59ff46aaea2451f6cb63bd"
+        "hash": "0b031fb20cb12c7a35b62773da42fc545efbacc8"
       },
       {
         "id": "286d2934-ad27-4cce-bb97-59252204ae13",
@@ -1048,99 +930,99 @@
         "hash": "d8863c88e0d7039562a9ae44235886ddb78abf65"
       },
       {
-        "id": "3256f76c-ec9d-4a28-b39c-9cf76cd60220",
+        "id": "8d570627-1888-4ef2-90fd-d4a6f5c0feb6",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLk40eVVpUWlUdndV",
         "videoId": "N4yUiQiTvwU",
         "title": "React Proxy | Easiest Fix to CORS Errors",
         "date": "2022-08-29T14:00:19Z",
-        "slug": "react-proxy-|-easiest-fix-to-cors-errors",
+        "slug": "react-proxy-easiest-fix-to-cors-errors",
         "image": {
-          "name": "react-proxy-|-easiest-fix-to-cors-errors.jpg",
+          "name": "react-proxy-easiest-fix-to-cors-errors.jpg",
           "alt": "React Proxy | Easiest Fix to CORS Errors",
           "width": 1280,
           "height": 720,
-          "url": "content/videos/videos/react-proxy-|-easiest-fix-to-cors-errors/images/react-proxy-|-easiest-fix-to-cors-errors.jpg"
+          "url": "content/videos/videos/react-proxy-easiest-fix-to-cors-errors/images/react-proxy-easiest-fix-to-cors-errors.jpg"
         },
         "status": "published",
         "description": "Proxying API Requests in Development using Vite, Parcel, or Create React App. If your plan is to host your react app from the same origin as your web server, then this is super helpful. Conveniently, this also avoids CORS issues. I'll also show you how to deploy your react app using your express server and railway.",
         "tags": [],
-        "skipSize": 756,
-        "dirPath": "content/videos/videos/react-proxy-|-easiest-fix-to-cors-errors",
-        "indexPath": "content/videos/videos/react-proxy-|-easiest-fix-to-cors-errors/index.mdx",
-        "imagesPath": "content/videos/videos/react-proxy-|-easiest-fix-to-cors-errors/images",
-        "hash": "682ebe78ae1fff9d4042a4fe1cb53d4ab014eb3b"
+        "skipSize": 752,
+        "dirPath": "content/videos/videos/react-proxy-easiest-fix-to-cors-errors",
+        "indexPath": "content/videos/videos/react-proxy-easiest-fix-to-cors-errors/index.mdx",
+        "imagesPath": "content/videos/videos/react-proxy-easiest-fix-to-cors-errors/images",
+        "hash": "281c4d131600a73925dbebd74afdd00d1e307691"
       },
       {
-        "id": "20d284d7-8970-405d-b06a-614b46044ad1",
+        "id": "3016a9cd-f1db-4814-8603-199ba434b34e",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLi1EVFVkT0p2OHc4",
         "videoId": "-DTUdOJv8w8",
         "title": "What is React.js? Get started with React using Vite",
         "date": "2022-08-22T14:00:00Z",
-        "slug": "what-is-react.js?-get-started-with-react-using-vite",
+        "slug": "what-is-reactjs-get-started-with-react-using-vite",
         "image": {
-          "name": "what-is-react.js?-get-started-with-react-using-vite.jpg",
+          "name": "what-is-reactjs-get-started-with-react-using-vite.jpg",
           "alt": "What is React.js? Get started with React using Vite",
           "width": 1280,
           "height": 720,
-          "url": "content/videos/videos/what-is-react.js?-get-started-with-react-using-vite/images/what-is-react.js?-get-started-with-react-using-vite.jpg"
+          "url": "content/videos/videos/what-is-reactjs-get-started-with-react-using-vite/images/what-is-reactjs-get-started-with-react-using-vite.jpg"
         },
         "status": "published",
         "description": "Get a fast paced introduction to React.js, JSX, and how to setup a react project using Vite. This video takes a big picture look at what react is and why you would want to use React when making web apps. ",
         "tags": [],
-        "skipSize": 688,
-        "dirPath": "content/videos/videos/what-is-react.js?-get-started-with-react-using-vite",
-        "indexPath": "content/videos/videos/what-is-react.js?-get-started-with-react-using-vite/index.mdx",
-        "imagesPath": "content/videos/videos/what-is-react.js?-get-started-with-react-using-vite/images",
-        "hash": "ba963e827c70812fd6ee7605c48cd5ebd66df0e9"
+        "skipSize": 684,
+        "dirPath": "content/videos/videos/what-is-reactjs-get-started-with-react-using-vite",
+        "indexPath": "content/videos/videos/what-is-reactjs-get-started-with-react-using-vite/index.mdx",
+        "imagesPath": "content/videos/videos/what-is-reactjs-get-started-with-react-using-vite/images",
+        "hash": "5a103977761843e04d846f9eaa1a061ba800c863"
       },
       {
-        "id": "9ab89751-b988-4611-ac76-5c2684b4e7be",
+        "id": "0121a205-4401-4329-9e42-65b6ed06c981",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmxaQUdJeTFlM0pB",
         "videoId": "lZAGIy1e3JA",
         "title": "Deleting files from S3 and CloudFront | Invalidate CloudFront Cache",
         "date": "2022-08-15T14:00:26Z",
-        "slug": "deleting-files-from-s3-and-cloudfront-|-invalidate-cloudfront-cache",
+        "slug": "deleting-files-from-s3-and-cloudfront-invalidate-cloudfront-cache",
         "image": {
-          "name": "deleting-files-from-s3-and-cloudfront-|-invalidate-cloudfront-cache.jpg",
+          "name": "deleting-files-from-s3-and-cloudfront-invalidate-cloudfront-cache.jpg",
           "alt": "Deleting files from S3 and CloudFront | Invalidate CloudFront Cache",
           "width": 1280,
           "height": 720,
-          "url": "content/videos/videos/deleting-files-from-s3-and-cloudfront-|-invalidate-cloudfront-cache/images/deleting-files-from-s3-and-cloudfront-|-invalidate-cloudfront-cache.jpg"
+          "url": "content/videos/videos/deleting-files-from-s3-and-cloudfront-invalidate-cloudfront-cache/images/deleting-files-from-s3-and-cloudfront-invalidate-cloudfront-cache.jpg"
         },
         "status": "published",
         "description": "When you delete an image from s3, it stays in the CloudFront cache until the cache is cleared, usually 24 hours. In this video, learn how to invalidate the cloud front cache so that any updates or deletes to a file are immediately seen in CloudFront.",
         "tags": [],
-        "skipSize": 798,
-        "dirPath": "content/videos/videos/deleting-files-from-s3-and-cloudfront-|-invalidate-cloudfront-cache",
-        "indexPath": "content/videos/videos/deleting-files-from-s3-and-cloudfront-|-invalidate-cloudfront-cache/index.mdx",
-        "imagesPath": "content/videos/videos/deleting-files-from-s3-and-cloudfront-|-invalidate-cloudfront-cache/images",
-        "hash": "8cb5e2b7a3d14724bca11217712d909c4309f521"
+        "skipSize": 794,
+        "dirPath": "content/videos/videos/deleting-files-from-s3-and-cloudfront-invalidate-cloudfront-cache",
+        "indexPath": "content/videos/videos/deleting-files-from-s3-and-cloudfront-invalidate-cloudfront-cache/index.mdx",
+        "imagesPath": "content/videos/videos/deleting-files-from-s3-and-cloudfront-invalidate-cloudfront-cache/images",
+        "hash": "741f0968bfaf05623f2887ed921d3acb9314c6a9"
       },
       {
-        "id": "2d0e21e0-d31c-4522-8cd8-3b0261ed6793",
+        "id": "c2abfc17-b3b8-4eb3-918d-489d7a297f02",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLkVJWXJoYkJrN2Rv",
         "videoId": "EIYrhbBk7do",
         "title": "CloudFront Signed URLs with Node.js",
         "date": "2022-08-08T14:00:13Z",
-        "slug": "cloudfront-signed-urls-with-node.js",
+        "slug": "cloudfront-signed-urls-with-nodejs",
         "image": {
-          "name": "cloudfront-signed-urls-with-node.js.jpg",
+          "name": "cloudfront-signed-urls-with-nodejs.jpg",
           "alt": "CloudFront Signed URLs with Node.js",
           "width": 1280,
           "height": 720,
-          "url": "content/videos/videos/cloudfront-signed-urls-with-node.js/images/cloudfront-signed-urls-with-node.js.jpg"
+          "url": "content/videos/videos/cloudfront-signed-urls-with-nodejs/images/cloudfront-signed-urls-with-nodejs.jpg"
         },
         "status": "published",
         "description": "Create signed urls to access files in a CloudFront distribution. Learn how to generate the signed URLs using a private key in a node application.",
         "tags": [],
-        "skipSize": 565,
-        "dirPath": "content/videos/videos/cloudfront-signed-urls-with-node.js",
-        "indexPath": "content/videos/videos/cloudfront-signed-urls-with-node.js/index.mdx",
-        "imagesPath": "content/videos/videos/cloudfront-signed-urls-with-node.js/images",
-        "hash": "c45871e3e6083a9c1982de25fb580ea73a392d8c"
+        "skipSize": 563,
+        "dirPath": "content/videos/videos/cloudfront-signed-urls-with-nodejs",
+        "indexPath": "content/videos/videos/cloudfront-signed-urls-with-nodejs/index.mdx",
+        "imagesPath": "content/videos/videos/cloudfront-signed-urls-with-nodejs/images",
+        "hash": "19ade4767c31f6506ac6fa2dda46b5d3c666177f"
       },
       {
-        "id": "b5ad302c-defc-482f-b187-77f55fa568ba",
+        "id": "3bb13c17-ea33-448e-a10a-712db401c85c",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmtiSTdrUldBVS13",
         "videoId": "kbI7kRWAU-w",
         "title": "Set up a CloudFront CDN for an S3 Bucket",
@@ -1160,10 +1042,10 @@
         "dirPath": "content/videos/videos/set-up-a-cloudfront-cdn-for-an-s3-bucket",
         "indexPath": "content/videos/videos/set-up-a-cloudfront-cdn-for-an-s3-bucket/index.mdx",
         "imagesPath": "content/videos/videos/set-up-a-cloudfront-cdn-for-an-s3-bucket/images",
-        "hash": "e675f62d102bed055eecd4f546e0b132f44b175e"
+        "hash": "a95c5828bf5f2673d0031702af33fdadcd2e7ec8"
       },
       {
-        "id": "08063455-8a69-4a27-a588-020dbc495062",
+        "id": "6a3d954f-2e81-4634-9e53-67fe877c3b18",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmVRQUlvamNBclJZ",
         "videoId": "eQAIojcArRY",
         "title": "Storing Images in S3 from Node Server",
@@ -1183,10 +1065,10 @@
         "dirPath": "content/videos/videos/storing-images-in-s3-from-node-server",
         "indexPath": "content/videos/videos/storing-images-in-s3-from-node-server/index.mdx",
         "imagesPath": "content/videos/videos/storing-images-in-s3-from-node-server/images",
-        "hash": "3d8533e4b5478a08f450fe2bf5ccc6f13188ac7a"
+        "hash": "51acd51d8805778708523d1e886fdd4fc2122672"
       },
       {
-        "id": "dd2fcbc1-12c1-4670-abc3-3ee23956da98",
+        "id": "9c0550b6-75f5-4d76-9985-bb130c3c7f42",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLkF6QV9MVERvRnFZ",
         "videoId": "AzA_LTDoFqY",
         "title": "Hashing Passwords in Node and Express using bcrypt",
@@ -1206,10 +1088,10 @@
         "dirPath": "content/videos/videos/hashing-passwords-in-node-and-express-using-bcrypt",
         "indexPath": "content/videos/videos/hashing-passwords-in-node-and-express-using-bcrypt/index.mdx",
         "imagesPath": "content/videos/videos/hashing-passwords-in-node-and-express-using-bcrypt/images",
-        "hash": "3608a69aa9ca1a4848953c61f673e497b299c29c"
+        "hash": "2c1e2a409e364c23d5062be71a753693f75606fe"
       },
       {
-        "id": "c94b6759-f9b2-4ab4-85ac-0eb53a11d6e9",
+        "id": "1b43c7cb-8f5e-4f36-bbfb-baadd09ed2bf",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLjVEVnFBRmhmU3NF",
         "videoId": "5DVqAFhfSsE",
         "title": "WTF is Truthy and Falsy !!",
@@ -1229,10 +1111,10 @@
         "dirPath": "content/videos/videos/wtf-is-truthy-and-falsy-!!",
         "indexPath": "content/videos/videos/wtf-is-truthy-and-falsy-!!/index.mdx",
         "imagesPath": "content/videos/videos/wtf-is-truthy-and-falsy-!!/images",
-        "hash": "600eb97e3b7bef4d881e6ecc5a4bca82c74426e4"
+        "hash": "64d578f2777186d6b5b275cc7e7de080299de180"
       },
       {
-        "id": "316a1280-3df8-4b6f-bc3e-2e63e81163ff",
+        "id": "dcbe32c1-4a7b-40b4-a22f-1ce7cee33868",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLm54M243VXlRVzNz",
         "videoId": "nx3n7UyQW3s",
         "title": "What you don't know about + in JavaScript",
@@ -1252,10 +1134,10 @@
         "dirPath": "content/videos/videos/what-you-don't-know-about-in-javascript",
         "indexPath": "content/videos/videos/what-you-don't-know-about-in-javascript/index.mdx",
         "imagesPath": "content/videos/videos/what-you-don't-know-about-in-javascript/images",
-        "hash": "ea10aaebc09e9a9e68389009f0c06cafbfc81a89"
+        "hash": "7121644a6130708928cb21aeac2a14919d5d5327"
       },
       {
-        "id": "2ed6f8fc-bba1-48c8-8563-94ba50e3424a",
+        "id": "7fe67ce9-b95b-465f-ad6c-ed0ca65860b1",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLldzYzJ4a3FEczdB",
         "videoId": "Wsc2xkqDs7A",
         "title": "JavaScript Recursion Explained",
@@ -1275,10 +1157,10 @@
         "dirPath": "content/videos/videos/javascript-recursion-explained",
         "indexPath": "content/videos/videos/javascript-recursion-explained/index.mdx",
         "imagesPath": "content/videos/videos/javascript-recursion-explained/images",
-        "hash": "d15d45fd98e970f9f6f9fdf0d66667749529cb19"
+        "hash": "26cb0c96c0d151f4306580ef7f9f271a28c346d2"
       },
       {
-        "id": "fb7368ea-d0ad-4d18-aa30-8000806e9f50",
+        "id": "0e13c008-edad-4902-8d19-ba372ef50753",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmxQVmdmU1hURTFZ",
         "videoId": "lPVgfSXTE1Y",
         "title": "Deploy React App to CloudFront with HTTPS Custom Domain",
@@ -1298,10 +1180,10 @@
         "dirPath": "content/videos/videos/deploy-react-app-to-cloudfront-with-https-custom-domain",
         "indexPath": "content/videos/videos/deploy-react-app-to-cloudfront-with-https-custom-domain/index.mdx",
         "imagesPath": "content/videos/videos/deploy-react-app-to-cloudfront-with-https-custom-domain/images",
-        "hash": "fa5bf9559ce82e090896a75f1edf0f14098c5db7"
+        "hash": "4e41f2d77e63f16565df3812fe4ce7f6e53ba3cc"
       },
       {
-        "id": "afe58476-a126-4cd6-b485-89da7b658636",
+        "id": "e17c6b42-768d-4907-bae5-b7f83253c1e0",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLjdkak1aNU9UR19F",
         "videoId": "7djMZ5OTG_E",
         "title": "Deploy React App to S3 with Custom Domain",
@@ -1321,10 +1203,10 @@
         "dirPath": "content/videos/videos/deploy-react-app-to-s3-with-custom-domain",
         "indexPath": "content/videos/videos/deploy-react-app-to-s3-with-custom-domain/index.mdx",
         "imagesPath": "content/videos/videos/deploy-react-app-to-s3-with-custom-domain/images",
-        "hash": "9131ace97d6829c20a9103f757e9920bb8af390c"
+        "hash": "e7b2f977826231b180af7cbce3fb26074072e4b7"
       },
       {
-        "id": "76b6a55b-005c-4f5a-88b2-450e16808da8",
+        "id": "f6f7ec42-308a-4599-8330-4e0445cef242",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLl9ESVJTSTA3a3hZ",
         "videoId": "_DIRSI07kxY",
         "title": "aws cli",
@@ -1344,10 +1226,10 @@
         "dirPath": "content/videos/videos/aws-cli",
         "indexPath": "content/videos/videos/aws-cli/index.mdx",
         "imagesPath": "content/videos/videos/aws-cli/images",
-        "hash": "e8bfa0b9946b01d16518faf5cf03f188c065e332"
+        "hash": "0257fa031bbc03cea1b5bf3b7489e372e7768b7d"
       },
       {
-        "id": "b3440759-77e1-45b2-a58f-c570477b8e82",
+        "id": "31bc3b56-aa99-43c8-8207-ec968a0bafe1",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmpEejRqX2treUxB",
         "videoId": "jDz4j_kkyLA",
         "title": "AWS Route 53 Domain Name",
@@ -1367,33 +1249,37 @@
         "dirPath": "content/videos/videos/aws-route-53-domain-name",
         "indexPath": "content/videos/videos/aws-route-53-domain-name/index.mdx",
         "imagesPath": "content/videos/videos/aws-route-53-domain-name/images",
-        "hash": "e25fa239467898b955e36ec757d4b1d8939a39a0"
+        "hash": "277545fc541436923c5bcdb954458732f564bfc1"
       },
       {
-        "id": "fe85500c-c4c4-4570-bb20-22d8ce900abf",
-        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLkhlajQ4cGlfbE9j",
-        "videoId": "Hej48pi_lOc",
-        "title": "MySQL Node.js Express",
-        "date": "2022-06-16T14:00:14Z",
-        "slug": "mysql-node.js-express",
+        "id": "a2033028-30ae-4a45-91c0-15e570e5e2b6",
+        "title": "MySQL with Node.js",
+        "description": "I'll show you how to connect your node application to a MySQL database to query and insert data. I will also show you how to integrate this into an express server to show what a complete backend might look like. ",
+        "slug": "mysql-nodejs-express",
+        "alt-slugs": [
+          "connect-to-mysql-from-node"
+        ],
         "image": {
-          "name": "mysql-node.js-express.jpg",
-          "alt": "MySQL Node.js Express",
+          "name": "mysql.png",
           "width": 1280,
           "height": 720,
-          "url": "content/videos/videos/mysql-node.js-express/images/mysql-node.js-express.jpg"
+          "url": "content/videos/express/mysql-with-nodejs/images/mysql.png"
         },
+        "videoId": "Hej48pi_lOc",
         "status": "published",
-        "description": "I'll show you how to connect your node application to a MySQL database to query and insert data. I will also show you how to integrate this into an express server to show what a complete backend might look like. ",
-        "tags": [],
-        "skipSize": 576,
-        "dirPath": "content/videos/videos/mysql-node.js-express",
-        "indexPath": "content/videos/videos/mysql-node.js-express/index.mdx",
-        "imagesPath": "content/videos/videos/mysql-node.js-express/images",
-        "hash": "80b4de70079b67b775dd0d41ce1d9fd05354fe1c"
+        "date": "2022-06-16T14:00:14Z",
+        "tags": [
+          "nodejs",
+          "mysql"
+        ],
+        "skipSize": 530,
+        "dirPath": "content/videos/express/mysql-with-nodejs",
+        "indexPath": "content/videos/express/mysql-with-nodejs/index.mdx",
+        "imagesPath": "content/videos/express/mysql-with-nodejs/images",
+        "hash": "f456a1689ebcd38e480ae221c0e13a4b4253b0e9"
       },
       {
-        "id": "3acc33d9-2b80-4811-bf3e-1bfc9b34c6f8",
+        "id": "1b41c882-d39e-459d-8362-fe66e02cfe71",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLkoyRG1lUVFITFJv",
         "videoId": "J2DmeQQHLRo",
         "title": "Stop Using Semicolons in Javascript",
@@ -1413,7 +1299,7 @@
         "dirPath": "content/videos/videos/stop-using-semicolons-in-javascript",
         "indexPath": "content/videos/videos/stop-using-semicolons-in-javascript/index.mdx",
         "imagesPath": "content/videos/videos/stop-using-semicolons-in-javascript/images",
-        "hash": "6e643eb7104850ae9a5110d4b7e5fbca5107f496"
+        "hash": "0068267c8578d78a04e5a7175507677a0676f573"
       },
       {
         "id": "254c12b7-3bf4-418d-bb08-dd94359deb18",
@@ -1439,7 +1325,7 @@
         "hash": "a27423e8ec4d5cd4ae1b982cf2d28b6a19768957"
       },
       {
-        "id": "5d146578-7b48-4003-8ef0-3fb45dbd3cf9",
+        "id": "251fa30a-7384-4f3f-a015-cbe9745796b8",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLkNWZVNGNy1naldN",
         "videoId": "CVeSF7-gjWM",
         "title": "Stop Using else Statements in Javascript",
@@ -1459,7 +1345,7 @@
         "dirPath": "content/videos/videos/stop-using-else-statements-in-javascript",
         "indexPath": "content/videos/videos/stop-using-else-statements-in-javascript/index.mdx",
         "imagesPath": "content/videos/videos/stop-using-else-statements-in-javascript/images",
-        "hash": "6969c1688959c5321f57f8f7a8f1bb2989c68c27"
+        "hash": "40fdabfca01da4fd172835670228708c6995cff6"
       },
       {
         "id": "609956ac-441e-449f-b448-32e0d3df3ff8",
@@ -1485,7 +1371,7 @@
         "hash": "4299427b0ea2ef03f4e038b34d283286264238a1"
       },
       {
-        "id": "c2dd1470-9d21-4e34-bed6-f22d43d05e61",
+        "id": "efcc23fe-a490-4e3d-816c-9e4fdd33f416",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLm42bFN4VGdPbTQw",
         "videoId": "n6lSxTgOm40",
         "title": "Prototypes in JavaScript",
@@ -1505,10 +1391,10 @@
         "dirPath": "content/videos/videos/prototypes-in-javascript",
         "indexPath": "content/videos/videos/prototypes-in-javascript/index.mdx",
         "imagesPath": "content/videos/videos/prototypes-in-javascript/images",
-        "hash": "302f911aa878b9e0502ac755011282bba464dbe8"
+        "hash": "16d97edbe2601e9b868353174008b5fbdbc408fe"
       },
       {
-        "id": "bbb0e528-4b4a-42a7-a60e-8e84179ebe6e",
+        "id": "4b8d8d74-bf04-4bc2-894c-cf56bfd39c8c",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLlBrZVRIMXJCN0hZ",
         "videoId": "PkeTH1rB7HY",
         "title": "Getters and Setters in JavaScript",
@@ -1528,33 +1414,33 @@
         "dirPath": "content/videos/videos/getters-and-setters-in-javascript",
         "indexPath": "content/videos/videos/getters-and-setters-in-javascript/index.mdx",
         "imagesPath": "content/videos/videos/getters-and-setters-in-javascript/images",
-        "hash": "c8b64a711692fab3b3167b1d7afa3e6e3c810742"
+        "hash": "fe579b0dbcd3fce14f162f2ad642b7737dd18253"
       },
       {
-        "id": "694a8495-6f3f-48b1-928a-a03c444603e3",
+        "id": "d0641a62-194d-4abc-94b8-ef7404cbd491",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLi1SNVIwc05GRnBz",
         "videoId": "-R5R0sNFFps",
         "title": "Object Oriented Javascript | The basics",
         "date": "2022-01-18T17:46:39Z",
-        "slug": "object-oriented-javascript-|-the-basics",
+        "slug": "object-oriented-javascript-the-basics",
         "image": {
-          "name": "object-oriented-javascript-|-the-basics.jpg",
+          "name": "object-oriented-javascript-the-basics.jpg",
           "alt": "Object Oriented Javascript | The basics",
           "width": 1280,
           "height": 720,
-          "url": "content/videos/videos/object-oriented-javascript-|-the-basics/images/object-oriented-javascript-|-the-basics.jpg"
+          "url": "content/videos/videos/object-oriented-javascript-the-basics/images/object-oriented-javascript-the-basics.jpg"
         },
         "status": "published",
         "description": "Learn how to couple data and functionality with objects in JavaScript.",
         "tags": [],
-        "skipSize": 506,
-        "dirPath": "content/videos/videos/object-oriented-javascript-|-the-basics",
-        "indexPath": "content/videos/videos/object-oriented-javascript-|-the-basics/index.mdx",
-        "imagesPath": "content/videos/videos/object-oriented-javascript-|-the-basics/images",
-        "hash": "5324a563cc06b3e35c4e553e1f3e9abdc5b67961"
+        "skipSize": 502,
+        "dirPath": "content/videos/videos/object-oriented-javascript-the-basics",
+        "indexPath": "content/videos/videos/object-oriented-javascript-the-basics/index.mdx",
+        "imagesPath": "content/videos/videos/object-oriented-javascript-the-basics/images",
+        "hash": "33a80eaa837ae78f96af40fc219f0ab8c622def2"
       },
       {
-        "id": "047f028b-44b3-46df-a832-bd5b6ce683b4",
+        "id": "57ae3f7e-c382-466b-92e7-c8e273330dd4",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLkE5U2FUSTctc000",
         "videoId": "A9SaTI7-sM4",
         "title": "THIS in JavaScript",
@@ -1574,33 +1460,33 @@
         "dirPath": "content/videos/videos/this-in-javascript",
         "indexPath": "content/videos/videos/this-in-javascript/index.mdx",
         "imagesPath": "content/videos/videos/this-in-javascript/images",
-        "hash": "68798511e95183f30fd8bee41b06b9ce20cb7361"
+        "hash": "fd52ff4db8c8105dadef12164b3bfab00ccd9b7f"
       },
       {
-        "id": "188af59e-5510-4d2b-b500-802ff9fd151a",
+        "id": "72e75a0e-90b4-44fa-b9e7-8e8b1f955b5a",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmJzc1g5T3Q5WU9J",
         "videoId": "bssX9Ot9YOI",
         "title": "Express JS Crash Course | Web Dev Tutorial for Beginners",
         "date": "2021-11-17T16:14:42Z",
-        "slug": "express-js-crash-course-|-web-dev-tutorial-for-beginners",
+        "slug": "express-js-crash-course-web-dev-tutorial-for-beginners",
         "image": {
-          "name": "express-js-crash-course-|-web-dev-tutorial-for-beginners.jpg",
+          "name": "express-js-crash-course-web-dev-tutorial-for-beginners.jpg",
           "alt": "Express JS Crash Course | Web Dev Tutorial for Beginners",
           "width": 1280,
           "height": 720,
-          "url": "content/videos/videos/express-js-crash-course-|-web-dev-tutorial-for-beginners/images/express-js-crash-course-|-web-dev-tutorial-for-beginners.jpg"
+          "url": "content/videos/videos/express-js-crash-course-web-dev-tutorial-for-beginners/images/express-js-crash-course-web-dev-tutorial-for-beginners.jpg"
         },
         "status": "published",
         "description": "Learn how to create a web application using Express js and EJS. This video goes over the basics of HTTP and backend programming to create a very basic note-taking app. ",
         "tags": [],
-        "skipSize": 672,
-        "dirPath": "content/videos/videos/express-js-crash-course-|-web-dev-tutorial-for-beginners",
-        "indexPath": "content/videos/videos/express-js-crash-course-|-web-dev-tutorial-for-beginners/index.mdx",
-        "imagesPath": "content/videos/videos/express-js-crash-course-|-web-dev-tutorial-for-beginners/images",
-        "hash": "ebf3b1a8f631f1df175128a1f3a51ac0f0682149"
+        "skipSize": 668,
+        "dirPath": "content/videos/videos/express-js-crash-course-web-dev-tutorial-for-beginners",
+        "indexPath": "content/videos/videos/express-js-crash-course-web-dev-tutorial-for-beginners/index.mdx",
+        "imagesPath": "content/videos/videos/express-js-crash-course-web-dev-tutorial-for-beginners/images",
+        "hash": "b87b5c54531bff0cc6b72c5a42885e84c974071f"
       },
       {
-        "id": "41e0fbf8-ee04-4a80-b784-73af0c263115",
+        "id": "883e0180-0381-4d33-9b5f-d773aaea4c20",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLklxemd1NVVFREtv",
         "videoId": "Iqzgu5UEDKo",
         "title": "Setup a NAT Gateway on AWS",
@@ -1620,10 +1506,10 @@
         "dirPath": "content/videos/videos/setup-a-nat-gateway-on-aws",
         "indexPath": "content/videos/videos/setup-a-nat-gateway-on-aws/index.mdx",
         "imagesPath": "content/videos/videos/setup-a-nat-gateway-on-aws/images",
-        "hash": "9ee648e4fb766bec55b9699537290a613f7966c5"
+        "hash": "537191c9aa73c2621430b08c4698b48185d5f9bb"
       },
       {
-        "id": "8866b0f4-5245-4c76-9eba-47a512898421",
+        "id": "f33ebeff-116b-4c55-8b9a-a4c2e3f0ff5b",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLnRmU3pFVTl4ZklR",
         "videoId": "tfSzEU9xfIQ",
         "title": "VPC Gateway Endpoints for Private S3 Bucket Connections",
@@ -1643,10 +1529,10 @@
         "dirPath": "content/videos/videos/vpc-gateway-endpoints-for-private-s3-bucket-connections",
         "indexPath": "content/videos/videos/vpc-gateway-endpoints-for-private-s3-bucket-connections/index.mdx",
         "imagesPath": "content/videos/videos/vpc-gateway-endpoints-for-private-s3-bucket-connections/images",
-        "hash": "f460aee7debd6de497928340046c3c330ba7716b"
+        "hash": "6485df974e5f159bd76895a11309b57798fe3a34"
       },
       {
-        "id": "a7e48afd-1003-4500-817e-44536bb4d878",
+        "id": "f5492174-361e-4749-9922-b2c38d2cc39c",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLlRVVHFZRVpaVWRj",
         "videoId": "TUTqYEZZUdc",
         "title": "AWS VPC & Subnets For Beginners",
@@ -1666,10 +1552,10 @@
         "dirPath": "content/videos/videos/aws-vpc-&-subnets-for-beginners",
         "indexPath": "content/videos/videos/aws-vpc-&-subnets-for-beginners/index.mdx",
         "imagesPath": "content/videos/videos/aws-vpc-&-subnets-for-beginners/images",
-        "hash": "05a722c6556f5815acb572a6c376dd635e0eee3f"
+        "hash": "bb3dfef7197efe02f031d983274af891e486187e"
       },
       {
-        "id": "86427cdf-b65a-4f26-909a-9b7e84d7184b",
+        "id": "8835674c-0b13-4c74-af67-993ffe4913c2",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLldYcGxndk5qVkQ0",
         "videoId": "WXplgvNjVD4",
         "title": "Get read for advent of code 2021",
@@ -1689,10 +1575,10 @@
         "dirPath": "content/videos/videos/get-read-for-advent-of-code-2021",
         "indexPath": "content/videos/videos/get-read-for-advent-of-code-2021/index.mdx",
         "imagesPath": "content/videos/videos/get-read-for-advent-of-code-2021/images",
-        "hash": "1848faacffab653c9c97075c5988c415f45e5046"
+        "hash": "883433d0a7f55f8897c66f21ed1d8903a59e8c07"
       },
       {
-        "id": "4bc4b8ca-b1f5-4efd-9f72-7c65e4c59555",
+        "id": "7852bc8b-0164-400a-96a4-2cbd8257e9be",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLkFtUWVlQjR5Z1pj",
         "videoId": "AmQeeB4ygZc",
         "title": "AWS Auto Scaling Groups and Load Balancers",
@@ -1712,33 +1598,33 @@
         "dirPath": "content/videos/videos/aws-auto-scaling-groups-and-load-balancers",
         "indexPath": "content/videos/videos/aws-auto-scaling-groups-and-load-balancers/index.mdx",
         "imagesPath": "content/videos/videos/aws-auto-scaling-groups-and-load-balancers/images",
-        "hash": "712fe53ef76371ef280656a578742ed1053883f3"
+        "hash": "be913182ba4d05dbe0aa06ef106761f8e7a30598"
       },
       {
-        "id": "9ea72d10-b3ec-4de0-801e-be27e9577580",
+        "id": "e222614d-ad35-46dd-b952-63debac92e50",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmRybFl2VHdnSzJR",
         "videoId": "drlYvTwgK2Q",
         "title": "Ocean Emoji Binary #TeamSeas",
         "date": "2021-10-29T20:00:08Z",
-        "slug": "ocean-emoji-binary-#teamseas",
+        "slug": "ocean-emoji-binary-teamseas",
         "image": {
-          "name": "ocean-emoji-binary-#teamseas.jpg",
+          "name": "ocean-emoji-binary-teamseas.jpg",
           "alt": "Ocean Emoji Binary #TeamSeas",
           "width": 1280,
           "height": 720,
-          "url": "content/videos/videos/ocean-emoji-binary-#teamseas/images/ocean-emoji-binary-#teamseas.jpg"
+          "url": "content/videos/videos/ocean-emoji-binary-teamseas/images/ocean-emoji-binary-teamseas.jpg"
         },
         "status": "published",
         "description": "#TeamSeas is a global campaign to raise $30M to remove 30M pounds of plastic and trash from our ocean, rivers, and beaches.",
         "tags": [],
-        "skipSize": 515,
-        "dirPath": "content/videos/videos/ocean-emoji-binary-#teamseas",
-        "indexPath": "content/videos/videos/ocean-emoji-binary-#teamseas/index.mdx",
-        "imagesPath": "content/videos/videos/ocean-emoji-binary-#teamseas/images",
-        "hash": "f52b5e40e4bc314d4b7af8c393b381d344c5ca3f"
+        "skipSize": 513,
+        "dirPath": "content/videos/videos/ocean-emoji-binary-teamseas",
+        "indexPath": "content/videos/videos/ocean-emoji-binary-teamseas/index.mdx",
+        "imagesPath": "content/videos/videos/ocean-emoji-binary-teamseas/images",
+        "hash": "1785720d88a04d9941c8f5fa2ced4c4438983024"
       },
       {
-        "id": "9df7a1cc-0bc6-43c1-b999-748d04fc5614",
+        "id": "f65d8599-0b6a-4178-8207-f90179029fa9",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmJTdElGeGJEMWZv",
         "videoId": "bStIFxbD1fo",
         "title": "Intro to Terraform with AWS",
@@ -1758,10 +1644,10 @@
         "dirPath": "content/videos/videos/intro-to-terraform-with-aws",
         "indexPath": "content/videos/videos/intro-to-terraform-with-aws/index.mdx",
         "imagesPath": "content/videos/videos/intro-to-terraform-with-aws/images",
-        "hash": "537e34ae158dcaa3f1623934940a30077c7cecf3"
+        "hash": "f76b2f13c087d4a0977d0f110f96b7364c8fc0c8"
       },
       {
-        "id": "b49300f5-8f4c-42f1-9db5-59ae8ef30973",
+        "id": "cb5b90e2-21fa-439c-8d2e-f5ab071abdd2",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmRkZS1iV1VlUk1v",
         "videoId": "dde-bWUeRMo",
         "title": "Intro to Packer with AWS",
@@ -1781,10 +1667,10 @@
         "dirPath": "content/videos/videos/intro-to-packer-with-aws",
         "indexPath": "content/videos/videos/intro-to-packer-with-aws/index.mdx",
         "imagesPath": "content/videos/videos/intro-to-packer-with-aws/images",
-        "hash": "8cddaff861201d40a420d10f51e11bbf57167e13"
+        "hash": "72fda9c9a8f6eec1181b7af7f11e0e9a2303e3e1"
       },
       {
-        "id": "3a98d473-b02e-4f44-9a73-5f0746fbd0b9",
+        "id": "d94fb574-688e-4d94-994b-72849cae9dd3",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLlZpeTF0Qm9pbmww",
         "videoId": "Viy1tBoinl0",
         "title": "Intro to RDS in AWS for MySQL",
@@ -1804,10 +1690,10 @@
         "dirPath": "content/videos/videos/intro-to-rds-in-aws-for-mysql",
         "indexPath": "content/videos/videos/intro-to-rds-in-aws-for-mysql/index.mdx",
         "imagesPath": "content/videos/videos/intro-to-rds-in-aws-for-mysql/images",
-        "hash": "e6283783b4953f9a13d6bc04293206d5fe83e790"
+        "hash": "555bbcbc7c2e68e6b43853414d1fbbc76c408ea1"
       },
       {
-        "id": "81d8dd61-6a22-4c3d-948d-ea9108a201ff",
+        "id": "eb937af7-f8b6-4271-ab59-e7628379fe94",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLndfMUVPTWstcndj",
         "videoId": "w_1EOMk-rwc",
         "title": "Sending logs to CloudWatch from Amazon Linux 2",
@@ -1827,10 +1713,10 @@
         "dirPath": "content/videos/videos/sending-logs-to-cloudwatch-from-amazon-linux-2",
         "indexPath": "content/videos/videos/sending-logs-to-cloudwatch-from-amazon-linux-2/index.mdx",
         "imagesPath": "content/videos/videos/sending-logs-to-cloudwatch-from-amazon-linux-2/images",
-        "hash": "02be1ce0a0a7411bcf912a01d9ba17687dd282a5"
+        "hash": "24f3abf92c4026756223f0574f179cbd7909ec28"
       },
       {
-        "id": "41a33545-74d3-4947-bc5f-e9698e65014a",
+        "id": "562496b8-7d39-4f4c-9953-e5a862e9be25",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLkZFYmZ2VFpDWVFR",
         "videoId": "FEbfvTZCYQQ",
         "title": "Intro to Horizontal Scaling, Load Balancing, Immutable Infrastructure with AWS",
@@ -1850,10 +1736,10 @@
         "dirPath": "content/videos/videos/intro-to-horizontal-scaling,-load-balancing,-immutable-infrastructure-with-aws",
         "indexPath": "content/videos/videos/intro-to-horizontal-scaling,-load-balancing,-immutable-infrastructure-with-aws/index.mdx",
         "imagesPath": "content/videos/videos/intro-to-horizontal-scaling,-load-balancing,-immutable-infrastructure-with-aws/images",
-        "hash": "caa7e906d0fb020a21a7dd77a624d45c683e7be8"
+        "hash": "c87056d1be759bfe9613e24963df047942df84a8"
       },
       {
-        "id": "e95b90a5-b66d-4f31-9408-20b0d0a8a116",
+        "id": "fbdfbf70-f1d8-4133-93ee-4cd65c0d35d6",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLkJTb2Rrd1dCLThz",
         "videoId": "BSodkwWB-8s",
         "title": "Intro to IAM Roles and Policies on AWS",
@@ -1873,10 +1759,10 @@
         "dirPath": "content/videos/videos/intro-to-iam-roles-and-policies-on-aws",
         "indexPath": "content/videos/videos/intro-to-iam-roles-and-policies-on-aws/index.mdx",
         "imagesPath": "content/videos/videos/intro-to-iam-roles-and-policies-on-aws/images",
-        "hash": "60ddb80e8196dc7828850aeed65a3f9c7b8c7527"
+        "hash": "29cbea5cdb4f9138a2b6a085860c3144716bb2e1"
       },
       {
-        "id": "4257b725-c080-4fb1-b80f-9dffa57f420b",
+        "id": "f1d8f2fd-8d1c-4bd1-b518-162ac7fba3fe",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLl9FQkFScXJlZWFv",
         "videoId": "_EBARqreeao",
         "title": "Nginx Reverse Proxy on AWS EC2 Amazon Linux 2",
@@ -1896,10 +1782,10 @@
         "dirPath": "content/videos/videos/nginx-reverse-proxy-on-aws-ec2-amazon-linux-2",
         "indexPath": "content/videos/videos/nginx-reverse-proxy-on-aws-ec2-amazon-linux-2/index.mdx",
         "imagesPath": "content/videos/videos/nginx-reverse-proxy-on-aws-ec2-amazon-linux-2/images",
-        "hash": "9fe4aa22c6444e8405268376777dcd1bb4adda3b"
+        "hash": "203093562dd3e5d42dd0006f9b081518d313233e"
       },
       {
-        "id": "72a7da50-c1fe-4956-a47d-00633f83f48a",
+        "id": "f50d31f2-4c7f-4ab0-b375-d4d1eb862c5d",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLm9IQVEzVHpVVHJv",
         "videoId": "oHAQ3TzUTro",
         "title": "Deploy Node app on AWS EC2 Amazon Linux 2",
@@ -1919,10 +1805,10 @@
         "dirPath": "content/videos/videos/deploy-node-app-on-aws-ec2-amazon-linux-2",
         "indexPath": "content/videos/videos/deploy-node-app-on-aws-ec2-amazon-linux-2/index.mdx",
         "imagesPath": "content/videos/videos/deploy-node-app-on-aws-ec2-amazon-linux-2/images",
-        "hash": "6b4462a3e72ed77760e2e695f5660b81002aca45"
+        "hash": "ffc2d6232b7ba9b1cc452c7da338de4c5a4a8a1e"
       },
       {
-        "id": "d268f3ec-a146-4063-83e4-7411da2407b3",
+        "id": "f6ea48eb-cad4-4a4c-83bd-b04f711f1508",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLk45RHdhVGhocHNn",
         "videoId": "N9DwaThhpsg",
         "title": "MySQL on AWS EC2 Amazon Linux 2",
@@ -1942,10 +1828,10 @@
         "dirPath": "content/videos/videos/mysql-on-aws-ec2-amazon-linux-2",
         "indexPath": "content/videos/videos/mysql-on-aws-ec2-amazon-linux-2/index.mdx",
         "imagesPath": "content/videos/videos/mysql-on-aws-ec2-amazon-linux-2/images",
-        "hash": "e0cf068ad64cd025ad188b03d0722fb99cae8357"
+        "hash": "1118f666dafe9c24ba4f67d2cdff3d194a66c6de"
       },
       {
-        "id": "a38f46c5-449b-4f84-b394-745b3dd5b3a0",
+        "id": "a6859031-a61d-4456-8130-79e4764dac7c",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLnlHWWVZSnBSV1BN",
         "videoId": "yGYeYJpRWPM",
         "title": "Upload Images Directly to S3 from Front End",
@@ -1965,10 +1851,10 @@
         "dirPath": "content/videos/videos/upload-images-directly-to-s3-from-front-end",
         "indexPath": "content/videos/videos/upload-images-directly-to-s3-from-front-end/index.mdx",
         "imagesPath": "content/videos/videos/upload-images-directly-to-s3-from-front-end/images",
-        "hash": "0b4c6662f92a8f4d18b2756c031aeb763d935dca"
+        "hash": "fda7e243e1797222c64725fd6a85282ed1a1681b"
       },
       {
-        "id": "1e85124e-2e9b-40cf-b55f-a8004ae22dd1",
+        "id": "daf8d3b1-afb7-4dbf-b0a5-d19c86b0bebe",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLklEakY2LXMxaEdr",
         "videoId": "IDjF6-s1hGk",
         "title": "Mocking a Database in Node with Jest",
@@ -1988,7 +1874,1088 @@
         "dirPath": "content/videos/videos/mocking-a-database-in-node-with-jest",
         "indexPath": "content/videos/videos/mocking-a-database-in-node-with-jest/index.mdx",
         "imagesPath": "content/videos/videos/mocking-a-database-in-node-with-jest/images",
-        "hash": "afcff3686b29f9f21a484ab45bf559a589717911"
+        "hash": "d409efea2e1c5079ac862c828ecc720cfe609098"
+      },
+      {
+        "id": "4df203be-1134-4460-a45f-dc2c0b0f1f17",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLnlPQzBlME5NWi1F",
+        "videoId": "yOC0e0NMZ-E",
+        "title": "Dependency Injection in JavaScript",
+        "date": "2021-04-05T22:57:36Z",
+        "slug": "dependency-injection-in-javascript",
+        "image": {
+          "name": "dependency-injection-in-javascript.jpg",
+          "alt": "Dependency Injection in JavaScript",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/js/dependency-injection-in-javascript/images/dependency-injection-in-javascript.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to use dependency injection in a JavaScript application to decouple a MySQL database from an express HTTP server. This will help us be able to mock the database for a future video.",
+        "tags": [],
+        "skipSize": 606,
+        "dirPath": "content/videos/js/dependency-injection-in-javascript",
+        "indexPath": "content/videos/js/dependency-injection-in-javascript/index.mdx",
+        "imagesPath": "content/videos/js/dependency-injection-in-javascript/images",
+        "hash": "6b44f2c5463ca647dee199a7485070772256bacf"
+      },
+      {
+        "id": "598b82ec-d66b-4286-bd2f-7c1e2d3156e1",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLkZLbnpTX2ljcDIw",
+        "videoId": "FKnzS_icp20",
+        "title": "Testing Node Server with Jest and Supertest",
+        "date": "2021-04-05T17:34:38Z",
+        "slug": "testing-node-server-with-jest-and-supertest",
+        "image": {
+          "name": "testing-node-server-with-jest-and-supertest.jpg",
+          "alt": "Testing Node Server with Jest and Supertest",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/testing-node-server-with-jest-and-supertest/images/testing-node-server-with-jest-and-supertest.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to test a node.js HTTP server using Jest and Supertest.",
+        "tags": [],
+        "skipSize": 517,
+        "dirPath": "content/videos/videos/testing-node-server-with-jest-and-supertest",
+        "indexPath": "content/videos/videos/testing-node-server-with-jest-and-supertest/index.mdx",
+        "imagesPath": "content/videos/videos/testing-node-server-with-jest-and-supertest/images",
+        "hash": "97c7e0de45a793f559b9600db033a8ca3de2f3dd"
+      },
+      {
+        "id": "78f75fae-bee3-4c51-a434-01edf155dcc3",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLjQ1bldzbUJ4VDE4",
+        "videoId": "45nWsmBxT18",
+        "title": "Build a web app with React, Express, Mysql, S3, Heroku | Live Lesson Demo",
+        "date": "2021-03-12T19:57:14Z",
+        "slug": "build-a-web-app-with-react,-express,-mysql,-s3,-heroku-live-lesson-demo",
+        "image": {
+          "name": "build-a-web-app-with-react,-express,-mysql,-s3,-heroku-live-lesson-demo.jpg",
+          "alt": "Build a web app with React, Express, Mysql, S3, Heroku | Live Lesson Demo",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/build-a-web-app-with-react,-express,-mysql,-s3,-heroku-live-lesson-demo/images/build-a-web-app-with-react,-express,-mysql,-s3,-heroku-live-lesson-demo.jpg"
+        },
+        "status": "published",
+        "description": "In this hour-long class, I demo how to make a react app that uploads images to an s3 bucket and persists data to a MySQL database. Everything is hosted in the cloud.",
+        "tags": [],
+        "skipSize": 733,
+        "dirPath": "content/videos/videos/build-a-web-app-with-react,-express,-mysql,-s3,-heroku-live-lesson-demo",
+        "indexPath": "content/videos/videos/build-a-web-app-with-react,-express,-mysql,-s3,-heroku-live-lesson-demo/index.mdx",
+        "imagesPath": "content/videos/videos/build-a-web-app-with-react,-express,-mysql,-s3,-heroku-live-lesson-demo/images",
+        "hash": "6dbf2ddfe77f146f47e7c73ae57da38bffda4b3f"
+      },
+      {
+        "id": "cd2ea100-9d16-4301-b812-449f64de76a6",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLjg5UGwyVW9rOHhj",
+        "videoId": "89Pl2Uok8xc",
+        "title": "TDD in JavaScript | Test Driven Development",
+        "date": "2021-03-07T22:07:30Z",
+        "slug": "tdd-in-javascript-test-driven-development",
+        "image": {
+          "name": "tdd-in-javascript-test-driven-development.jpg",
+          "alt": "TDD in JavaScript | Test Driven Development",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/tdd-in-javascript-test-driven-development/images/tdd-in-javascript-test-driven-development.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to use test-driven development (TDD) in your JavaScript applications to help guide your software development.",
+        "tags": [],
+        "skipSize": 567,
+        "dirPath": "content/videos/videos/tdd-in-javascript-test-driven-development",
+        "indexPath": "content/videos/videos/tdd-in-javascript-test-driven-development/index.mdx",
+        "imagesPath": "content/videos/videos/tdd-in-javascript-test-driven-development/images",
+        "hash": "d3a871af8f7d1a45a4c54cb40e7dec18146789f5"
+      },
+      {
+        "id": "0d4658fd-1d7d-4e62-b063-c4bf0c2f080c",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmh6MF9xMU1KYTJr",
+        "videoId": "hz0_q1MJa2k",
+        "title": "Unit Testing in Javascript | Writing Automated Tests With Jest",
+        "date": "2021-03-06T22:07:07Z",
+        "slug": "unit-testing-in-javascript-writing-automated-tests-with-jest",
+        "image": {
+          "name": "unit-testing-in-javascript-writing-automated-tests-with-jest.jpg",
+          "alt": "Unit Testing in Javascript | Writing Automated Tests With Jest",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/unit-testing-in-javascript-writing-automated-tests-with-jest/images/unit-testing-in-javascript-writing-automated-tests-with-jest.jpg"
+        },
+        "status": "published",
+        "description": "Learn why we write automated tests and how to write automated unit tests in JavaScript using the jest test framework. ",
+        "tags": [],
+        "skipSize": 642,
+        "dirPath": "content/videos/videos/unit-testing-in-javascript-writing-automated-tests-with-jest",
+        "indexPath": "content/videos/videos/unit-testing-in-javascript-writing-automated-tests-with-jest/index.mdx",
+        "imagesPath": "content/videos/videos/unit-testing-in-javascript-writing-automated-tests-with-jest/images",
+        "hash": "eaaf778d550b03cbef6affc0a700bbe01e0eff9b"
+      },
+      {
+        "id": "c7d905b6-bde0-412b-b6a6-5f952e58429d",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLk5aRWxnOTFsX21z",
+        "videoId": "NZElg91l_ms",
+        "title": "Upload Images to S3 from Node Back End",
+        "date": "2021-03-01T16:00:07Z",
+        "slug": "upload-images-to-s3-from-node-back-end",
+        "image": {
+          "name": "upload-images-to-s3-from-node-back-end.jpg",
+          "alt": "Upload Images to S3 from Node Back End",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/upload-images-to-s3-from-node-back-end/images/upload-images-to-s3-from-node-back-end.jpg"
+        },
+        "status": "published",
+        "description": "There is an updated version to this tutorial. Use the new one instead: https://youtu.be/eQAIojcArRY",
+        "tags": [],
+        "skipSize": 531,
+        "dirPath": "content/videos/videos/upload-images-to-s3-from-node-back-end",
+        "indexPath": "content/videos/videos/upload-images-to-s3-from-node-back-end/index.mdx",
+        "imagesPath": "content/videos/videos/upload-images-to-s3-from-node-back-end/images",
+        "hash": "0e718f69fb242577e6090d0bd5c6b0a85eda9bb4"
+      },
+      {
+        "id": "9625a4df-265f-47c3-8fbc-8c8974a50759",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLnY1ekZfQVlhUmZR",
+        "videoId": "v5zF_AYaRfQ",
+        "title": "TDD and Unit Testing in iOS | Part 3 View Controllers",
+        "date": "2021-02-18T23:08:48Z",
+        "slug": "tdd-and-unit-testing-in-ios-part-3-view-controllers",
+        "image": {
+          "name": "tdd-and-unit-testing-in-ios-part-3-view-controllers.jpg",
+          "alt": "TDD and Unit Testing in iOS | Part 3 View Controllers",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/tdd-and-unit-testing-in-ios-part-3-view-controllers/images/tdd-and-unit-testing-in-ios-part-3-view-controllers.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to use the XCTest framework to write unit tests for UIViewControllers.",
+        "tags": [],
+        "skipSize": 568,
+        "dirPath": "content/videos/videos/tdd-and-unit-testing-in-ios-part-3-view-controllers",
+        "indexPath": "content/videos/videos/tdd-and-unit-testing-in-ios-part-3-view-controllers/index.mdx",
+        "imagesPath": "content/videos/videos/tdd-and-unit-testing-in-ios-part-3-view-controllers/images",
+        "hash": "693ad3a4c60224b1d21d2005fc9b71be61fe1f64"
+      },
+      {
+        "id": "ecd6d4ba-e38c-495f-813a-b3ee990e72e1",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmVVa2xSUy1DZ1A4",
+        "videoId": "eUklRS-CgP8",
+        "title": "UIScrollViews in iOS with Swift",
+        "date": "2021-02-05T18:51:09Z",
+        "slug": "uiscrollviews-in-ios-with-swift",
+        "image": {
+          "name": "uiscrollviews-in-ios-with-swift.jpg",
+          "alt": "UIScrollViews in iOS with Swift",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/uiscrollviews-in-ios-with-swift/images/uiscrollviews-in-ios-with-swift.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to use UIScrollViews in your iOS apps.",
+        "tags": [],
+        "skipSize": 452,
+        "dirPath": "content/videos/videos/uiscrollviews-in-ios-with-swift",
+        "indexPath": "content/videos/videos/uiscrollviews-in-ios-with-swift/index.mdx",
+        "imagesPath": "content/videos/videos/uiscrollviews-in-ios-with-swift/images",
+        "hash": "9d140367dee9e80de1bcc5712314b6ce7596ab57"
+      },
+      {
+        "id": "a51367c4-65a3-4068-80e0-cfce7c5f1d11",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLkF4SkpHb3BwYWpV",
+        "videoId": "AxJJGoppajU",
+        "title": "Delegates in iOS with Swift",
+        "date": "2021-01-29T16:42:28Z",
+        "slug": "delegates-in-ios-with-swift",
+        "image": {
+          "name": "delegates-in-ios-with-swift.jpg",
+          "alt": "Delegates in iOS with Swift",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/delegates-in-ios-with-swift/images/delegates-in-ios-with-swift.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to use the Delegate design pattern using Swift in an iOS app.",
+        "tags": [],
+        "skipSize": 459,
+        "dirPath": "content/videos/videos/delegates-in-ios-with-swift",
+        "indexPath": "content/videos/videos/delegates-in-ios-with-swift/index.mdx",
+        "imagesPath": "content/videos/videos/delegates-in-ios-with-swift/images",
+        "hash": "d3929591c66ec68d78d3ef8fa950f0d5f1640a59"
+      },
+      {
+        "id": "64dc8edf-b68d-4d2b-a2d0-cce4cdae5a89",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLjlKSXlweFJzdVJB",
+        "videoId": "9JIypxRsuRA",
+        "title": "Fetch Requests | Core Data #4",
+        "date": "2020-11-08T18:46:40Z",
+        "slug": "fetch-requests-core-data-4",
+        "image": {
+          "name": "fetch-requests-core-data-4.jpg",
+          "alt": "Fetch Requests | Core Data #4",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/fetch-requests-core-data-4/images/fetch-requests-core-data-4.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to create fetch requests to query objects from Core Data.",
+        "tags": [],
+        "skipSize": 457,
+        "dirPath": "content/videos/videos/fetch-requests-core-data-4",
+        "indexPath": "content/videos/videos/fetch-requests-core-data-4/index.mdx",
+        "imagesPath": "content/videos/videos/fetch-requests-core-data-4/images",
+        "hash": "f4a301a558efb3cd4cc5496b9d48ab428572a3df"
+      },
+      {
+        "id": "58867660-1fd2-4c0b-b7ac-1a8ac9883d00",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLjJjZVp0LUhLck9j",
+        "videoId": "2ceZt-HKrOc",
+        "title": "Relationships | Core Data #3",
+        "date": "2020-11-08T18:44:04Z",
+        "slug": "relationships-core-data-3",
+        "image": {
+          "name": "relationships-core-data-3.jpg",
+          "alt": "Relationships | Core Data #3",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/relationships-core-data-3/images/relationships-core-data-3.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to create different relationships between different entities using Core Data.",
+        "tags": [],
+        "skipSize": 473,
+        "dirPath": "content/videos/videos/relationships-core-data-3",
+        "indexPath": "content/videos/videos/relationships-core-data-3/index.mdx",
+        "imagesPath": "content/videos/videos/relationships-core-data-3/images",
+        "hash": "07956657d75e252bcec108f5d85cd290515f825b"
+      },
+      {
+        "id": "c1f60b76-e66c-4690-b70c-502bfa8880cc",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmtwMHJ4SkNJdmRV",
+        "videoId": "kp0rxJCIvdU",
+        "title": "Saving Entities | Core Data #2",
+        "date": "2020-11-08T18:39:09Z",
+        "slug": "saving-entities-core-data-2",
+        "image": {
+          "name": "saving-entities-core-data-2.jpg",
+          "alt": "Saving Entities | Core Data #2",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/saving-entities-core-data-2/images/saving-entities-core-data-2.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to add core data to an existing project and save entities.",
+        "tags": [],
+        "skipSize": 462,
+        "dirPath": "content/videos/videos/saving-entities-core-data-2",
+        "indexPath": "content/videos/videos/saving-entities-core-data-2/index.mdx",
+        "imagesPath": "content/videos/videos/saving-entities-core-data-2/images",
+        "hash": "220b31ff0b8d2c7d31796b9c37313035f44f77b4"
+      },
+      {
+        "id": "3aa1f145-6b85-4640-9c9c-f846572f644d",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLlp3QklCenMzdHVj",
+        "videoId": "ZwBIBzs3tuc",
+        "title": "What is Core Data? | Core Data #1",
+        "date": "2020-11-08T18:28:44Z",
+        "slug": "what-is-core-data-core-data-1",
+        "image": {
+          "name": "what-is-core-data-core-data-1.jpg",
+          "alt": "What is Core Data? | Core Data #1",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/what-is-core-data-core-data-1/images/what-is-core-data-core-data-1.jpg"
+        },
+        "status": "published",
+        "description": "Learn about what Core Data is and how to use it to persist data in an iOS application.",
+        "tags": [],
+        "skipSize": 490,
+        "dirPath": "content/videos/videos/what-is-core-data-core-data-1",
+        "indexPath": "content/videos/videos/what-is-core-data-core-data-1/index.mdx",
+        "imagesPath": "content/videos/videos/what-is-core-data-core-data-1/images",
+        "hash": "082958736001dfca298b6e49fd5a01f23bbc53c8"
+      },
+      {
+        "id": "35b08488-09d7-415c-8757-e60c5e23a0dd",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLkI0eUo4NUlhVFV3",
+        "videoId": "B4yJ85IaTUw",
+        "title": "TDD and Unit Testing in iOS | Part 1 Stateless Objects",
+        "date": "2020-11-02T18:53:42Z",
+        "slug": "tdd-and-unit-testing-in-ios-part-1-stateless-objects",
+        "image": {
+          "name": "tdd-and-unit-testing-in-ios-part-1-stateless-objects.jpg",
+          "alt": "TDD and Unit Testing in iOS | Part 1 Stateless Objects",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/tdd-and-unit-testing-in-ios-part-1-stateless-objects/images/tdd-and-unit-testing-in-ios-part-1-stateless-objects.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to use the XCTest framework to write unit tests for stateless objects.",
+        "tags": [],
+        "skipSize": 572,
+        "dirPath": "content/videos/videos/tdd-and-unit-testing-in-ios-part-1-stateless-objects",
+        "indexPath": "content/videos/videos/tdd-and-unit-testing-in-ios-part-1-stateless-objects/index.mdx",
+        "imagesPath": "content/videos/videos/tdd-and-unit-testing-in-ios-part-1-stateless-objects/images",
+        "hash": "8066fdb979f4fa893424c8ae3222f0c7f6835d2f"
+      },
+      {
+        "id": "15a45ad5-658d-4605-853b-056dc5b77b66",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLjBUR1FwWmlBb0tV",
+        "videoId": "0TGQpZiAoKU",
+        "title": "TDD and Unit Testing in iOS | Part 2 Stateful Objects",
+        "date": "2020-11-02T18:53:24Z",
+        "slug": "tdd-and-unit-testing-in-ios-part-2-stateful-objects",
+        "image": {
+          "name": "tdd-and-unit-testing-in-ios-part-2-stateful-objects.jpg",
+          "alt": "TDD and Unit Testing in iOS | Part 2 Stateful Objects",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/tdd-and-unit-testing-in-ios-part-2-stateful-objects/images/tdd-and-unit-testing-in-ios-part-2-stateful-objects.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to use the XCTest framework to write unit tests for stateful objects.",
+        "tags": [],
+        "skipSize": 567,
+        "dirPath": "content/videos/videos/tdd-and-unit-testing-in-ios-part-2-stateful-objects",
+        "indexPath": "content/videos/videos/tdd-and-unit-testing-in-ios-part-2-stateful-objects/index.mdx",
+        "imagesPath": "content/videos/videos/tdd-and-unit-testing-in-ios-part-2-stateful-objects/images",
+        "hash": "36f49b35dad501787cd8f34197b42da12f92b169"
+      },
+      {
+        "id": "82e1278e-6737-4e05-ba06-bc7deb0f66d4",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmRORDlpTk16ZUtz",
+        "videoId": "dND9iNMzeKs",
+        "title": "Downloading & Caching Images in iOS with Swift",
+        "date": "2020-10-29T06:33:28Z",
+        "slug": "downloading-&-caching-images-in-ios-with-swift",
+        "image": {
+          "name": "downloading-&-caching-images-in-ios-with-swift.jpg",
+          "alt": "Downloading & Caching Images in iOS with Swift",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/downloading-&-caching-images-in-ios-with-swift/images/downloading-&-caching-images-in-ios-with-swift.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to use URLSession to download images into a UICollectionView. Then cache those images using an NSCache",
+        "tags": [],
+        "skipSize": 576,
+        "dirPath": "content/videos/videos/downloading-&-caching-images-in-ios-with-swift",
+        "indexPath": "content/videos/videos/downloading-&-caching-images-in-ios-with-swift/index.mdx",
+        "imagesPath": "content/videos/videos/downloading-&-caching-images-in-ios-with-swift/images",
+        "hash": "988b3836d99345e8aebebfcd806c496d6f2f6b86"
+      },
+      {
+        "id": "bb713482-b9f1-4308-a2c9-2948b6761d2c",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLnp2ZlZpWW1FVHVj",
+        "videoId": "zvfViYmETuc",
+        "title": "Networking in iOS with URLSession | JSON and Image data",
+        "date": "2020-10-25T16:57:04Z",
+        "slug": "networking-in-ios-with-urlsession-json-and-image-data",
+        "image": {
+          "name": "networking-in-ios-with-urlsession-json-and-image-data.jpg",
+          "alt": "Networking in iOS with URLSession | JSON and Image data",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/networking-in-ios-with-urlsession-json-and-image-data/images/networking-in-ios-with-urlsession-json-and-image-data.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to use URLSession to perform HTTP requests in an iOS App",
+        "tags": [],
+        "skipSize": 562,
+        "dirPath": "content/videos/videos/networking-in-ios-with-urlsession-json-and-image-data",
+        "indexPath": "content/videos/videos/networking-in-ios-with-urlsession-json-and-image-data/index.mdx",
+        "imagesPath": "content/videos/videos/networking-in-ios-with-urlsession-json-and-image-data/images",
+        "hash": "6032d86ff8ca3a71414eaf1a283f4eb02d8fc690"
+      },
+      {
+        "id": "c1e27235-fb35-4ccc-ac23-e3a72aaccea7",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLkM4eUJ5T2g4LTZV",
+        "videoId": "C8yByOh8-6U",
+        "title": "Multithreading & Async in iOS | A Basic Introduction",
+        "date": "2020-10-25T16:47:12Z",
+        "slug": "multithreading-&-async-in-ios-a-basic-introduction",
+        "image": {
+          "name": "multithreading-&-async-in-ios-a-basic-introduction.jpg",
+          "alt": "Multithreading & Async in iOS | A Basic Introduction",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/multithreading-&-async-in-ios-a-basic-introduction/images/multithreading-&-async-in-ios-a-basic-introduction.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to use dispatch queues to perform tasks on a background queue in iOS with Swift.",
+        "tags": [],
+        "skipSize": 574,
+        "dirPath": "content/videos/videos/multithreading-&-async-in-ios-a-basic-introduction",
+        "indexPath": "content/videos/videos/multithreading-&-async-in-ios-a-basic-introduction/index.mdx",
+        "imagesPath": "content/videos/videos/multithreading-&-async-in-ios-a-basic-introduction/images",
+        "hash": "b6d07a5ac232736d6378515ec9f55455f906cbd9"
+      },
+      {
+        "id": "f53a3991-14c2-41f9-b115-5dc5c6d8b671",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmNXZkc3OU5hT3Y0",
+        "videoId": "cWfG79NaOv4",
+        "title": "UICollectionViews in iOS with Compositional Layout",
+        "date": "2020-10-11T17:50:33Z",
+        "slug": "uicollectionviews-in-ios-with-compositional-layout",
+        "image": {
+          "name": "uicollectionviews-in-ios-with-compositional-layout.jpg",
+          "alt": "UICollectionViews in iOS with Compositional Layout",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/uicollectionviews-in-ios-with-compositional-layout/images/uicollectionviews-in-ios-with-compositional-layout.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to use UICollectionViews in an iOS app.",
+        "tags": [],
+        "skipSize": 529,
+        "dirPath": "content/videos/videos/uicollectionviews-in-ios-with-compositional-layout",
+        "indexPath": "content/videos/videos/uicollectionviews-in-ios-with-compositional-layout/index.mdx",
+        "imagesPath": "content/videos/videos/uicollectionviews-in-ios-with-compositional-layout/images",
+        "hash": "59bc62f0395b4aa4d5aa0532e424f439db8f51bd"
+      },
+      {
+        "id": "4944c3b2-5248-4de9-9a2f-36b616ba428d",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLld1U2VzYVpjYU1R",
+        "videoId": "WuSesaZcaMQ",
+        "title": "UIViewControllers in iOS and Swift",
+        "date": "2020-10-10T01:10:48Z",
+        "slug": "uiviewcontrollers-in-ios-and-swift",
+        "image": {
+          "name": "uiviewcontrollers-in-ios-and-swift.jpg",
+          "alt": "UIViewControllers in iOS and Swift",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/uiviewcontrollers-in-ios-and-swift/images/uiviewcontrollers-in-ios-and-swift.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to use the UIViewControllers to make a multi-screen app for iOS.",
+        "tags": [],
+        "skipSize": 490,
+        "dirPath": "content/videos/videos/uiviewcontrollers-in-ios-and-swift",
+        "indexPath": "content/videos/videos/uiviewcontrollers-in-ios-and-swift/index.mdx",
+        "imagesPath": "content/videos/videos/uiviewcontrollers-in-ios-and-swift/images",
+        "hash": "f3c322d8788ff00795925aafcf122bd3de0fafd4"
+      },
+      {
+        "id": "e777cf3b-128b-471a-9ec3-33e9c27dc61a",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmNoajJjZVpsNTFz",
+        "videoId": "chj2ceZl51s",
+        "title": "Custom UIViews and UIControls | iOS Swift Checkbox",
+        "date": "2020-10-08T18:19:17Z",
+        "slug": "custom-uiviews-and-uicontrols-ios-swift-checkbox",
+        "image": {
+          "name": "custom-uiviews-and-uicontrols-ios-swift-checkbox.jpg",
+          "alt": "Custom UIViews and UIControls | iOS Swift Checkbox",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/custom-uiviews-and-uicontrols-ios-swift-checkbox/images/custom-uiviews-and-uicontrols-ios-swift-checkbox.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to make custom UIViews and UIControls in iOS",
+        "tags": [],
+        "skipSize": 530,
+        "dirPath": "content/videos/videos/custom-uiviews-and-uicontrols-ios-swift-checkbox",
+        "indexPath": "content/videos/videos/custom-uiviews-and-uicontrols-ios-swift-checkbox/index.mdx",
+        "imagesPath": "content/videos/videos/custom-uiviews-and-uicontrols-ios-swift-checkbox/images",
+        "hash": "aeff8a4197ace0df6db872751991f1628fcfc0b5"
+      },
+      {
+        "id": "18120eb8-fbd5-4815-83b9-8b7774648ba8",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLnByampueFhCa3Bv",
+        "videoId": "prjjnxXBkpo",
+        "title": "UITableViews | Making an iOS Todo List App with Swift",
+        "date": "2020-10-08T18:18:10Z",
+        "slug": "uitableviews-making-an-ios-todo-list-app-with-swift",
+        "image": {
+          "name": "uitableviews-making-an-ios-todo-list-app-with-swift.jpg",
+          "alt": "UITableViews | Making an iOS Todo List App with Swift",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/uitableviews-making-an-ios-todo-list-app-with-swift/images/uitableviews-making-an-ios-todo-list-app-with-swift.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to use UITableViews to make a todo list app for iOS",
+        "tags": [],
+        "skipSize": 549,
+        "dirPath": "content/videos/videos/uitableviews-making-an-ios-todo-list-app-with-swift",
+        "indexPath": "content/videos/videos/uitableviews-making-an-ios-todo-list-app-with-swift/index.mdx",
+        "imagesPath": "content/videos/videos/uitableviews-making-an-ios-todo-list-app-with-swift/images",
+        "hash": "a096bf96b5aa1f9ff49b45d8e006f87ea51d471e"
+      },
+      {
+        "id": "8aef440e-8fa5-44b7-b14e-53be453c49c7",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLlJvWTNla0NDeEtj",
+        "videoId": "RoY3ekCCxKc",
+        "title": "S3 Bucket Hosting a Static Website",
+        "date": "2020-09-13T16:00:06Z",
+        "slug": "s3-bucket-hosting-a-static-website",
+        "image": {
+          "name": "s3-bucket-hosting-a-static-website.jpg",
+          "alt": "S3 Bucket Hosting a Static Website",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/s3-bucket-hosting-a-static-website/images/s3-bucket-hosting-a-static-website.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to set up an s3 bucket and use it to host static assets and a website. You could use this for anything from a simple landing page, to a fully featured react app.",
+        "tags": [],
+        "skipSize": 587,
+        "dirPath": "content/videos/videos/s3-bucket-hosting-a-static-website",
+        "indexPath": "content/videos/videos/s3-bucket-hosting-a-static-website/index.mdx",
+        "imagesPath": "content/videos/videos/s3-bucket-hosting-a-static-website/images",
+        "hash": "7078f708994a6c91fa8e67c6b1353683c7940414"
+      },
+      {
+        "id": "c78882d0-8a0c-4a5c-9115-e19f51a8052f",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLkdFVmJZUVdXSmtR",
+        "videoId": "GEVbYQWWJkQ",
+        "title": "Setting Up And Deploying AWS EC2 Instances",
+        "date": "2020-09-13T16:00:02Z",
+        "slug": "setting-up-and-deploying-aws-ec2-instances",
+        "image": {
+          "name": "setting-up-and-deploying-aws-ec2-instances.jpg",
+          "alt": "Setting Up And Deploying AWS EC2 Instances",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/setting-up-and-deploying-aws-ec2-instances/images/setting-up-and-deploying-aws-ec2-instances.jpg"
+        },
+        "status": "published",
+        "description": "EC2 or elastic compute cloud is part of amazon's infrastructure as a service for us to rent virtual machines in the cloud. we can run a VM on amazon's servers to run any of our own applications.",
+        "tags": [],
+        "skipSize": 642,
+        "dirPath": "content/videos/videos/setting-up-and-deploying-aws-ec2-instances",
+        "indexPath": "content/videos/videos/setting-up-and-deploying-aws-ec2-instances/index.mdx",
+        "imagesPath": "content/videos/videos/setting-up-and-deploying-aws-ec2-instances/images",
+        "hash": "174c7e6daedf69a83ffa92ccc09369545dd9d3c9"
+      },
+      {
+        "id": "74ccc667-363c-4f05-8dd2-396e26e3fb86",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLnc2T3NJQ2JuSmJB",
+        "videoId": "w6OsICbnJbA",
+        "title": "SSH Keys | Adding an SSH key to a Raspberry Pi",
+        "date": "2020-07-29T15:00:13Z",
+        "slug": "ssh-keys-adding-an-ssh-key-to-a-raspberry-pi",
+        "image": {
+          "name": "ssh-keys-adding-an-ssh-key-to-a-raspberry-pi.jpg",
+          "alt": "SSH Keys | Adding an SSH key to a Raspberry Pi",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/ssh-keys-adding-an-ssh-key-to-a-raspberry-pi/images/ssh-keys-adding-an-ssh-key-to-a-raspberry-pi.jpg"
+        },
+        "status": "published",
+        "description": "In this lesson, we're going to create an SSH key so that we don't have to enter our password every time we want to transfer code or control the pi.",
+        "tags": [],
+        "skipSize": 607,
+        "dirPath": "content/videos/videos/ssh-keys-adding-an-ssh-key-to-a-raspberry-pi",
+        "indexPath": "content/videos/videos/ssh-keys-adding-an-ssh-key-to-a-raspberry-pi/index.mdx",
+        "imagesPath": "content/videos/videos/ssh-keys-adding-an-ssh-key-to-a-raspberry-pi/images",
+        "hash": "91f86daecbd9da0882ccd856253529340f1e0fef"
+      },
+      {
+        "id": "384d0dad-c663-49f8-a539-7e78d0a35b00",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLk5tXzh1NDR6Q2x3",
+        "videoId": "Nm_8u44zClw",
+        "title": "Transfer Code to a Raspberry Pi Using rsync",
+        "date": "2020-07-25T23:50:38Z",
+        "slug": "transfer-code-to-a-raspberry-pi-using-rsync",
+        "image": {
+          "name": "transfer-code-to-a-raspberry-pi-using-rsync.jpg",
+          "alt": "Transfer Code to a Raspberry Pi Using rsync",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/transfer-code-to-a-raspberry-pi-using-rsync/images/transfer-code-to-a-raspberry-pi-using-rsync.jpg"
+        },
+        "status": "published",
+        "description": "Writing code directly on a raspberry pi is not ideal. It doesn't have our favorite text editor or git installed, and it can be a little bit slow for testing. ",
+        "tags": [],
+        "skipSize": 610,
+        "dirPath": "content/videos/videos/transfer-code-to-a-raspberry-pi-using-rsync",
+        "indexPath": "content/videos/videos/transfer-code-to-a-raspberry-pi-using-rsync/index.mdx",
+        "imagesPath": "content/videos/videos/transfer-code-to-a-raspberry-pi-using-rsync/images",
+        "hash": "016e9e181a1b4c071e7135844642adf8f536e2f5"
+      },
+      {
+        "id": "9bcf7668-3e62-4452-8abb-b7e28cab516e",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLlhlNlNfYzVBcElj",
+        "videoId": "Xe6S_c5ApIc",
+        "title": "Auto Layout Constraints in iOS",
+        "date": "2020-07-24T15:00:09Z",
+        "slug": "auto-layout-constraints-in-ios",
+        "image": {
+          "name": "auto-layout-constraints-in-ios.jpg",
+          "alt": "Auto Layout Constraints in iOS",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/auto-layout-constraints-in-ios/images/auto-layout-constraints-in-ios.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to use Auto Layout to layout elements in UIKit on an iOS device.",
+        "tags": [],
+        "skipSize": 474,
+        "dirPath": "content/videos/videos/auto-layout-constraints-in-ios",
+        "indexPath": "content/videos/videos/auto-layout-constraints-in-ios/index.mdx",
+        "imagesPath": "content/videos/videos/auto-layout-constraints-in-ios/images",
+        "hash": "396d7677fdb5f95311a723dfdd7db8cae02a179b"
+      },
+      {
+        "id": "7bd7f496-c5ba-4706-b071-45ff3ae69380",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLlZNMWNYcWJfMVYw",
+        "videoId": "VM1cXqb_1V0",
+        "title": "Touches and Gestures in iOS with Swift",
+        "date": "2020-07-23T21:05:14Z",
+        "slug": "touches-and-gestures-in-ios-with-swift",
+        "image": {
+          "name": "touches-and-gestures-in-ios-with-swift.jpg",
+          "alt": "Touches and Gestures in iOS with Swift",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/touches-and-gestures-in-ios-with-swift/images/touches-and-gestures-in-ios-with-swift.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to use UIGestureRecognizers to handle user input on an iOS device.",
+        "tags": [],
+        "skipSize": 508,
+        "dirPath": "content/videos/videos/touches-and-gestures-in-ios-with-swift",
+        "indexPath": "content/videos/videos/touches-and-gestures-in-ios-with-swift/index.mdx",
+        "imagesPath": "content/videos/videos/touches-and-gestures-in-ios-with-swift/images",
+        "hash": "b56b7b2372e6f1a9860c9a44765329de2506fc1d"
+      },
+      {
+        "id": "1bc6540f-c1a8-4af3-a9c3-b4a7cba65252",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLlFjMjlaR3Rxa2Ew",
+        "videoId": "Qc29ZGtqka0",
+        "title": "Intro to UIControls | iOS and Swift",
+        "date": "2020-07-16T16:00:09Z",
+        "slug": "intro-to-uicontrols-ios-and-swift",
+        "image": {
+          "name": "intro-to-uicontrols-ios-and-swift.jpg",
+          "alt": "Intro to UIControls | iOS and Swift",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/intro-to-uicontrols-ios-and-swift/images/intro-to-uicontrols-ios-and-swift.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to use UIControls like buttons and switches to detect user interactions in UIKit. ",
+        "tags": [],
+        "skipSize": 508,
+        "dirPath": "content/videos/videos/intro-to-uicontrols-ios-and-swift",
+        "indexPath": "content/videos/videos/intro-to-uicontrols-ios-and-swift/index.mdx",
+        "imagesPath": "content/videos/videos/intro-to-uicontrols-ios-and-swift/images",
+        "hash": "d61ea1939637ea377c3e37894317b172cd515490"
+      },
+      {
+        "id": "51468e6a-eba9-4d4e-90b4-90ad4dd8a691",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLnc1OG5jVEhLaUs0",
+        "videoId": "w58ncTHKiK4",
+        "title": "Intro to UIKit and UIViews | iOS and Swift",
+        "date": "2020-07-08T19:38:46Z",
+        "slug": "intro-to-uikit-and-uiviews-ios-and-swift",
+        "image": {
+          "name": "intro-to-uikit-and-uiviews-ios-and-swift.jpg",
+          "alt": "Intro to UIKit and UIViews | iOS and Swift",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/intro-to-uikit-and-uiviews-ios-and-swift/images/intro-to-uikit-and-uiviews-ios-and-swift.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to build your iOS UI using UIKit.",
+        "tags": [],
+        "skipSize": 487,
+        "dirPath": "content/videos/videos/intro-to-uikit-and-uiviews-ios-and-swift",
+        "indexPath": "content/videos/videos/intro-to-uikit-and-uiviews-ios-and-swift/index.mdx",
+        "imagesPath": "content/videos/videos/intro-to-uikit-and-uiviews-ios-and-swift/images",
+        "hash": "efdcdbc076cd27dccf0ab19eef2d433c7c942149"
+      },
+      {
+        "id": "5c317c96-86e2-45db-a18a-83cb74892f06",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLktrbmdFdGR3R1RZ",
+        "videoId": "KkngEtdwGTY",
+        "title": "Protocols and Polymorphism in Swift | Protocol Oriented Programming",
+        "date": "2020-07-03T17:56:23Z",
+        "slug": "protocols-and-polymorphism-in-swift-protocol-oriented-programming",
+        "image": {
+          "name": "protocols-and-polymorphism-in-swift-protocol-oriented-programming.jpg",
+          "alt": "Protocols and Polymorphism in Swift | Protocol Oriented Programming",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/protocols-and-polymorphism-in-swift-protocol-oriented-programming/images/protocols-and-polymorphism-in-swift-protocol-oriented-programming.jpg"
+        },
+        "status": "published",
+        "description": "How do we achieve polymorphism in Swift? And why do we prefer Protocols over superclasses?",
+        "tags": [],
+        "skipSize": 634,
+        "dirPath": "content/videos/videos/protocols-and-polymorphism-in-swift-protocol-oriented-programming",
+        "indexPath": "content/videos/videos/protocols-and-polymorphism-in-swift-protocol-oriented-programming/index.mdx",
+        "imagesPath": "content/videos/videos/protocols-and-polymorphism-in-swift-protocol-oriented-programming/images",
+        "hash": "b60635914e6188da0fabe34de744887919420b35"
+      },
+      {
+        "id": "a840cfcb-52f8-44fd-8ea2-bab8844b444e",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLk5xX1FfQVF5b1M4",
+        "videoId": "Nq_Q_AQyoS8",
+        "title": "Swift Optionals Explained",
+        "date": "2020-07-03T17:45:01Z",
+        "slug": "swift-optionals-explained",
+        "image": {
+          "name": "swift-optionals-explained.jpg",
+          "alt": "Swift Optionals Explained",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/swift-optionals-explained/images/swift-optionals-explained.jpg"
+        },
+        "status": "published",
+        "description": "How do optionals work in the Swift Programming language?",
+        "tags": [],
+        "skipSize": 436,
+        "dirPath": "content/videos/videos/swift-optionals-explained",
+        "indexPath": "content/videos/videos/swift-optionals-explained/index.mdx",
+        "imagesPath": "content/videos/videos/swift-optionals-explained/images",
+        "hash": "e575839381644e420db608c3b375930447879beb"
+      },
+      {
+        "id": "ab313d95-1584-4556-a736-8eded424e9ba",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLk0yUm81d0V1WTJv",
+        "videoId": "M2Ro5wEuY2o",
+        "title": "Fast Introduction to The Swift Programming Language",
+        "date": "2020-07-03T17:45:00Z",
+        "slug": "fast-introduction-to-the-swift-programming-language",
+        "image": {
+          "name": "fast-introduction-to-the-swift-programming-language.jpg",
+          "alt": "Fast Introduction to The Swift Programming Language",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/fast-introduction-to-the-swift-programming-language/images/fast-introduction-to-the-swift-programming-language.jpg"
+        },
+        "status": "published",
+        "description": "In this video, I'm going to show you the basics of the Swift programming language. This is a fast-paced video that assumes you already have experience with other programming languages.",
+        "tags": [],
+        "skipSize": 668,
+        "dirPath": "content/videos/videos/fast-introduction-to-the-swift-programming-language",
+        "indexPath": "content/videos/videos/fast-introduction-to-the-swift-programming-language/index.mdx",
+        "imagesPath": "content/videos/videos/fast-introduction-to-the-swift-programming-language/images",
+        "hash": "5ad44c3823be0ab2a73fb38ac9d98e087f536f58"
+      },
+      {
+        "id": "4d57008c-cfee-49da-95d6-d716caa6939f",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmpnSC1VZUhhRDFn",
+        "videoId": "jgH-UeHaD1g",
+        "title": "Swift Classes and Structs | Value and Reference Types",
+        "date": "2020-07-03T17:45:00Z",
+        "slug": "swift-classes-and-structs-value-and-reference-types",
+        "image": {
+          "name": "swift-classes-and-structs-value-and-reference-types.jpg",
+          "alt": "Swift Classes and Structs | Value and Reference Types",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/swift-classes-and-structs-value-and-reference-types/images/swift-classes-and-structs-value-and-reference-types.jpg"
+        },
+        "status": "published",
+        "description": "How to use classes and structs in the swift programming language.",
+        "tags": [],
+        "skipSize": 553,
+        "dirPath": "content/videos/videos/swift-classes-and-structs-value-and-reference-types",
+        "indexPath": "content/videos/videos/swift-classes-and-structs-value-and-reference-types/index.mdx",
+        "imagesPath": "content/videos/videos/swift-classes-and-structs-value-and-reference-types/images",
+        "hash": "15ffb4c2654132a57e363c5a61e23205c5b69650"
+      },
+      {
+        "id": "58773d38-93bc-4ad6-8fcf-0948d3816f3e",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLkJOWXJBVE9UNGlj",
+        "videoId": "BNYrATOT4ic",
+        "title": "iOS Storyboard Merge Conflicts",
+        "date": "2020-06-18T01:18:02Z",
+        "slug": "ios-storyboard-merge-conflicts",
+        "image": {
+          "name": "ios-storyboard-merge-conflicts.jpg",
+          "alt": "iOS Storyboard Merge Conflicts",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/ios-storyboard-merge-conflicts/images/ios-storyboard-merge-conflicts.jpg"
+        },
+        "status": "published",
+        "description": "Learn how ow to create, resolve, and avoid merge conflicts in storyboards in an iOS app.",
+        "tags": [],
+        "skipSize": 488,
+        "dirPath": "content/videos/videos/ios-storyboard-merge-conflicts",
+        "indexPath": "content/videos/videos/ios-storyboard-merge-conflicts/index.mdx",
+        "imagesPath": "content/videos/videos/ios-storyboard-merge-conflicts/images",
+        "hash": "7a5e49355f2de7d13033aef7b0f2a1ac51352132"
+      },
+      {
+        "id": "ef40847f-36d0-4f11-8b33-db2209737b8a",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmZWN1prWUlfZWZ3",
+        "videoId": "fV7ZkYI_efw",
+        "title": "Beginning iOS Development for Not Beginners",
+        "date": "2020-06-06T23:15:56Z",
+        "slug": "beginning-ios-development-for-not-beginners",
+        "image": {
+          "name": "beginning-ios-development-for-not-beginners.jpg",
+          "alt": "Beginning iOS Development for Not Beginners",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/beginning-ios-development-for-not-beginners/images/beginning-ios-development-for-not-beginners.jpg"
+        },
+        "status": "published",
+        "description": "In this video, I'm going to show you how to get started making iOS apps by building a basic Rock, Paper, Scissors game.",
+        "tags": [],
+        "skipSize": 571,
+        "dirPath": "content/videos/videos/beginning-ios-development-for-not-beginners",
+        "indexPath": "content/videos/videos/beginning-ios-development-for-not-beginners/index.mdx",
+        "imagesPath": "content/videos/videos/beginning-ios-development-for-not-beginners/images",
+        "hash": "fcf4c5f61721004c0dddfa16436ccf6c24f3fc45"
+      },
+      {
+        "id": "474466e2-9ff2-4fe8-b4cd-25a64e3b6be7",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLkhoNkNickRyMExr",
+        "videoId": "Hh6CbrDr0Lk",
+        "title": "SQL Injection",
+        "date": "2020-01-16T19:33:10Z",
+        "slug": "sql-injection",
+        "image": {
+          "name": "sql-injection.jpg",
+          "alt": "SQL Injection",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/sql-injection/images/sql-injection.jpg"
+        },
+        "status": "published",
+        "description": "#sqlinjection",
+        "tags": [],
+        "skipSize": 345,
+        "dirPath": "content/videos/videos/sql-injection",
+        "indexPath": "content/videos/videos/sql-injection/index.mdx",
+        "imagesPath": "content/videos/videos/sql-injection/images",
+        "hash": "61ebd2d6eb4022e981879db0d68484b60713a44a"
+      },
+      {
+        "id": "54b3bd25-b4b5-48f9-9f70-5b48e35140b3",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmp4MnVIMGlLLWJR",
+        "videoId": "jx2uH0iK-bQ",
+        "title": "Raspberry pi, Arduino, Motors, and Candy",
+        "date": "2019-12-04T18:17:25Z",
+        "slug": "raspberry-pi,-arduino,-motors,-and-candy",
+        "image": {
+          "name": "raspberry-pi,-arduino,-motors,-and-candy.jpg",
+          "alt": "Raspberry pi, Arduino, Motors, and Candy",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/raspberry-pi,-arduino,-motors,-and-candy/images/raspberry-pi,-arduino,-motors,-and-candy.jpg"
+        },
+        "status": "published",
+        "description": "My 16-month-old daughter and I built an advent calendar for her mother for Christmas. It uses a linear actuator and an iPhone app to push out a box of candy each day. ",
+        "tags": [],
+        "skipSize": 607,
+        "dirPath": "content/videos/videos/raspberry-pi,-arduino,-motors,-and-candy",
+        "indexPath": "content/videos/videos/raspberry-pi,-arduino,-motors,-and-candy/index.mdx",
+        "imagesPath": "content/videos/videos/raspberry-pi,-arduino,-motors,-and-candy/images",
+        "hash": "60cc18b4dbb25bc4d4ff904885a40378cd052fc9"
+      },
+      {
+        "id": "7e377ee1-c846-4544-9117-3f4a4314b18c",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLm9GZGxSY1JsNWFR",
+        "videoId": "oFdlRcRl5aQ",
+        "title": "Installing Node.js - Raspberry Pi & JavaScript",
+        "date": "2019-04-18T13:53:33Z",
+        "slug": "installing-nodejs-raspberry-pi-&-javascript",
+        "image": {
+          "name": "installing-nodejs-raspberry-pi-&-javascript.jpg",
+          "alt": "Installing Node.js - Raspberry Pi & JavaScript",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/installing-nodejs-raspberry-pi-&-javascript/images/installing-nodejs-raspberry-pi-&-javascript.jpg"
+        },
+        "status": "published",
+        "description": "In this video, I will show you how to install Node.js on your raspberry pi. Once you've completed this, you can control your pi using JavaScript.",
+        "tags": [],
+        "skipSize": 603,
+        "dirPath": "content/videos/videos/installing-nodejs-raspberry-pi-&-javascript",
+        "indexPath": "content/videos/videos/installing-nodejs-raspberry-pi-&-javascript/index.mdx",
+        "imagesPath": "content/videos/videos/installing-nodejs-raspberry-pi-&-javascript/images",
+        "hash": "ef5c32fbf56be87df4b3c4c01a42c1bf94ca3f00"
+      },
+      {
+        "id": "efd09e13-d50a-4625-b52e-fa52bbe22372",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmZnMnNmSC03Ti1R",
+        "videoId": "fg2sfH-7N-Q",
+        "title": "Configuring Hostname and Password - Raspberry Pi for Developers",
+        "date": "2019-04-16T19:40:50Z",
+        "slug": "configuring-hostname-and-password-raspberry-pi-for-developers",
+        "image": {
+          "name": "configuring-hostname-and-password-raspberry-pi-for-developers.jpg",
+          "alt": "Configuring Hostname and Password - Raspberry Pi for Developers",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/configuring-hostname-and-password-raspberry-pi-for-developers/images/configuring-hostname-and-password-raspberry-pi-for-developers.jpg"
+        },
+        "status": "published",
+        "description": "Entire Series: https://www.youtube.com/playlist?list=PL0X6fGhFFNTfW6RL46Rtd0VSqVtj-yBSd",
+        "tags": [],
+        "skipSize": 615,
+        "dirPath": "content/videos/videos/configuring-hostname-and-password-raspberry-pi-for-developers",
+        "indexPath": "content/videos/videos/configuring-hostname-and-password-raspberry-pi-for-developers/index.mdx",
+        "imagesPath": "content/videos/videos/configuring-hostname-and-password-raspberry-pi-for-developers/images",
+        "hash": "7cecec2ca43ef7a383f9905ea19d520a0d1d9f7e"
+      },
+      {
+        "id": "ba0c085d-d6da-4caf-8a9a-f780002db4ad",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLm5hRFlYa0k1VVlF",
+        "videoId": "naDYXkI5UYE",
+        "title": "Connecting to Wi-Fi and Using SSH - Raspberry Pi for Developers",
+        "date": "2019-04-12T15:43:44Z",
+        "slug": "connecting-to-wifi-and-using-ssh-raspberry-pi-for-developers",
+        "image": {
+          "name": "connecting-to-wifi-and-using-ssh-raspberry-pi-for-developers.jpg",
+          "alt": "Connecting to Wi-Fi and Using SSH - Raspberry Pi for Developers",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/connecting-to-wifi-and-using-ssh-raspberry-pi-for-developers/images/connecting-to-wifi-and-using-ssh-raspberry-pi-for-developers.jpg"
+        },
+        "status": "published",
+        "description": "Entire Series: https://www.youtube.com/playlist?list=PL0X6fGhFFNTfW6RL46Rtd0VSqVtj-yBSd",
+        "tags": [],
+        "skipSize": 613,
+        "dirPath": "content/videos/videos/connecting-to-wifi-and-using-ssh-raspberry-pi-for-developers",
+        "indexPath": "content/videos/videos/connecting-to-wifi-and-using-ssh-raspberry-pi-for-developers/index.mdx",
+        "imagesPath": "content/videos/videos/connecting-to-wifi-and-using-ssh-raspberry-pi-for-developers/images",
+        "hash": "99d1950a080525df3fae8fb5931dc73427aad77d"
+      },
+      {
+        "id": "a6d7868b-e0ef-4282-8f07-fffbcea70310",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmhBcnFyRlRxNXZR",
+        "videoId": "hArqrFTq5vQ",
+        "title": "Setting Up The Pi - Raspberry Pi for Developers",
+        "date": "2019-04-12T15:43:38Z",
+        "slug": "setting-up-the-pi-raspberry-pi-for-developers",
+        "image": {
+          "name": "setting-up-the-pi-raspberry-pi-for-developers.jpg",
+          "alt": "Setting Up The Pi - Raspberry Pi for Developers",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/setting-up-the-pi-raspberry-pi-for-developers/images/setting-up-the-pi-raspberry-pi-for-developers.jpg"
+        },
+        "status": "published",
+        "description": "Entire Series: https://www.youtube.com/playlist?list=PL0X6fGhFFNTfW6RL46Rtd0VSqVtj-yBSd",
+        "tags": [],
+        "skipSize": 551,
+        "dirPath": "content/videos/videos/setting-up-the-pi-raspberry-pi-for-developers",
+        "indexPath": "content/videos/videos/setting-up-the-pi-raspberry-pi-for-developers/index.mdx",
+        "imagesPath": "content/videos/videos/setting-up-the-pi-raspberry-pi-for-developers/images",
+        "hash": "725e41642099c9804c7f5e4204dabc76d53b9ba8"
+      },
+      {
+        "id": "0aca56aa-4d5a-4b2e-930a-4ba193f73e8a",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLi1wUGkza3ZwSWxj",
+        "videoId": "-pPi3kvpIlc",
+        "title": "Raspberry Pi & JavaScript: Getting Started With IoT - Lunch&&Learn",
+        "date": "2019-04-11T17:19:44Z",
+        "slug": "raspberry-pi-&-javascript:-getting-started-with-iot-lunch&&learn",
+        "image": {
+          "name": "raspberry-pi-&-javascript:-getting-started-with-iot-lunch&&learn.jpg",
+          "alt": "Raspberry Pi & JavaScript: Getting Started With IoT - Lunch&&Learn",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/raspberry-pi-&-javascript:-getting-started-with-iot-lunch&&learn/images/raspberry-pi-&-javascript:-getting-started-with-iot-lunch&&learn.jpg"
+        },
+        "status": "published",
+        "description": "This is the recorded video from a lunch and learn event hosted by devhub.ca",
+        "tags": [],
+        "skipSize": 615,
+        "dirPath": "content/videos/videos/raspberry-pi-&-javascript:-getting-started-with-iot-lunch&&learn",
+        "indexPath": "content/videos/videos/raspberry-pi-&-javascript:-getting-started-with-iot-lunch&&learn/index.mdx",
+        "imagesPath": "content/videos/videos/raspberry-pi-&-javascript:-getting-started-with-iot-lunch&&learn/images",
+        "hash": "fc40362dfa70d4c70a7089fadb1e80eb0436d86b"
+      },
+      {
+        "id": "6dc01cae-6fb5-4f83-9fca-acf97e8ffcee",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmtlZ29pSVMzdE53",
+        "videoId": "kegoiIS3tNw",
+        "title": "Internet Controlled Hand for Remote Lectures",
+        "date": "2019-03-17T17:08:48Z",
+        "slug": "internet-controlled-hand-for-remote-lectures",
+        "image": {
+          "name": "internet-controlled-hand-for-remote-lectures.jpg",
+          "alt": "Internet Controlled Hand for Remote Lectures",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/projects/internet-controlled-hand-for-remote-lectures/images/internet-controlled-hand-for-remote-lectures.jpg"
+        },
+        "status": "published",
+        "description": "A cohort in Calgary was getting upset that I was neglecting them during a lecture, so I made them a present. A hand that connects to slack and waves in front of me every time someone in Calgary has a question. You’re welcome neglected Calgary students.",
+        "tags": [],
+        "skipSize": 708,
+        "dirPath": "content/videos/projects/internet-controlled-hand-for-remote-lectures",
+        "indexPath": "content/videos/projects/internet-controlled-hand-for-remote-lectures/index.mdx",
+        "imagesPath": "content/videos/projects/internet-controlled-hand-for-remote-lectures/images",
+        "hash": "460017778edaaa77d39c4fb1f98aba8e712de4f6"
+      },
+      {
+        "id": "258bdf94-8c28-4cb2-9298-8158b8485966",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLk1idGpiMWFUSFU0",
+        "videoId": "Mbtjb1aTHU4",
+        "title": "World's First Razor Blade Advent Calendar",
+        "date": "2018-12-07T18:01:15Z",
+        "slug": "world's-first-razor-blade-advent-calendar",
+        "image": {
+          "name": "world's-first-razor-blade-advent-calendar.jpg",
+          "alt": "World's First Razor Blade Advent Calendar",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/world's-first-razor-blade-advent-calendar/images/world's-first-razor-blade-advent-calendar.jpg"
+        },
+        "status": "published",
+        "description": "An advent calendar that uses razor blades to unlock doors, not an advent calendar filled with razor blades.",
+        "tags": [],
+        "skipSize": 551,
+        "dirPath": "content/videos/videos/world's-first-razor-blade-advent-calendar",
+        "indexPath": "content/videos/videos/world's-first-razor-blade-advent-calendar/index.mdx",
+        "imagesPath": "content/videos/videos/world's-first-razor-blade-advent-calendar/images",
+        "hash": "0a9d889c7204d1bb5f527c9a1df41445863bab0c"
+      },
+      {
+        "id": "0af5e279-bd8c-4ade-87d5-6704461aeadc",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLlRpOE1YZ1RGSTdz",
+        "videoId": "Ti8MXgTFI7s",
+        "title": "Let's Build a Temperature Sensor with a Raspberry Pi Part 2",
+        "date": "2018-07-15T20:52:46Z",
+        "slug": "let's-build-a-temperature-sensor-with-a-raspberry-pi-part-2",
+        "image": {
+          "name": "let's-build-a-temperature-sensor-with-a-raspberry-pi-part-2.jpg",
+          "alt": "Let's Build a Temperature Sensor with a Raspberry Pi Part 2",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/let's-build-a-temperature-sensor-with-a-raspberry-pi-part-2/images/let's-build-a-temperature-sensor-with-a-raspberry-pi-part-2.jpg"
+        },
+        "status": "published",
+        "description": "Instructions on how to build this: https://sammeechward.com/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2/",
+        "tags": [],
+        "skipSize": 635,
+        "dirPath": "content/videos/videos/let's-build-a-temperature-sensor-with-a-raspberry-pi-part-2",
+        "indexPath": "content/videos/videos/let's-build-a-temperature-sensor-with-a-raspberry-pi-part-2/index.mdx",
+        "imagesPath": "content/videos/videos/let's-build-a-temperature-sensor-with-a-raspberry-pi-part-2/images",
+        "hash": "f998c89c1fb43730d9de408475853f5aa700a9ac"
+      },
+      {
+        "id": "b0f2e3ea-9c09-4c97-9131-3835c15e4c06",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLnZhNUpCcDVMVkU0",
+        "videoId": "va5JBp5LVE4",
+        "title": "Let's Build a Temperature Sensor with a Raspberry Pi Part 1",
+        "date": "2018-07-05T15:25:39Z",
+        "slug": "let's-build-a-temperature-sensor-with-a-raspberry-pi-part-1",
+        "image": {
+          "name": "let's-build-a-temperature-sensor-with-a-raspberry-pi-part-1.jpg",
+          "alt": "Let's Build a Temperature Sensor with a Raspberry Pi Part 1",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/let's-build-a-temperature-sensor-with-a-raspberry-pi-part-1/images/let's-build-a-temperature-sensor-with-a-raspberry-pi-part-1.jpg"
+        },
+        "status": "published",
+        "description": "I made a temperature sensor using a raspberry pi, now I know the temperature of my apartment 🤗.",
+        "tags": [],
+        "skipSize": 612,
+        "dirPath": "content/videos/videos/let's-build-a-temperature-sensor-with-a-raspberry-pi-part-1",
+        "indexPath": "content/videos/videos/let's-build-a-temperature-sensor-with-a-raspberry-pi-part-1/index.mdx",
+        "imagesPath": "content/videos/videos/let's-build-a-temperature-sensor-with-a-raspberry-pi-part-1/images",
+        "hash": "1bc454dab79d7f21d5134a67e05c064a8f59dd01"
       }
     ]
   }
