@@ -4,52 +4,58 @@ import parseMarkdown from 'front-matter-markdown'
 import sharp from 'sharp'
 import { hashElement } from 'folder-hash'
 
-import currentBuild from './build.json' assert {type: "json"}
- 
+import { putPost, getAllPosts } from './dynamo.js'
+
+const posts = await getAllPosts()
+
 const __dirname = path.resolve()
 
 const isDir = (path) => fs.lstatSync(path).isDirectory()
 const isFile = (path) => fs.lstatSync(path).isFile()
 
-const contentDir = path.resolve(__dirname, 'content')
+const contentDir = path.resolve(__dirname, '../content')
 const content = fs.readdirSync(contentDir)
 
-function getEntity(sections, id) {
-  for (let section in sections) {
-    const entity = sections[section].entities.find(e => e.id === id)
-    if (entity) {
-      return entity
-    }
-  }
-}
-
-let changed = []
+let changed = new Set()
+let created = new Set()
+let deleted = new Set(posts.map(p => p.slug))
 async function getEntities(dirPath) {
   const files = fs.readdirSync(dirPath)
-  
+
   const entityName = "index.mdx"
   if (files.includes(entityName)) {
     const filePath = path.join(dirPath, entityName)
     const content = fs.readFileSync(filePath, 'utf8')
-    const relativeDirPath = path.relative(__dirname, dirPath)
+    const relativeDirPath = path.relative(path.join(__dirname, "../"), dirPath)
     const metaData = parseMarkdown(content)
+
     if (metaData.status != 'published') {
-      return 
+      return
+    }
+
+    if (deleted.has(metaData.slug)) {
+      // Entity is still there
+      // and potentially bing updated
+      deleted.delete(metaData.slug)
+    } else {
+      // Entity is new
+      created.add(metaData.slug)
     }
 
 
     // Get current version
-    const currentVersion = getEntity(currentBuild, metaData.id)
-
+    const currentVersion = posts.find(p => p.slug === metaData.slug)
     // Check for changes 
-    const hash = await hashElement(dirPath, {encoding: 'hex'})
+    const hash = await hashElement(dirPath, { encoding: 'hex' })
     const folderHash = hash.hash
     if (currentVersion && currentVersion.hash === folderHash) {
       return currentVersion
     }
-    
+
     // console.log("Building", metaData.id, metaData.title)
-    changed.push(metaData.id)
+    if (!created.has(metaData.slug)) {
+      changed.add(metaData.slug)
+    }
 
     // //delete file
     // if (fs.existsSync(path.join(dirPath, 'images/images.json'))) {
@@ -70,11 +76,11 @@ async function getEntities(dirPath) {
 
     // console.log("hash", JSON.parse(hash.toString()).hash)
 
-    
+
     return {
       ...metaData,
       dirPath: relativeDirPath,
-      indexPath: path.relative(__dirname, filePath),
+      indexPath: path.relative(path.join(__dirname, "../"), filePath),
       imagesPath: path.join(relativeDirPath, 'images'),
       image: {
         ...metaData.image,
@@ -101,41 +107,54 @@ async function getEntities(dirPath) {
  * @returns 
  */
 async function getSections() {
-  let sections = {}
+  let all = []
   for (let section of content) {
     // check is a dir
     const sectionPath = path.resolve(contentDir, section)
     if (!isDir(sectionPath)) {
       continue
     }
-    
+
     const entities = await getEntities(sectionPath)
-    sections[section] = {
-      entities: entities.sort((a, b) => new Date(b.date) - new Date(a.date))
-    }
+    all.push(entities)
+
   }
-  return sections
+  return all.flat().sort((a, b) => new Date(b.date) - new Date(a.date))
 }
 
 const sections = await getSections()
 
 // Check for any duplicates
-const uuids = {}
 const slugs = {}
-for (let section in sections) {
-  for (let entity of sections[section].entities) {
-    if (uuids[entity.id]) {
-      throw 'Duplicate UUID ' + JSON.stringify(uuids[entity.id], null, 2) + JSON.stringify(entity, null, 2)
-    }
-    uuids[entity.id] = entity
-    
-    if (slugs[entity.slug]) {
-      throw 'Duplicate slug ' + JSON.stringify(slugs[entity.slug], null, 2) + JSON.stringify(entity, null, 2)
-    }
-    slugs[entity.slug] = entity
+for (let entity of sections) {
+
+  if (slugs[entity.slug]) {
+    throw 'Duplicate slug ' + JSON.stringify(slugs[entity.slug], null, 2) + JSON.stringify(entity, null, 2)
   }
+  slugs[entity.slug] = entity
 }
 
 
-fs.writeFileSync(path.resolve(__dirname, 'build.json'), JSON.stringify(sections, null, 2))
-console.log(changed)
+
+// fs.writeFileSync(path.resolve(__dirname, 'build.json'), JSON.stringify(sections, null, 2))
+console.log({ changed })
+console.log({ deleted })
+console.log({ created })
+
+for (let slug of changed) {
+  const entity = sections.find(e => e.slug === slug)
+  delete entity.skipSize
+  await putPost(entity)
+  console.log("put", slug)
+}
+
+for (let slug of created) {
+  const entity = sections.find(e => e.slug === slug)
+  delete entity.skipSize
+  await putPost({
+    ...entity,
+    totalComments: 0,
+    totalLikes: 0, 
+  })
+  console.log("put", slug)
+}

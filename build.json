@@ -692,6 +692,35 @@
   "videos": {
     "entities": [
       {
+        "id": "7a6a66d4-7139-469c-9f36-2b156534c16c",
+        "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLk1va29vMG1WRUFV",
+        "videoId": "Mokoo0mVEAU",
+        "title": "Fetching and Posting Data in React",
+        "date": "2022-10-03T14:00:11Z",
+        "slug": "fetching-and-posting-data-in-react",
+        "image": {
+          "name": "fetching-and-posting-data-in-react.jpg",
+          "alt": "Fetching and Posting Data in React",
+          "width": 1280,
+          "height": 720,
+          "url": "content/videos/videos/fetching-and-posting-data-in-react/images/fetching-and-posting-data-in-react.jpg"
+        },
+        "status": "published",
+        "description": "Learn how to make network requests in a react app to fetch data on load, and post data when users submit a form.",
+        "tags": [
+          "axios",
+          "get",
+          "post",
+          "useEffect",
+          "onSubmit"
+        ],
+        "skipSize": 575,
+        "dirPath": "content/videos/videos/fetching-and-posting-data-in-react",
+        "indexPath": "content/videos/videos/fetching-and-posting-data-in-react/index.mdx",
+        "imagesPath": "content/videos/videos/fetching-and-posting-data-in-react/images",
+        "hash": "5fe31a6d08a7891fe8add924f6b9c20f545a114e"
+      },
+      {
         "id": "fe7a0b1b-7c8b-457d-aade-47a3bb7042f3",
         "yt_id": "VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLmM4UjRDYmE3UFBZ",
         "videoId": "c8R4Cba7PPY",
@@ -799,12 +828,17 @@
         },
         "status": "published",
         "description": "Learn how to use useState in a react app to:",
-        "tags": [],
-        "skipSize": 356,
+        "tags": [
+          "react",
+          "useState",
+          "hooks",
+          "javascript"
+        ],
+        "skipSize": 398,
         "dirPath": "content/videos/videos/usestate",
         "indexPath": "content/videos/videos/usestate/index.mdx",
         "imagesPath": "content/videos/videos/usestate/images",
-        "hash": "cfd0dc31745866e5faecb20d92f1e1387bfeb805"
+        "hash": "a6b4ff0b7b98716f9a87b879f5d33ca329da1448"
       },
       {
         "id": "2c839fa0-e61d-410d-a074-a39e97571ef2",
@@ -1255,10 +1289,7 @@
         "id": "a2033028-30ae-4a45-91c0-15e570e5e2b6",
         "title": "MySQL with Node.js",
         "description": "I'll show you how to connect your node application to a MySQL database to query and insert data. I will also show you how to integrate this into an express server to show what a complete backend might look like. ",
-        "slug": "mysql-nodejs-express",
-        "alt-slugs": [
-          "connect-to-mysql-from-node"
-        ],
+        "slug": "connect-to-mysql-from-node",
         "image": {
           "name": "mysql.png",
           "width": 1280,
@@ -1272,11 +1303,11 @@
           "nodejs",
           "mysql"
         ],
-        "skipSize": 530,
+        "skipSize": 494,
         "dirPath": "content/videos/express/mysql-with-nodejs",
         "indexPath": "content/videos/express/mysql-with-nodejs/index.mdx",
         "imagesPath": "content/videos/express/mysql-with-nodejs/images",
-        "hash": "f456a1689ebcd38e480ae221c0e13a4b4253b0e9"
+        "hash": "79de0c64bef53a991d39833e144f01ab2b932dd9"
       },
       {
         "id": "1b41c882-d39e-459d-8362-fe66e02cfe71",
