@@ -182,7 +182,7 @@ console.log({ changed })
 for (let slug of changed) {
   const entity = sections.find(e => e.slug === slug)
   delete entity.skipSize
-  // entity.modified = dateFormat(new Date()),
+  entity.modified = dateFormat(new Date()),
   await deleteFromAlgolia(entity)
   await insertIntoAlgolia(entity)
   const oldPost = (await queryPost(entity)).Items[0]
@@ -215,7 +215,7 @@ for (let slug of deleted) {
 
 putSetting("featured", "featured-1", sections.find(e => e.slug === "useeffect-everything-you-need-to-know"))
 putSetting("featured", "featured-2", sections.find(e => e.slug === "storing-images-in-s3-from-node-server"))
-putSetting("featured", "featured-3", sections.find(e => e.slug === "$100-diy-ebike"))
+putSetting("featured", "featured-3", sections.find(e => e.slug === "100-dollar-diy-ebike"))
 
 const mostRecentVideo = sections.find(e => e.type === 'video')
 
