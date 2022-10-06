@@ -158,8 +158,7 @@ const algoliaIndex = client.initIndex(process.env.ALGOLIA_SEARCH_POSTS_INDEX_NAM
 
 async function deleteFromAlgolia(entity) {
   const by = {
-    // filters: `slug:${entity.slug}`
-    filters: `slug:"${entity.slug.replace(/"/g, '\"')}"`
+    filters: `objectID:${entity.slug}`
   }
   console.log(by)
   await algoliaIndex.deleteBy(by)
