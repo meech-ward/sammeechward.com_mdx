@@ -138,6 +138,19 @@ for (let entity of sections) {
   slugs[entity.slug] = entity
 }
 
+// Check for any bad slugs, throw if there are any
+const badCharacters = /[^a-z0-9-]/
+const badSlugs = []
+for (const slug in slugs) {
+  if (badCharacters.test(slug)) {
+    badSlugs.push(slug)
+  }
+}
+
+if (badSlugs.length > 0) {
+  throw 'Bad slugs ' + JSON.stringify(badSlugs, null, 2)
+}
+
 
 // Add, update, and delete entities from algolia and dynamo
 
@@ -164,12 +177,14 @@ async function insertIntoAlgolia(e) {
   })
 }
 
+const dateFormat = date => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
 
 console.log({ changed })
 // delete the existing ones and replace them with new ones
 for (let slug of changed) {
   const entity = sections.find(e => e.slug === slug)
   delete entity.skipSize
+  // entity.modified = dateFormat(new Date()),
   await deleteFromAlgolia(entity)
   await insertIntoAlgolia(entity)
   const oldPost = (await queryPost(entity)).Items[0]
@@ -185,6 +200,7 @@ console.log({ created })
 for (let slug of created) {
   const entity = sections.find(e => e.slug === slug)
   delete entity.skipSize
+  entity.modified = dateFormat(new Date(entity.date)),
   await insertIntoAlgolia(entity)
   await putPost(entity)
   console.log("put", slug)

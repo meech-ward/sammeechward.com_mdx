@@ -43,10 +43,13 @@ export async function putItem(Item) {
   return data
 }
 
+
 export async function putPost(post) {
   const sk = `${post.type.toUpperCase()}#${Math.floor(new Date(post.date).getTime() / 1000)}`
   const GSI1SK = `${Math.floor(new Date(post.date).getTime() / 1000)}#${post.type.toUpperCase()}`
   const Item = {
+    commentCount: 0,
+    likeCount: 0,
     ...post,
     pk: "ENTITY#" + post.slug,
     sk,
@@ -69,7 +72,7 @@ export async function putSetting(pk, sk, data) {
 export async function getAllPosts() {
   const params = {
     TableName: tableName,
-    ProjectionExpression: "pk, sk, #h, slug, commentCount, likeCount",
+    ProjectionExpression: "pk, sk, #h, slug, commentCount, likeCount, modified",
     ExpressionAttributeNames: { "#h": "hash" },
   }
 
