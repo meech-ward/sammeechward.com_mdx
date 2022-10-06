@@ -146,7 +146,6 @@ for (const slug in slugs) {
     badSlugs.push(slug)
   }
 }
-
 if (badSlugs.length > 0) {
   throw 'Bad slugs ' + JSON.stringify(badSlugs, null, 2)
 }
@@ -154,7 +153,7 @@ if (badSlugs.length > 0) {
 
 // Add, update, and delete entities from algolia and dynamo
 
-const client = algoliasearch(process.env.ALGOLIA_SEARCH_APP_ID, process.env.ALGOLIA_SEARCH_API_KEY);
+const client = algoliasearch(process.env.ALGOLIA_SEARCH_APP_ID, process.env.ALGOLIA_ADMIN_API_KEY);
 const algoliaIndex = client.initIndex(process.env.ALGOLIA_SEARCH_POSTS_INDEX_NAME);
 
 async function deleteFromAlgolia(entity) {
