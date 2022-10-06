@@ -214,12 +214,12 @@ for (let slug of deleted) {
   console.log("delete", slug)
 }
 
-// putSetting("featured", "featured-1", sections.find(e => e.slug === "useeffect-everything-you-need-to-know"))
-// putSetting("featured", "featured-2", sections.find(e => e.slug === "storing-images-in-s3-from-node-server"))
-// putSetting("featured", "featured-3", sections.find(e => e.slug === "$100-diy-ebike"))
+putSetting("featured", "featured-1", sections.find(e => e.slug === "useeffect-everything-you-need-to-know"))
+putSetting("featured", "featured-2", sections.find(e => e.slug === "storing-images-in-s3-from-node-server"))
+putSetting("featured", "featured-3", sections.find(e => e.slug === "$100-diy-ebike"))
 
-// const mostRecentVideo = sections.find(e => e.type === 'video')
+const mostRecentVideo = sections.find(e => e.type === 'video')
 
-// putSetting("most-recent-video", "most-recent-video", {
-//   ...mostRecentVideo
-// })
+putSetting("most-recent-video", "most-recent-video", {
+  ...mostRecentVideo
+})
