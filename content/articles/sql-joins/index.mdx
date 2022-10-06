@@ -1,0 +1,228 @@
+---
+type: article
+title: 'SQL Joins'
+date: '2022-10-06'
+slug: 'sql-joins'
+image: 
+  name: 'a-quick-guide-to-creating-tables.png'
+  width: 3176
+  height: 2088
+status: 'published'
+description: "How do we query that data when it's spread across multiple tables? JOIN!"
+tags: ['mysql']
+---
+
+When we're using relational databases correctly, we're going to end up with a lot of tables in our database. That's great for organizing our data, but how do we query that data when it's spread across multiple tables? Well, the answer is JOIN.
+
+We're going to work with a small database that contains just two tables pulled from the [ACADEMY AWARDS® DATABASE](http://awardsdatabase.oscars.org/). An actors table and an awards table. The following SQL contains the schema for the database and some seed data.
+
+<Note>
+  Make sure you execute the schema then the seeds before continuing. 
+</Note>
+
+### Schema
+
+<SQLJoinsEditor component="schema"  defaultValue={`
+DROP TABLE IF EXISTS awards; DROP TABLE IF EXISTS actors;
+
+CREATE TABLE awards (
+  id INTEGER PRIMARY KEY,
+  year CHAR(4),
+  title VARCHAR(255),
+  winner_id INTEGER
+);
+
+CREATE TABLE actors (
+  id INTEGER PRIMARY KEY,
+  full_name VARCHAR(255)
+);
+`} />
+
+
+### Seeds
+
+<SQLJoinsEditor component="seeds" defaultValue={`
+DELETE FROM awards; DELETE FROM actors;
+
+INSERT INTO awards (id, year, title, winner_id)
+VALUES 
+
+(17, 2019, 'ACTOR IN A LEADING ROLE', NULL),
+(18, 2019, 'ACTOR IN A SUPPORTING ROLE', NULL),
+(19, 2019, 'ACTRESS IN A LEADING ROLE', NULL),
+(20, 2019, 'ACTRESS IN A SUPPORTING ROLE', NULL),
+
+(13, 2018, 'ACTOR IN A LEADING ROLE', 1291),
+(14, 2018, 'ACTOR IN A SUPPORTING ROLE', 1259),
+(15, 2018, 'ACTRESS IN A LEADING ROLE', 1297),
+(16, 2018, 'ACTRESS IN A SUPPORTING ROLE', 1302),
+
+(9, 2017, 'ACTOR IN A LEADING ROLE', 1277),
+(10, 2017, 'ACTOR IN A SUPPORTING ROLE', 1282),
+(11, 2017, 'ACTRESS IN A LEADING ROLE', 1284),
+(12, 2017, 'ACTRESS IN A SUPPORTING ROLE', 1287);
+
+-- (5, 2016, 'ACTOR IN A LEADING ROLE', 1254),
+-- (6, 2016, 'ACTOR IN A SUPPORTING ROLE', 1259),
+-- (7, 2016, 'ACTRESS IN A LEADING ROLE', 1267),
+-- (8, 2016, 'ACTRESS IN A SUPPORTING ROLE', 1269),
+
+-- (1, 2015, 'ACTOR IN A LEADING ROLE', 1236),
+-- (2, 2015, 'ACTOR IN A SUPPORTING ROLE', 1242),
+-- (3, 2015, 'ACTRESS IN A LEADING ROLE', 1245),
+-- (4, 2015, 'ACTRESS IN A SUPPORTING ROLE', 1252);
+
+INSERT INTO actors (id, full_name)
+VALUES 
+-- (1234, 'Bryan Cranston'),
+-- (1235, 'Matt Damon'),
+-- (1236, 'Leonardo DiCaprio'),
+-- (1237, 'Michael Fassbender'),
+-- (1238, 'Eddie Redmayne'),
+-- (1239, 'Christian Bale'),
+-- (1240, 'Tom Hardy'),
+-- (1241, 'Mark Ruffalo'),
+-- (1242, 'Mark Rylance'),
+-- (1243, 'Sylvester Stallone'),
+-- (1244, 'Cate Blanchett'),
+-- (1245, 'Brie Larson'),
+-- (1246, 'Jennifer Lawrence'),
+-- (1247, 'Charlotte Rampling'),
+-- (1248, 'Saoirse Ronan'),
+-- (1249, 'Jennifer Jason Leigh'),
+-- (1250, 'Rooney Mara'),
+-- (1251, 'Rachel McAdams'),
+-- (1252, 'Alicia Vikander'),
+-- (1253, 'Kate Winslet'),
+-- (1254, 'Casey Affleck'),
+-- (1255, 'Andrew Garfield'),
+-- (1256, 'Ryan Gosling'),
+-- (1257, 'Viggo Mortensen'),
+-- (1258, 'Denzel Washington'),
+(1259, 'Mahershala Ali'),
+(1260, 'Jeff Bridges'),
+(1261, 'Lucas Hedges'),
+(1262, 'Dev Patel'),
+(1263, 'Michael Shannon'),
+(1264, 'Isabelle Huppert'),
+(1265, 'Ruth Negga'),
+(1266, 'Natalie Portman'),
+(1267, 'Emma Stone'),
+(1268, 'Meryl Streep'),
+(1269, 'Viola Davis'),
+(1270, 'Naomie Harris'),
+(1271, 'Nicole Kidman'),
+(1272, 'Octavia Spencer'),
+(1273, 'Michelle Williams'),
+(1274, 'Timothée Chalamet'),
+(1275, 'Daniel Day-Lewis'),
+(1276, 'Daniel Kaluuya'),
+(1277, 'Gary Oldman'),
+(1278, 'Willem Dafoe'),
+(1279, 'Woody Harrelson'),
+(1280, 'Richard Jenkins'),
+(1281, 'Christopher Plummer'),
+(1282, 'Sam Rockwell'),
+(1283, 'Sally Hawkins'),
+(1284, 'Frances McDormand'),
+(1285, 'Margot Robbie'),
+(1286, 'Mary J. Blige'),
+(1287, 'Allison Janney'),
+(1288, 'Lesley Manville'),
+(1289, 'Laurie Metcalf'),
+(1290, 'Bradley Cooper'),
+(1291, 'Rami Malek'),
+(1292, 'Adam Driver'),
+(1293, 'Sam Elliott'),
+(1294, 'Richard E. Grant'),
+(1295, 'Yalitza Aparicio'),
+(1296, 'Glenn Close'),
+(1297, 'Olivia Colman'),
+(1298, 'Lady Gaga'),
+(1299, 'Melissa McCarthy'),
+(1300, 'Amy Adams'),
+(1301, 'Marina de Tavira'),
+(1302, 'Regina King'),
+(1303, 'Rachel Weisz');
+`} />
+
+If we wanted to get all of the awards with the id of the actor that won the award, that would be a simple query
+
+<SQLJoinsEditor component="query" defaultValue={`
+SELECT year, title, winner_id 
+FROM awards 
+ORDER BY year DESC;
+`} />
+
+
+But instead of getting the winner's id, we want the winner's name. We want to
+
+```sql
+SELECT year, title, full_name
+```
+
+Now we're dealing with data from more than one table. We've got the `year` and `title` from the `awards` table, and the `full_name` from the `actors` table. We also have a relationship, the `winner_id` is an id of one of the `actors`.
+So we need to use this information to `JOIN` the tables together so that we can get the data we need.
+Note that when there is a shared column name between tables, we **must** specify which table the column belongs to, hence the `actors.id`
+
+<SQLJoinsEditor component="query" defaultValue={`
+SELECT year, title, full_name 
+FROM actors 
+JOIN awards 
+ON actors.id = winner_id
+ORDER BY year DESC;
+`} />
+
+
+In order to get data from multiple tables, we can `JOIN` the tables together. When we `JOIN` tables, we must specify how the tables are related to each other using `ON`.
+
+This kind of JOIN is called an `INNER JOIN`. When we just write `JOIN` like this, it's just short hand for `INNER JOIN`. Try writing `INNER ` before the word `JOIN` and re running the query.
+  
+Did you notice that the first query without the `JOIN` returned 12 results, but the second query with the `INNER JOIN` only returned 8 results? Why is that?
+
+
+It's because an `INNER JOIN` will only return values where there's a match between the tables. 
+In the first query, we selected all of the awards, even if there wasn't a winner (the winner_id was null). 
+Since the table's are being `JOIN`ed when `actors.id = winner_id`, we won't get any results when the `winner_id` is null.
+
+But what if we want **all** of the awards, even when there's no winner? Then we'll have to use another `JOIN`!
+
+<SQLJoinsEditor component="query" defaultValues={[
+  {
+    label: 'INNER JOIN',
+    value: `SELECT year, title, full_name 
+FROM actors 
+INNER JOIN awards 
+ON actors.id = awards.winner_id
+ORDER BY year DESC;`
+  },
+  {
+    label: 'LEFT JOIN',
+    value: `SELECT year, title, full_name 
+FROM actors 
+LEFT OUTER JOIN awards 
+ON actors.id = awards.winner_id
+ORDER BY year DESC;`
+  },
+  {
+    label: 'RIGHT JOIN',
+    value: `SELECT year, title, full_name 
+FROM actors 
+RIGHT OUTER JOIN awards 
+ON actors.id = awards.winner_id
+ORDER BY year DESC;`
+  },
+  {
+    label: 'FULL JOIN',
+    value: `SELECT year, title, full_name 
+FROM actors 
+FULL OUTER JOIN awards 
+ON actors.id = awards.winner_id
+ORDER BY year DESC;`
+  }
+]} />
+  
+* `INNER` returns rows from both tables where there's a match between the tables. 
+* `LEFT` and `RIGHT` return all rows from the left or right table respectively, and only the matched results from the other table, or NULL if there is no match.
+* `FULL` returns all rows from both tables.
+
