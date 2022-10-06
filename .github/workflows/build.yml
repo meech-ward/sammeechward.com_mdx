@@ -2,7 +2,8 @@ name: learn-github-actions
 run-name: ${{ github.actor }} is updating the data stores
 on: [push]
 jobs:
-  check-bats-version:
+  datastore-update:
+    if: ${{ github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
