@@ -1,6 +1,6 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
 import { DynamoDBDocumentClient, DynamoDBDocument } from "@aws-sdk/lib-dynamodb"
-import { PutCommand, ScanCommand, UpdateCommand, GetCommand, ExecuteStatementCommand, QueryCommand } from "@aws-sdk/lib-dynamodb"
+import { PutCommand, ScanCommand, DeleteCommand, UpdateCommand, GetCommand, ExecuteStatementCommand, QueryCommand } from "@aws-sdk/lib-dynamodb"
 
 import dotenv from "dotenv"
 dotenv.config()
@@ -17,7 +17,6 @@ const ddbConfig = {
     secretAccessKey
   }
 }
-console.log({ ddbConfig })
 const ddbClient = new DynamoDBClient(ddbConfig)
 
 
@@ -46,10 +45,22 @@ export async function putItem(Item) {
 
 export async function putPost(post) {
   const sk = `${post.type.toUpperCase()}#${Math.floor(new Date(post.date).getTime() / 1000)}`
+  const GSI1SK = `${Math.floor(new Date(post.date).getTime() / 1000)}#${post.type.toUpperCase()}`
   const Item = {
+    ...post,
     pk: "ENTITY#" + post.slug,
     sk,
-    ...post
+    GSI1PK: "ENTITY#POST",
+    GSI1SK
+  }
+  await putItem(Item)
+}
+
+export async function putSetting(pk, sk, data) {
+  const Item = {
+    ...data,
+    pk: "SETTING#" + pk,
+    sk: "SETTING#" + sk
   }
   await putItem(Item)
 }
@@ -58,10 +69,33 @@ export async function putPost(post) {
 export async function getAllPosts() {
   const params = {
     TableName: tableName,
-    ProjectionExpression: "pk, sk, #h, slug",
+    ProjectionExpression: "pk, sk, #h, slug, commentCount, likeCount",
     ExpressionAttributeNames: { "#h": "hash" },
   }
 
   const data = await dynamodbClient.send(new ScanCommand(params));
-  return data.Items
+  return data.Items.filter(i => i.pk.startsWith("ENTITY#"))
+}
+
+export function queryPost(post) {
+  const params = {
+    TableName: tableName,
+    KeyConditionExpression: "pk = :pk",
+    ExpressionAttributeValues: {
+      ":pk": "ENTITY#" + post.slug,
+    }
+  }
+  return dynamodbClient.send(new QueryCommand(params));
+}
+
+export async function deletePost({sk, pk}) {
+  const params = {
+    TableName: tableName,
+    Key: {
+      pk,
+      sk
+    }
+  }
+  const data = await dynamodbClient.send(new DeleteCommand(params));
+  return data
 }

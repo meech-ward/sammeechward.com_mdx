@@ -17,7 +17,7 @@ The WordPress REST API provides us with a way to communicate with our WordPress 
 
 In this tutorial, we will just take a small peak at the WordPress REST API by creating a chrome extension that shows recent posts. We will get the 5 most recent posts from a site and display them in a small extension like this:
 
-<Image src="images/Screen-Shot-2019-11-13-at-11.21.38-AM.png" width={464} height={508} quality={100} />
+<Image src="/images/Screen-Shot-2019-11-13-at-11.21.38-AM.png" width={464} height={508} quality={100} />
 
 If you have your own WordPress site setup, then use posts from that site, otherwise, you can use sammeechward.com. If you are using your own site, just replace sammeechward.com with your own URL in the code examples.
 
@@ -99,7 +99,7 @@ Click the LOAD UNPACKED button and select the `sams_posts` directory.
 
 At this point, you should a little `S` icon appear with the other installed extensions in chrome. Click this icon and you should see the `Hello Popup` message.
 
-<Image src="images/Screen-Shot-2019-11-12-at-6.17.31-AM.png" width={288} height={270} quality={100} />
+<Image src="/images/Screen-Shot-2019-11-12-at-6.17.31-AM.png" width={288} height={270} quality={100} />
 
 Now that we’ve got an extension, let’s pull in data from our API.
 
@@ -125,11 +125,11 @@ This should grab the 5 most recent posts from the API and log them to the consol
   
 Right click on the extension icon and select **Inspect Popup**.  
 
-<Image src="images/Screen-Shot-2019-11-13-at-10.54.35-AM.png" width={385} height={246} quality={100} />
+<Image src="/images/Screen-Shot-2019-11-13-at-10.54.35-AM.png" width={385} height={246} quality={100} />
 
 This will open the chrome developer tools for the popup. Open the console tab. If you’re using your own site, then you’ll probably see an error message stating the request has been blocked by CORS policy: ‘Access-Control-Allow-Origin’.
 
-<Image src="images/Screen-Shot-2019-11-13-at-10.56.34-AM.png" width={487} height={324} quality={100} />
+<Image src="/images/Screen-Shot-2019-11-13-at-10.56.34-AM.png" width={487} height={324} quality={100} />
 
 I’m not going to go into a huge amount of detail about what CORS is here, but here’s a quick sentence about it. A website from one server can’t make a request to a different server without special permission. So we need our WordPress site to give special permission to chrome extensions that allow them to GET data.
 
@@ -206,7 +206,7 @@ As long as this plugin is activated, chrome extensions will be able to make GET 
 
 Now that we don’t have CORS issues anymore, let’s take another look at the extension’s console. We should now be able to see 5 JSON posts show up. So now we just want to take those objects and turn them into HTML elements.
 
-<Image src="images/Screen-Shot-2019-11-13-at-11.07.43-AM.png" width={499} height={272} quality={100} />
+<Image src="/images/Screen-Shot-2019-11-13-at-11.07.43-AM.png" width={499} height={272} quality={100} />
 
   
 Add the following code to your popup.js file:  
@@ -265,7 +265,7 @@ body {
 
 Now your posts should look something like this:
 
-<Image src="images/Screen-Shot-2019-11-13-at-11.21.38-AM.png" width={464} height={508} quality={100} />
+<Image src="/images/Screen-Shot-2019-11-13-at-11.21.38-AM.png" width={464} height={508} quality={100} />
 
 Take a moment to look through the JSON objects and see what other pieces of information you could display in the extension.
 

@@ -1,25 +1,26 @@
 ---
-type: article
-wp_id: 192
-title: 'Let’s Build a Temperature Sensor with a Raspberry Pi – Part 2'
-date: '2018-07-15T19:43:40'
-slug: 'lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2'
+type: video
+yt_id: VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLlRpOE1YZ1RGSTdz
+videoId: Ti8MXgTFI7s
+title: "Let's Build a Temperature Sensor with a Raspberry Pi Part 2"
+date: "2018-07-15T20:52:46Z"
+slug: "lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2"
 image: 
-  name: 'lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2.png'
+  name: "let's-build-a-temperature-sensor-with-a-raspberry-pi-part-2.jpg"
+  alt: "Let's Build a Temperature Sensor with a Raspberry Pi Part 2"
   width: 1280
   height: 720
 status: 'published'
-description: 'I set up a raspberry pi to emit temperature and humidity data using BLE advertising packets. Then I made an iPhone app that can read that data and display it to me.'
+description: "Instructions on how to build this: https://sammeechward.com/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-2/"
 tags: ['ble', 'ios', 'node js', 'raspberry pi', 'swift']
 ---
+
 
 I set up a raspberry pi to emit temperature and humidity data using BLE advertising packets. Then I made an iPhone app that can read that data and display it to me.
 
 This is part two of the two part temperature sensor project. Make sure you check out [Part 1](/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-1) first.
 
 In this part, I set up the pi to emit the temperature and humidity data using BLE advertising packets. I also made an iPhone app that can read that data and display it to me.
-
-## YouTube Video
 
 ## Hardware
 
@@ -28,7 +29,7 @@ In this part, I set up the pi to emit the temperature and humidity data using BL
 
 ## How To Do This
 
-The first thing to do is to set up the raspberry pi as the Bluetooth peripheral (the thing advertising it’s data). Then I will set up the iPhone app which acts as the central device (the thing that reads data from the peripheral)
+The first thing to do is to set up the raspberry pi as the Bluetooth peripheral (the thing advertising it's data). Then I will set up the iPhone app which acts as the central device (the thing that reads data from the peripheral)
 
 BLE peripherals can either be advertising themselves, or they can be connected to a central device. If they are advertising themselves, then lots of central devices can “see” them and choose to try and connect to them. Once connected, the peripheral device can only communicate with a single central device.
 
@@ -92,12 +93,12 @@ I can advertise 31 bytes of data using the `startAdvertising` function and passi
 
 #### Note:
 
-If you’re interested, here’s some data on how the 31 bytes should be set up.
+If you're interested, here's some data on how the 31 bytes should be set up.
 
 *   [Custom GAP advertising packet](https://docs.mbed.com/docs/ble-intros/en/latest/Advanced/CustomGAP/)
 *   [GAP Data Types](https://www.bluetooth.com/specifications/assigned-numbers/generic-access-profile)
 
-All that’s left to do here, is pass the temperature and humidity data to this function as a 31 byte buffer. So I wrote the following function that takes in two doubles, and creates a new buffer. The code is a little bit long because of the way an advertising packet works, but here it is:
+All that's left to do here, is pass the temperature and humidity data to this function as a 31 byte buffer. So I wrote the following function that takes in two doubles, and creates a new buffer. The code is a little bit long because of the way an advertising packet works, but here it is:
 
 ```js
 /**
@@ -157,11 +158,11 @@ const buffer = advertisementData(24.4, 65.6);
 startAdvertising(buffer);
 ```
 
-This is just using some hardcoded numbers. I’ll let you figure out how you want to connect this to the real temperature data from the [previous post](/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-1/).
+This is just using some hardcoded numbers. I'll let you figure out how you want to connect this to the real temperature data from the [previous post](/lets-build-a-temperature-sensor-with-a-raspberry-pi-part-1/).
 
 My version of the peripheral code for this can be found here: [https://github.com/Sam-Meech-Ward/Sensei-Peripheral-JS](https://github.com/Sam-Meech-Ward/Sensei-Peripheral-JS)
 
-Once you’ve got the raspberry pi advertising, you can use an app like [LightBlue® Explorer](https://itunes.apple.com/ca/app/lightblue-explorer/id557428110?mt=8) to verify that it’s working.
+Once you've got the raspberry pi advertising, you can use an app like [LightBlue® Explorer](https://itunes.apple.com/ca/app/lightblue-explorer/id557428110?mt=8) to verify that it's working.
 
 #### Bluetooth Central (iOS)
 
@@ -228,6 +229,6 @@ extension TemperatureDetector: CBCentralManagerDelegate {
 }
 ```
 
-When you create a new instance of `TemperatureDetector`, it will start scanning for BLE peripherals. If it finds the temperature sensor “Sensei” (oh yeah, the sensor’s name is “Sensei”), it will print out the temperature and humidity data.
+When you create a new instance of `TemperatureDetector`, it will start scanning for BLE peripherals. If it finds the temperature sensor “Sensei” (oh yeah, the sensor's name is “Sensei”), it will print out the temperature and humidity data.
 
-Here’s the code for my completed iPhone app: [https://github.com/Sam-Meech-Ward/Sensei-Central-iOS](https://github.com/Sam-Meech-Ward/Sensei-Central-iOS)
+Here's the code for my completed iPhone app: [https://github.com/Sam-Meech-Ward/Sensei-Central-iOS](https://github.com/Sam-Meech-Ward/Sensei-Central-iOS)

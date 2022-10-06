@@ -4,7 +4,9 @@ import parseMarkdown from 'front-matter-markdown'
 import sharp from 'sharp'
 import { hashElement } from 'folder-hash'
 
-import { putPost, getAllPosts } from './dynamo.js'
+import { putPost, getAllPosts, deletePost, putSetting, queryPost } from './dynamo.js'
+
+import algoliasearch from 'algoliasearch'
 
 const posts = await getAllPosts()
 
@@ -13,7 +15,7 @@ const __dirname = path.resolve()
 const isDir = (path) => fs.lstatSync(path).isDirectory()
 const isFile = (path) => fs.lstatSync(path).isFile()
 
-const contentDir = path.resolve(__dirname, '../content')
+const contentDir = path.resolve(__dirname, 'content')
 const content = fs.readdirSync(contentDir)
 
 let changed = new Set()
@@ -26,7 +28,7 @@ async function getEntities(dirPath) {
   if (files.includes(entityName)) {
     const filePath = path.join(dirPath, entityName)
     const content = fs.readFileSync(filePath, 'utf8')
-    const relativeDirPath = path.relative(path.join(__dirname, "../"), dirPath)
+    const relativeDirPath = path.relative(path.join(__dirname, ""), dirPath)
     const metaData = parseMarkdown(content)
 
     if (metaData.status != 'published') {
@@ -49,12 +51,13 @@ async function getEntities(dirPath) {
     const hash = await hashElement(dirPath, { encoding: 'hex' })
     const folderHash = hash.hash
     if (currentVersion && currentVersion.hash === folderHash) {
-      return currentVersion
-    }
-
-    // console.log("Building", metaData.id, metaData.title)
-    if (!created.has(metaData.slug)) {
-      changed.add(metaData.slug)
+      // No changes
+      
+    } else {
+      // console.log("Building", metaData.id, metaData.title)
+      if (!created.has(metaData.slug)) {
+        changed.add(metaData.slug)
+      }
     }
 
     // //delete file
@@ -69,7 +72,7 @@ async function getEntities(dirPath) {
       const imageMetadata = await image.metadata();
       metaData.image.width = imageMetadata.width
       metaData.image.height = imageMetadata.height
-      console.log(metaData.image)
+      // console.log(metaData.image)
     }
 
     // hash for caching 
@@ -78,9 +81,10 @@ async function getEntities(dirPath) {
 
 
     return {
+      ...currentVersion,
       ...metaData,
       dirPath: relativeDirPath,
-      indexPath: path.relative(path.join(__dirname, "../"), filePath),
+      indexPath: path.relative(path.join(__dirname, ""), filePath),
       imagesPath: path.join(relativeDirPath, 'images'),
       image: {
         ...metaData.image,
@@ -124,7 +128,7 @@ async function getSections() {
 
 const sections = await getSections()
 
-// Check for any duplicates
+// Check for any duplicates, throw if there are any
 const slugs = {}
 for (let entity of sections) {
 
@@ -135,26 +139,72 @@ for (let entity of sections) {
 }
 
 
+// Add, update, and delete entities from algolia and dynamo
 
-// fs.writeFileSync(path.resolve(__dirname, 'build.json'), JSON.stringify(sections, null, 2))
+const client = algoliasearch(process.env.ALGOLIA_SEARCH_APP_ID, process.env.ALGOLIA_SEARCH_API_KEY);
+const algoliaIndex = client.initIndex(process.env.ALGOLIA_SEARCH_POSTS_INDEX_NAME);
+
+async function deleteFromAlgolia(entity) {
+  const by = {
+    // filters: `slug:${entity.slug}`
+    filters: `slug:"${entity.slug.replace(/"/g, '\"')}"`
+  }
+  console.log(by)
+  await algoliaIndex.deleteBy(by)
+}
+
+async function insertIntoAlgolia(e) {
+  const entity = {...e}
+  delete entity.hash
+  const text = fs.readFileSync(path.join(__dirname, entity.indexPath)).toString().split('---')[2].trim()
+  await algoliaIndex.saveObject({
+    ...entity,
+    objectID: entity.slug,
+    text,
+  })
+}
+
+
 console.log({ changed })
-console.log({ deleted })
-console.log({ created })
-
+// delete the existing ones and replace them with new ones
 for (let slug of changed) {
   const entity = sections.find(e => e.slug === slug)
   delete entity.skipSize
+  await deleteFromAlgolia(entity)
+  await insertIntoAlgolia(entity)
+  const oldPost = (await queryPost(entity)).Items[0]
+  if (oldPost) {
+    await deletePost(oldPost)
+  }
   await putPost(entity)
   console.log("put", slug)
 }
 
+console.log({ created })
+// Create new ones
 for (let slug of created) {
   const entity = sections.find(e => e.slug === slug)
   delete entity.skipSize
-  await putPost({
-    ...entity,
-    totalComments: 0,
-    totalLikes: 0, 
-  })
+  await insertIntoAlgolia(entity)
+  await putPost(entity)
   console.log("put", slug)
 }
+
+console.log({ deleted })
+// delete old ones
+for (let slug of deleted) {
+  const entity = posts.find(e => e.slug === slug)
+  await deleteFromAlgolia(entity)
+  await deletePost(entity)
+  console.log("delete", slug)
+}
+
+// putSetting("featured", "featured-1", sections.find(e => e.slug === "useeffect-everything-you-need-to-know"))
+// putSetting("featured", "featured-2", sections.find(e => e.slug === "storing-images-in-s3-from-node-server"))
+// putSetting("featured", "featured-3", sections.find(e => e.slug === "$100-diy-ebike"))
+
+// const mostRecentVideo = sections.find(e => e.type === 'video')
+
+// putSetting("most-recent-video", "most-recent-video", {
+//   ...mostRecentVideo
+// })

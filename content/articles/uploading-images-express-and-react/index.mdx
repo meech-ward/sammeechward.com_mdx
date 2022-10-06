@@ -147,7 +147,7 @@ We’re going to send the description and the path to the image back to the clie
 The image is currently being stored in a directory called `images` on the server. That’s great, but there’s currently no way of getting the image back from the server. We want to allow the client to request the image in an img tag like this:
 
 ```html
-<img src="images/d54c8136cd238804b67e4a0c56427f8b">
+<img src="/images/d54c8136cd238804b67e4a0c56427f8b">
 ```
 
 Then the server needs to send the image to the client. This can be done in many ways, but the easiest way is to just let express serve these as static files:

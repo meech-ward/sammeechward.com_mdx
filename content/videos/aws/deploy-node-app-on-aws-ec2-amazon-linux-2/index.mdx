@@ -1,0 +1,116 @@
+---
+type: video
+yt_id: VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLm9IQVEzVHpVVHJv
+videoId: oHAQ3TzUTro
+title: "Deploy Node app on AWS EC2 Amazon Linux 2"
+date: "2021-09-18T18:29:42Z"
+slug: "deploy-node-app-on-aws-ec2-amazon-linux-2"
+image: 
+  name: "deploy-node-app-on-aws-ec2-amazon-linux-2.jpg"
+  alt: "Deploy Node app on AWS EC2 Amazon Linux 2"
+  width: 1280
+  height: 720
+status: 'published'
+description: "Deploy Node app on AWS EC2 Amazon Linux 2 by installing node js and setting the app up as a systemd service"
+tags: ["install node", "install node on amazon linux 2"]
+---
+
+Deploy Node app on AWS EC2 Amazon Linux 2 by installing node js and setting the app up as a systemd service
+
+## Chapters:
+
+* 0:00 Intro
+* 0:14 Setting up an EC2 Instance
+* 2:31 Installing Node
+* 3:21 git clone code onto the instance
+* 4:28 Running the node app
+* 6:13 Environment Variables
+* 9:38 Systemd service
+* 14:13 Summary
+
+
+🔗Other tutorials:
+MySQL on AWS EC2 Amazon Linux 2: [https://youtu.be/N9DwaThhpsg](https://youtu.be/N9DwaThhpsg)
+Nginx Reverse Proxy on AWS EC2 Amazon Linux 2: [https://youtu.be/_EBARqreeao](https://youtu.be/_EBARqreeao)
+Setting Up And Deploying AWS EC2 Instances: [https://youtu.be/GEVbYQWWJkQ](https://youtu.be/GEVbYQWWJkQ)
+
+
+
+<hr />
+
+## Code
+
+### Node
+
+```sh
+sudo yum install -y gcc-c++ make
+curl -sL https://rpm.nodesource.com/setup_16.x | sudo -E bash -
+sudo yum install -y nodejs
+```
+
+### Git 
+
+```
+sudo yum install -y git
+```
+
+### systemd service
+
+
+```sh
+sudo vim /etc/systemd/system/YourAppName.service
+```
+
+```
+[Unit]
+Description=YourAppName
+After=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/node /home/ec2-user/your_app_dir/server.js
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=YourAppName
+User=ec2-user
+EnvironmentFile=/home/ec2-user/your_app_dir/app.env
+
+[Install]
+WantedBy=multi-user.target
+```
+
+<Note>
+Remember to put the environment variables in `/home/ec2-user/your_app_dir/app.env`
+And make sure each env var is put on a new line.
+</Note>
+
+
+```
+sudo systemctl enable YourAppName.service
+sudo systemctl start YourAppName.service
+```
+
+## nginx reverse proxy (optional)
+
+
+```
+sudo amazon-linux-extras install nginx1 -y
+sudo systemctl enable nginx
+sudo systemctl start nginx
+```
+
+```sh
+sudo vim /etc/nginx/nginx.conf
+```
+
+```
+    location / {
+          proxy_pass http://localhost:8080;
+    }
+```
+
+
+```
+sudo systemctl restart nginx
+```
