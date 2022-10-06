@@ -1,5 +1,5 @@
 name: learn-github-actions
-run-name: ${{ github.actor }} is learning GitHub Actions
+run-name: ${{ github.actor }} is updating the data stores
 on: [push]
 jobs:
   check-bats-version:
@@ -9,6 +9,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - run: npm install
         env:
           ALGOLIA_ADMIN_API_KEY: ${{ secrets.ALGOLIA_ADMIN_API_KEY }}
           ALGOLIA_SEARCH_APP_ID: ${{ secrets.ALGOLIA_SEARCH_APP_ID }}
@@ -17,5 +18,4 @@ jobs:
           AWS_DYNAMO_POSTS_TABLE_NAME: ${{ secrets.AWS_DYNAMO_POSTS_TABLE_NAME }}
           AWS_DYNAMO_REGION: ${{ secrets.AWS_DYNAMO_REGION }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - run: npm install
       - run: npm run build
