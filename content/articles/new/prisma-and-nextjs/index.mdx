@@ -1,0 +1,697 @@
+---
+type: article
+title: 'Using Prisma with Next.js'
+date: '2022-10-13T20:20:20.000Z'
+slug: 'prisma-and-nextjs'
+image: 
+  name: 'next-prisma.png'
+status: 'published'
+description: 'Add prisma to your Next.js app!'
+tags: ['sql', 'orm', 'prisma']
+previousPostSlug: 'why-use-prisma'
+---
+
+Add prisma to your Next.js app! If you're not sure what prisma is, check out the following article first:
+
+<PostCard slug="why-use-prisma" />
+
+## Install Prisma
+
+These isntructions will work on an existing Next.js app. If you're starting from scratch, you can use the following command to create a new Next.js app:
+
+<Tabs>
+  <Tab name="JS">
+    ```sh
+    npx create-next-app
+    ```
+</Tab>
+  <Tab name="TS">
+    ```sh
+    npx create-next-app --ts
+    ```
+  </Tab>
+</Tabs>
+
+<Instruction>
+In your next app, install and initialize prisma:
+</Instruction>
+
+<Tabs>
+  <Tab name="JS">
+  ```sh
+  yarn add -D prisma
+  npx prisma init
+  ```
+  </Tab>
+  <Tab name="TS">
+  ```sh
+  yarn add prisma typescript ts-node @types/node --dev 
+  npx prisma init
+  ```
+  </Tab>
+</Tabs>
+
+This will create a new `prisma` folder in your project with a `schema.prisma` file inside of it. This is where you define your database schema. 
+
+### `.env` and `.env.local`
+
+It also creates a `.env` file where you can put your database connection string, but this conflicts with how Next.js supports env vars.
+
+* Prisma will only look inside of `.env` for the connection string which is private information that should never be comitted and shared. 
+* Next.js will look inside of a few files to [load environment variables](https://nextjs.org/docs/basic-features/environment-variables). However, next.js suggests **only using `.env.local`** for private information and comitting and pushing any other `.env` files.
+
+To be safe, you should only add your sesitive env vars to `.env.local` in a next app. So we need to tell prisma to look inside of `.env.local` instead of `.env`.
+
+<Instruction>
+Rename `.env` to `.env.local`
+</Instruction>
+
+https://www.prisma.io/docs/guides/development-environment/environment-variables/using-multiple-env-files#migration-script
+
+<Instruction>
+Install the `dotenv-cli` package:
+</Instruction>
+
+```sh
+yarn add dotenv-cli --dev
+```
+
+<Instruction>
+Add the following [scripts](https://www.slipshods.com/code/2) to your `package.json` file:
+</Instruction>
+
+```json
+// package.json
+```json
+"scripts": {
+    ...,
+    "migrate:dev": "npx dotenv -e .env.local -- prisma migrate dev",
+    "db:push": "npx dotenv -e .env.local -- prisma db push",
+    "migrate:reset": "npx dotenv -e .env.local -- prisma migrate reset",
+    "db:seed": "npx dotenv -e .env.local -- prisma db seed",
+    "prisma:generate": "npx dotenv -e .env.local -- prisma generate",
+    "prisma:studio": "npx dotenv -e .env.local -- prisma studio",
+    "production:build": "npx prisma generate && npx prisma migrate deploy && next build"
+}
+```
+
+Now anytime you need to run a prisma command, you can use the scripts you just added to your `package.json` file.
+
+* ~~`prisma migrate dev`~~ > `yarn migrate:dev`
+* ~~`prisma db push`~~ > `yarn db:push`
+* ~~`prisma migrate reset`~~ > `yarn migrate:reset`
+* ~~`prisma db seed`~~ > `yarn db:seed`
+* ~~`prisma generate`~~ > `yarn prisma:generate`
+* ~~`prisma studio`~~ > `yarn prisma:studio`
+
+<Note>
+  When it comes time to building your app for deployment, you should run `yarn production:build` instead of `next build`. This will run `prisma generate` and `prisma migrate deploy` before building your app.
+
+  If you're deploying to vercel, then just change the build script to be `yarn production:build` in your vercel settings.
+</Note>
+
+## `DATABASE_URL`
+
+The next thing you need to do is supply a valid `DATABASE_URL` to your `.env.local` file so that prisma can start performing its magic.
+
+```sh
+SCHEME://USER:PASSWORD@HOST:PORT/DATABASE?schema=SCHEMA 
+```
+
+[Prisma's documentation](https://www.prisma.io/docs/reference/database-reference/connection-urls) has a few different examples on how you can do this, but before you can do anything, you need to know two things:
+
+1. Which database are you using? `PostgreSQL`, `MySQL`, `Microsoft SQL Server`, `CockroachDB`, or `MongoDB`?
+2. Are you going to use a local database or a cloud database?
+
+Right now you're just in development so a local database is a good idea, but a cloud database is also a fine way to go.
+
+### Local Database
+
+Let's say you're using a local MySQL database with the following details:
+
+username=`root`
+password=`password`
+database=`my_database`
+
+Then your `DATABASE_URL` would look like this
+
+```sh
+mysql://root:password@127.0.0.1:3306/my_database
+```
+
+Make sure that you update your db provider in the `schema.prisma` file to match your database provider.
+
+```prisma
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+```
+
+### Cloud Database
+
+If you want to use a cloud database, then copy the url from the provider you're using. If you're not sure which provider to use, I suggest using [railway.app](https://railway.app/) because it's free and easy to use.
+
+* Go to [https://railway.app/new](https://railway.app/new)
+* Select the database you want to use 
+* Click select `Connect` and copy the url 
+* Done 
+
+<AutoPlayVideo path="/assets/postgres-railway.mov">
+</AutoPlayVideo>
+
+
+I suggest using PostgreSQL because it's the cheapest option for some reason.
+
+## `schema.prisma`
+
+Now that you have a database, you need to define your database schema. This is where you define your tables, columns, and relationships. Don't worry, it's really easy to change this in the future, so just start with something simple so you can start playing around with prisma.
+
+Here's a really basic `Post` model that has a `title` and some `content`:
+
+```prisma
+model Post {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String  
+  content   String?  @db.Text
+}
+```
+
+<Instruction>
+Add the Post model to the `/prisma/schema.prisma` file, then run the following command to migrate the database:
+</Instruction>
+
+```sh
+yarn migrate:dev --name init
+```
+
+This create a migration file, which is the raw SQL that needs to be run against the database. Then prisma runs that file against the database which in this case will create the tables.
+
+You should now have a `/prisma/migrations` directory that contains all the raw SQL. You can completely ignore this directory, but make sure you commit it to your repo.
+
+
+## npm install @prisma/client
+
+Time to start persisting data. Let's make an API route that allows someone to make a `POST` request to create a new `Post` in the database.
+
+<Instruction>
+Run the following command to install the prisma client:
+</Instruction>
+
+```sh
+yarn add @prisma/client
+```
+
+
+
+<Tabs>
+  <Tab name="JS">
+<Instruction>
+Create a new file at `/pages/api/posts.js` and add the following code:
+</Instruction>
+
+```js
+// pages/api/posts.js
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
+export default async function handle(req, res) {
+  const { method } = req
+
+  switch (method) {
+    case 'POST':
+      // get the title and content from the request body
+      const { title, content } = req.body
+      // use prisma to create a new post using that data
+      const post = await prisma.post.create({
+        data: {
+          title,
+          content
+        }
+      })
+      // send the post object back to the client
+      res.status(201).json(post)
+      break
+    default:
+      res.status(405).end(`Method ${method} Not Allowed`)
+  }
+}
+```
+  </Tab>
+  <Tab name="TS">
+<Instruction>
+Create a new file at `/pages/api/posts.ts` and add the following code:
+</Instruction>
+```ts 
+// pages/api/posts.ts
+import { PrismaClient } from '@prisma/client'
+
+import type { NextApiRequest, NextApiResponse } from 'next'
+
+const prisma = new PrismaClient()
+
+
+export default async function handle(req: NextApiRequest, res: NextApiResponse) {
+  const { method } = req
+
+  switch (method) {
+    case 'POST':
+      // get the title and content from the request body
+      const { title, content } = req.body
+      // use prisma to create a new post using that data
+      const post = await prisma.post.create({
+        data: {
+          title,
+          content
+        }
+      })
+      // send the post object back to the client
+      res.status(201).json(post)
+      break
+    default:
+      res.status(405).end(`Method ${method} Not Allowed`)
+  }
+}
+```
+  </Tab>
+</Tabs>
+
+<Instruction>
+Run the next app:
+</Instruction>
+
+```sh
+yarn dev
+```
+
+<Instruction>
+Make a POST request to create a new Post
+</Instruction>
+
+You can use something like [Postman](https://www.postman.com/), [Insomnia](https://insomnia.rest/), or [ThunderClient](https://www.thunderclient.com/) to make the request. Here's an example using curl:
+
+```sh
+curl --request POST \
+--header "Content-Type: application/json" \
+--data '{"title": "some post title", "content": "some post content"}' \
+localhost:3000/api/posts
+````
+
+If everything worked, you should see a response like this:
+
+```json
+{
+  "id": 1,
+  "createdAt": "2021-03-01T00:00:00.000Z",
+  "updatedAt": "2021-03-01T00:00:00.000Z",
+  "title": "some post title",
+  "content": "some post content"
+}
+```
+
+## Prisma Studio 
+
+Prisma studio is a GUI for your database. It's really useful for seeing what's going on in your database and for debugging. Even though there's not much data in the database yet, let's open Prisma Studio to see what it looks like:
+
+<Instruction>
+Run the following command to open prisma studio:
+</Instruction>
+
+```sh
+yarn prisma:studio
+```
+
+You should see the Post model and the single post you just created:
+
+<AutoPlayVideo path="/assets/prisma-studio-1.mov">
+</AutoPlayVideo>
+
+You can use prisma studio to create, read, update, and delete data.
+
+
+## Single Client 
+
+Before we do write any more code to interact with data, we should refactor slightly. Our application should only have one instance of the prisma client, so this code should only run once:
+
+```js
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+``` 
+
+Instead of creating a new instance every time we need to use prisma, we should put this in a file that only runs the setup code once and shares the prisma object with our entire project. There are also some quirks when using prisma with next in development, so we can follow prisma's [Best practice for instantiating PrismaClient with Next.js](https://www.prisma.io/docs/guides/database/troubleshooting-orm/help-articles/nextjs-prisma-client-dev-practices)
+
+<Tabs>
+  <Tab name="JS">
+
+<Instruction>
+  Create a new file at `/server/db/client.js` 
+</Instruction>
+
+<Image
+src="/images/db-client-js.png"
+width={512/2}
+height={373/2}
+/>
+
+<Instruction>
+  Add the following code:
+</Instruction>
+
+```js
+import { PrismaClient } from '@prisma/client'
+
+export const prisma =
+  global.prisma ||
+  new PrismaClient({
+    log: ['query'],
+  })
+
+if (process.env.NODE_ENV !== 'production') global.prisma = prisma
+```
+</Tab>
+<Tab name="TS">
+<Instruction>
+  Create a new file at `/server/db/client.ts` 
+</Instruction>
+
+<Image
+src="/images/db-client-ts.png"
+width={502/2}
+height={374/2}
+/>
+
+<Instruction>
+  Add the following code:
+</Instruction>
+
+```ts
+import { PrismaClient } from '@prisma/client'
+
+declare global {
+  // allow global `var` declarations
+  // eslint-disable-next-line no-var
+  var prisma: PrismaClient | undefined
+}
+
+export const prisma =
+  global.prisma ||
+  new PrismaClient({
+    log: ['query'],
+  })
+
+if (process.env.NODE_ENV !== 'production') global.prisma = prisma
+```
+</Tab>
+</Tabs>
+
+<Instruction>
+  In your `/pages/api/posts` file, instead of creating the client, import the prisma client from `/server/db/client`:
+</Instruction>
+
+```js
+import { prisma } from '../../server/db/client'
+```
+
+Everything should still work the same, but now we're using the same prisma client everywhere. Now let's fetch some data.
+
+## Fetching Data 
+
+We could make an API route that allows us to fetch all the posts. But this is a next app, so let's use the `getServerSideProps` function to fetch the posts on the server and do some server-side rendering.
+
+<Tabs>
+  <Tab name="JS">
+    <Instruction>
+      Replace the contents of `/pages/index.js` with the following code:
+    </Instruction>
+
+```js
+// pages/index.js
+import { prisma } from '../server/db/client'
+
+export default function Home({posts}) => {
+  return (
+    <div>
+      <h1>Home</h1>
+      {posts.map((post) => (
+        <div key={post.id}>
+          <h2>{post.title}</h2>
+          <p>{post.content}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export async function getServerSideProps() {
+  const posts = await prisma.post.findMany()
+
+  return {
+    props: {
+      posts
+    }
+  }
+}
+```
+  </Tab>
+  <Tab name="TS">
+    <Instruction>
+      Replace the contents of `/pages/index.ts` with the following code:
+    </Instruction>
+
+```ts 
+// pages/index.ts
+import type { NextPage } from 'next'
+
+import { prisma } from '../server/db/client'
+
+type PostProps = {
+  id: number;
+  title: string;
+  content: string;
+  createdAt: Date;
+}
+
+type Props = {
+  posts: PostProps[];
+}
+
+const Home: NextPage<Props> = ({posts}) => {
+  return (
+    <div>
+      <h1>Home</h1>
+      {posts.map((post) => (
+        <div key={post.id}>
+          <h2>{post.title}</h2>
+          <p>{post.content}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
+export default Home
+
+export async function getServerSideProps() {
+  const posts = await prisma.post.findMany()
+
+  return {
+    props: {
+      posts
+    }
+  }
+}
+```
+  </Tab>
+</Tabs>
+
+We are using the prisma client to get all of the posts from the database and passing them to the `Home` component as props. But if you run the app right now `yarn dev` and visit the home page `http://localhost:3000`, you'll see an error:
+
+<Error>
+  Error: Error serializing `.posts[0].createdAt` returned from `getServerSideProps` in "/".
+Reason: `object` ("[object Date]") cannot be serialized as JSON. Please only return JSON serializable data types.
+</Error>
+
+This is because prisma `Date`s are converted to JavaScript `Date`s, but we can't pass a date object as a prop from `getServerSideProps`. First, we need to convert it to a string. This can be handled in a bunch of different ways, but here's a [simple way](https://www.slipshods.com/code/8).
+
+<Instruction>
+  stringify then parse the data before returning it from `getServerSideProps`:
+</Instruction>
+
+```js
+  return {
+    props: {
+      posts: JSON.parse(JSON.stringify(posts))
+    }
+  }
+```
+
+stringify converts everything to valid json data, so things like date objects get converted to strings. Then we parse the posts back to an object but the date object will remain a string. It's kind of weird, but it works and lets us get back to building the app, so 🤷‍♀️
+
+If you visit `http://localhost:3000` again, you should see the posts from the database.
+
+## Creating Posts
+
+Now that we can fetch posts, let's add the ability to create posts from the home page. 
+
+<Instruction>
+  Add a form to the home page that allows you to input a `title` and `content`:
+</Instruction>
+
+<Tabs>
+  <Tab name="JS">
+```js
+import { useState } from 'react'
+
+...
+
+export default function Home({posts}) {
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    console.log({title, content})
+  }
+
+  return (
+    <div>
+      <h1>Home</h1>
+
+      <form onSubmit={handleSubmit} style={{display: "flex", flexDirection: "column", maxWidth: "400px"}}>
+        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <textarea value={content} onChange={(e) => setContent(e.target.value)} />
+        <button type="submit">Submit</button>
+      </form>
+      ...
+```
+  </Tab>
+  <Tab name="TS">
+```ts
+import { useState } from 'react'
+
+...
+
+const Home: NextPage<Props> = ({ posts }) => {
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    console.log({title, content})
+  }
+
+  return (
+    <div>
+      <h1>Home</h1>
+
+      <form onSubmit={handleSubmit} style={{display: "flex", flexDirection: "column", maxWidth: "400px"}}>
+        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <textarea value={content} onChange={(e) => setContent(e.target.value)} />
+        <button type="submit">Submit</button>
+      </form>
+      ...
+```
+  </Tab>
+</Tabs>
+
+
+You can use `fetch` to send the data to the API route we created earlier, but I prefer axios.
+
+<Instruction>
+  Install axios: 
+</Instruction>
+
+```bash
+yarn add axios
+```
+
+<Instruction>
+  Update the handle submit function to use axios:
+</Instruction>
+
+
+<Tabs>
+  <Tab name="JS">
+```js
+import axios from 'axios'
+
+...
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const res = await axios.post('/api/posts', { title, content })
+    console.log(res.data)
+  }
+```
+  </Tab>
+  <Tab name="TS">
+```ts
+import axios from 'axios'
+
+...
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const res = await axios.post('/api/posts', { title, content })
+    console.log(res.data)
+  }
+```
+  </Tab>
+</Tabs>
+
+Now when you submit the form, you should see the new post in the console. You can also check the past is created using Prisma Studio.
+
+But when a new post is created, the home page doesn't update. We need to refresh to see the new post appear on the page. Let's fix this using `useState`.
+
+<Instruction>
+  `useState` to keep track of the newly created posts:
+</Instruction>
+
+<Tabs>
+  <Tab name="JS">
+```js
+  const [posts, setPosts] = useState(props.posts)
+
+  // Add a use effect in case the posts change when routing to the home page
+  useEffect(() => {
+    setPosts(props.posts)
+  }, [props.posts])
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const res = await axios.post('/api/posts', { title, content })
+    setPosts([...posts, res.data])
+  }
+```
+  </Tab>
+  <Tab name="TS">
+```ts
+  const [posts, setPosts] = useState(props.posts)
+
+  // Add a use effect in case the posts change when routing to the home page
+  useEffect(() => {
+    setPosts(props.posts)
+  }, [props.posts])
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const res = await axios.post('/api/posts', { title, content })
+    setPosts([...posts, res.data])
+  }
+```
+  </Tab>
+</Tabs>
+
+Make sure you import `useEffect` for this to work. Try submitting a new post again and you should see it appear on the page without having to refresh.
+
+## Where to go from here 
+
+This is a pretty basic app, but it's a good starting point for next and prisma. Go build an app now and refer to the prisma docs when you're unsure about how to do something. Here are some useful links:
+
+* [Crud](https://www.prisma.io/docs/concepts/components/prisma-client/crud)
+* [Seeding your database](https://www.prisma.io/docs/guides/database/seed-database)
+* [Get started with Prisma Migrate](https://www.prisma.io/docs/concepts/components/prisma-migrate/get-started)
+

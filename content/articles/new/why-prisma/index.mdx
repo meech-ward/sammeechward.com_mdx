@@ -1,0 +1,195 @@
+---
+type: article
+title: 'Why Use Prisma'
+date: '2022-10-13T10:10:10.000Z'
+slug: 'why-use-prisma'
+image: 
+  name: 'why-use-prisma.png'
+status: 'published'
+description: 'What is Prisma and why do you care?'
+tags: ['sql', 'orm', 'prisma']
+previousPostSlug: 'connect-to-mysql-from-node'
+nextPostSlug: 'prisma-and-nextjs'
+---
+
+**"Prisma is an open source next-generation ORM."**
+
+What does that even mean and why do you care?
+
+When you're devleping a web app, you're probably going to need to persist data somehow. The best way to do that is to add a database to your project, probably a relational database like `MySQL` or `Postgres`.
+
+<Note>
+### Use a Relational database
+
+If your app is new or doesn't have many users, use a relational database like `MySQL` or `Postgres`. Don't use a noSQL database like `MongoDB` or `DynamoDB`.
+
+Relational databases are general purpose databases that follow the same storage and access patterns regardless of what your application is. Normalization and JOINs work the same way for an ecommerce app as it does for a dating app. 
+
+NoSQL databases usually prioritize **access patterns**, so they're optimized for specific use cases. Until you **know** how your app is going to be used at scale with a large amount of users, stick with a relational database. You don't know what your access patterns are yet. 
+</Note>
+
+When you add a database to your web app, there are a lot of problems that you end up having to solve. How are you going to **Organizing and Building Queries**, **Manage Schema Creation and Migrations**, and **Monitor Data in your Database** so you can test everything is working correctly? 
+
+### Organizing and Building Queries 
+
+Here is a query that gets an array of posts from the database:
+
+```js
+const posts = await prisma.post.findMany({})
+```
+
+But each post was created by a user and we want the user's information too:
+
+```js
+const posts = await prisma.post.findMany({
+  include: { user: true }
+})
+```
+
+Now I have an array of post objects and each post has a `user` property that is an object with the user's information. Here's what that might look like as an SQL query using `mysql2`:
+
+```js
+let query = `
+  SELECT posts.id, posts.created, imageUrl, description, totalLikes, totalComments, 
+  JSON_OBJECT('id', posts.user_id, 'email', email, 'username', username) as user, 
+  FROM posts 
+  JOIN users ON posts.user_id = users.id
+  `
+
+const [posts] = await promisePool.query(query)
+```
+
+Writing raw sql queries requirest me to think about [JOINing](https://www.sammeechward.com/sql-joins) tables together and it's a little weird to get the table's to act as objects where one entity is a is a property of another entity.  
+
+But in Prisma, I only have to think about the data I want represented as JavaScript objects. And it's kind of intuative:
+
+* Get me all the posts
+* Include the associated user object on each post 
+
+Let's make this more complex, let's add pagination to the mix and get a user's posts if a user object exists:
+
+```js
+const posts = await prisma.post.findMany({
+  where: user && { user: { id: user.id } },
+  skip: 40,
+  take: 20,
+  include: { user: true }
+})
+```
+
+Here's the raw sql version, put into a function because that's the only sane way of writing this insane code:
+
+```js
+async function getPosts({ user, limit = 100, skip = 0 }) {
+  let query = `
+  SELECT posts.id, posts.created, imageUrl, description, totalLikes, totalComments, 
+  JSON_OBJECT('id', posts.user_id, 'email', email, 'username', username) as user, 
+  FROM posts 
+  JOIN users ON posts.user_id = users.id
+  `
+  if (user) {
+    query += " WHERE user.id = ?"
+    params.push(user.id)
+  }
+
+  query += " LIMIT ?"
+  skip && query += " OFFSET ?"
+
+  params.push(limit)
+  params.push(skip)
+
+  const [rows, fields] = await promisePool.query(query, params)
+  return rows
+}
+```
+
+In a web app, you're very quickly going to end up with queries that select from multiple tables with `WHERE` clauses that are based on some sort of application state like the currently logged in user. To help organize these queries, you can throw them into functions like this one, but that's still not a nice function to look at. It seems overly complex just to try and add a conditional `WHERE` and `OFFSET`. And because we get no syntax highlighting or type checking for the sql strings, it's easy to make mistakes that we won't catch until we run the code. And as the application grows, we're just going to end up with more and more of these functions for `SELECT`, `INSERT`, `UPDATE`, and `DELETE` queries.
+
+It's nice to have a layer of abstraction between the database and the application to make things easier. Other ORMS like `Sequelize` and `TypeORM` do this, but they add a bunch of `OOP` complexity that makes the tradeoff questionable. You don't have to think about sql queries, but you have to think about `OOP` and `ORM` concepts like `Models`, `Repositories`, `Entities`, `Data Mappers`, `Data Access Objects`, `Active Record`, and `Data Transfer Objects`.
+
+You could use a simple query builder like `knex` or `sql-bricks` but you're still going to end up thinking in terms of sql statements and you're still going to end up with a bunch of functions that are hard to read and hard to maintain.
+
+By using Prisma, you don't have to worry about complex queries, you just think about the data you want. And you think in terms of objects and relationships between objects, rather than thinking about tables, JOINs, and building queries. But Prisma doesn't go down a bad `OOP` path like other ORMs, it's just a thin layer of abstraction that makes it easier to write queries and it's easy to read and maintain.
+
+### Managing Schema Creation and Migrations
+
+Creating tables and defining relationships and constraints can be a bit of a pain and difficult to get right the first time you try. I still have to use my own [DDL guide](https://www.sammeechward.com/a-quick-guide-to-creating-tables) as a reference just to create a basic **MySQL** table like this:
+
+```sql
+CREATE TABLE post (
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  createdAt TIMESTAMP NOT NULL DEFAULT NOW(),
+  updatedAt TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+  title VARCHAR(191) NOT NULL,
+  authorId INTEGER NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT
+);
+```
+
+Then I notice that if I deploy to railway, Postgres is three times cheaper than **MySQL** so I have to change all the code to use **Postgres** instead. 
+
+```sql
+CREATE TABLE post (
+  id SERIAL PRIMARY KEY,
+...
+```
+
+Which actually isn't a huge deal, just the `id`, but it's still kind of annoying. 
+
+Then I realize I wanted each post to have an optional image attribute so I have to modify the table:
+
+```sql
+ALTER TABLE post ADD COLUMN image VARCHAR(191);
+```
+
+I have run that code against my local database, get every other dev to run it against their local database, and run it agains any production and staging databases.
+
+And where does this code go? Do I just put a bunch of `.sql` files in my project and run them manually? Do I write a script that runs them for me? 
+
+### Creating and Updating Schema with Prisma 
+
+With prisma, I define my model in a `.prisma` file using their prisma schema language:
+
+```prisma
+model Post {
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  title      String
+  author     User       @relation(fields: [authorId], references: [id])
+  authorId   Int
+}
+```
+
+These are not instructions on how to create a table, I'm just defining the shape of my data. To create the table, I run `prisma migrate dev` and prisma will create the table for me. It doesn't matter if I'm using **MySQL** or **Postgres**, prisma will create the table in the correct format for the database I'm using.
+
+If I want to add a new field to my table, I just add it to the model and run `prisma migrate dev` again.
+
+```prisma
+model Post {
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  title      String
+  image      String?
+  author     User       @relation(fields: [authorId], references: [id])
+  authorId   Int
+}
+```
+
+This single file represents my entire database schema. I commit that into git, then anytime anyone wants to run the app, they can just tell prisma to run any migrations and the database will reflect the current state of the schema.
+
+### Monitoring Data in the Database
+
+At some point in the development process, you're going to want to connect directly to the database to make sure things are working as you expect. You could use a tool like **MySQL Workbench** or **pgAdmin**, I usually just use the command line. But this involves connecting to same db that the app is connected to, and running some queries to monitor or update data. 
+
+With prisma, you just run `prisma studio` and you get a nice GUI that lets you browse the data in your database.
+
+<AutoPlayVideo path="/assets/prisma_studio.mov">
+</AutoPlayVideo>
+
+## And more
+
+These are some of the features that I've found most useful, but there are a lot more like it's integration with typscript and graphql, and it's support for seeding databases.
+
+Prisma is an abstraction, it makes data persistance easier for application developers, but gives us less control over the database layer. It's a tradeoff, less control for a more simple development experience. I don't always want a layer of abstraction between my application and the database, I often like the control I get from interacting directly with my database; however, when I do need a layer of abstraction, Prisma has been the best tool I've found for the job.

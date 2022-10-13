@@ -8,6 +8,8 @@ import { putPost, getAllPosts, deletePost, putSetting, queryPost } from './dynam
 
 import algoliasearch from 'algoliasearch'
 
+import axios from 'axios'
+
 const posts = await getAllPosts()
 
 const __dirname = path.resolve()
@@ -222,3 +224,20 @@ const mostRecentVideo = sections.find(e => e.type === 'video')
 putSetting("most-recent-video", "most-recent-video", {
   ...mostRecentVideo
 })
+
+
+// Revalidation
+
+const revalidateSlugs = [...Array.from(created), ...Array.from(changed)].map(a => "/" + a)
+if (revalidateSlugs.length > 0) {
+  revalidateSlugs.push("/posts")
+}
+
+await axios.post(process.env.ROOT_URL + '/api/revalidate', {
+  secret: process.env.REVALIDATION_TOKEN,
+  slugs: revalidateSlugs
+})
+
+
+
+// Todo: revalidate home page
