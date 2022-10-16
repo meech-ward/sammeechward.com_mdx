@@ -20,4 +20,5 @@ jobs:
           AWS_DYNAMO_POSTS_TABLE_NAME: ${{ secrets.AWS_DYNAMO_POSTS_TABLE_NAME }}
           AWS_DYNAMO_REGION: ${{ secrets.AWS_DYNAMO_REGION }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          REVALIDATION_TOKEN: ${{ secrets.REVALIDATION_TOKEN }}
           ROOT_URL: 'https://sammeechward.com'
