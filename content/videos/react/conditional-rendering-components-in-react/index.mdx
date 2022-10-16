@@ -1,0 +1,190 @@
+---
+type: video
+yt_id: VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLnhSS3ZqV0RabFc4
+videoId: xRKvjWDZlW8
+title: "Conditional Rendering Components in React"
+date: "2022-09-26T14:00:37Z"
+slug: "conditional-rendering-components-in-react"
+image: 
+  name: "conditional-rendering-components-in-react.jpg"
+  alt: "Conditional Rendering Components in React"
+  width: 1280
+  height: 720
+status: 'published'
+description: "Learn how conditionally render components using conditional ternary (? : ) and logical and (&&) operators, and if else statements. "
+tags: []
+---
+
+Learn how conditionally render components using conditional ternary (? : ) and logical and (&&) operators, and if else statements. 
+
+This is video #8 in my react series: 
+
+* #7 React State Array of Objects: [https://youtu.be/95r9A5_taNo](https://youtu.be/95r9A5_taNo)
+* #9 useEffect Everything You Need To Know: [https://youtu.be/c8R4Cba7PPY](https://youtu.be/c8R4Cba7PPY)
+
+Join this channel to get access to perks:
+[https://www.youtube.com/channel/UC6aTLuI_j4-0wiDSzmaPctQ/join](https://www.youtube.com/channel/UC6aTLuI_j4-0wiDSzmaPctQ/join)
+
+## Chapters:
+
+* 0:00​ Intro
+* 1:04 return different markup
+* 3:25 jsx in varaibles
+* 4:28 &&
+* 6:50 if else 
+* 10:30 ternary (? : ) 
+* 11:45 Summary
+
+
+## Different ways to conditionally render components in React:
+
+### 1 return
+
+```jsx
+if (whatever) {
+  return (jsx)
+} 
+return (jsx)
+```
+
+### 2 create variable
+
+```jsx
+let jsx = null
+if (whatever) {
+  jsx = something
+} 
+```
+
+### 3 &&
+
+```jsx
+const jsx = whatever && something
+```
+
+### 4 ternary
+
+```jsx
+const jsx = whatever ? something : something
+```
+
+### 5 Inline
+
+```jsx
+{whatever && something}
+{whaver ? something : something}
+```
+
+---
+
+## code
+
+**App.jsx**
+```jsx
+import './App.css'
+import Joke from './Joke'
+import JokeForm from './JokeForm'
+
+import { useState } from "react"
+
+function App() {
+  const [showForm, setShowForm] = useState(false)
+
+  const [jokes, setJokes] = useState([{
+    id: 1,
+    text: "I'm afraid for the calendar. Its days are numbered."
+  },
+  {
+    id: 2,
+    text: "I used to be addicted to soap, but I'm clean now."
+  }
+  ])
+
+  const handleAddJoke = (text) => {
+    const joke = {
+      text,
+      id: self.crypto.randomUUID(),
+      likes: 0
+    }
+    setJokes([joke, ...jokes])
+    setShowForm(false)
+  }
+
+  const handleDeleteJoke = (id) => {
+    setJokes(jokes.filter(joke => joke.id !== id))
+  }
+
+  const handleAddNewJoke = () => {
+    setShowForm(true)
+  }
+
+  return (
+    <div className="">
+      <h1>Dad Jokes</h1>
+
+      {showForm ?
+        <JokeForm onAddJoke={handleAddJoke} />
+        :
+        <>
+          <button onClick={handleAddNewJoke}>Add a new joke</button>
+          {jokes.map(joke => <Joke key={joke.id} {...joke} onDelete={handleDeleteJoke} />)}
+        </>
+      }
+
+    </div>
+  )
+}
+
+export default App
+```
+
+**Joke.jsx**
+
+```jsx
+export default function Joke({ id, text, onDelete}) {
+  return (
+    <div>
+      <p>{text}</p>
+      <button onClick={() => onDelete(id)}>delete</button>
+    </div>
+  )
+}
+```
+
+**JokeForm.jsx**
+
+```jsx
+import { useState } from "react"
+
+export default function JokeForm({ onAddJoke }) {
+  const [text, setText] = useState("")
+  const [error, setError] = useState("")
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (text.length < 5) {
+      setError("Jokes must be at least 5 characters long")
+      return
+    }
+    setError("")
+    onAddJoke(text)
+    setText("")
+  }
+
+  
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="text">New Joke</label>
+      <input
+        type="text"
+        id="text"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      {error && <p>{error}</p>}
+      <button type="submit">Add Joke</button>
+    </form>
+  )
+}
+```
