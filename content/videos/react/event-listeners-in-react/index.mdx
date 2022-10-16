@@ -32,7 +32,52 @@ This is video #5 in my react series:
 * 5:29 events in child components
 * 8:27 Summary
 
-Join this channel to get access to perks:
-[https://www.youtube.com/channel/UC6aTLuI_j4-0wiDSzmaPctQ/join](https://www.youtube.com/channel/UC6aTLuI_j4-0wiDSzmaPctQ/join)
 
+## code
 
+**App.jsx**
+```jsx
+import './App.css'
+import Form from './Form'
+
+function App() {
+
+  function handleClick(e) {
+    console.log('Button clicked')
+  }
+
+  function handleSubmit() {
+    console.log('Form submitted')
+  }
+
+  return (
+    <div className="App">
+
+      <button onClick={handleClick}>Do Something</button>
+
+      <Form onSubmit={handleSubmit} />
+     
+    </div>
+  )
+}
+
+export default App
+```
+
+**Form.jsx**
+```jsx
+export default function Form({ onSubmit }) {
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    onSubmit()
+  }
+  
+  return (
+  <form onSubmit={handleSubmit}>
+    <input type="text" onChange={(e) => console.log(e.target.value)} />
+    <button type="submit">Submit</button>
+  </form>
+  )
+}
+```
