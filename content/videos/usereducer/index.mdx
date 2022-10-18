@@ -1,0 +1,140 @@
+---
+type: video
+yt_id: VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLlVNUUtqOU04cjNn
+videoId: UMQKj9M8r3g
+title: "useReducer"
+date: "2022-10-17T14:00:29Z"
+slug: "usereducer"
+image: 
+  name: "usereducer.jpg"
+  alt: "useReducer"
+  width: 1280
+  height: 720
+status: 'published'
+description: "Learn how to use the useReducer hook to manage state inside of your components. "
+tags: []
+---
+
+Learn how to use the useReducer hook to manage state inside of your components. 
+
+This is video #8 in my react series: 
+
+* #7 React State Array of Objects: [https://youtu.be/95r9A5_taNo](https://youtu.be/95r9A5_taNo)
+* #9 Conditional Rendering: [https://youtu.be/xRKvjWDZlW8](https://youtu.be/xRKvjWDZlW8)
+
+[https://www.sammeechward.com/useReducer](https://www.sammeechward.com/useReducer)
+
+## Chapters:
+
+* 0:00 useState
+* 1:24 reducer function
+* 3:37 dispatch actions
+* 9:20 reducer is a pure function
+* 11:37 summary
+
+## Code
+
+**App.jsx**
+
+```jsx
+import './App.css'
+import Joke from './Joke'
+import JokeForm from './JokeForm'
+
+import { useReducer } from 'react';
+
+import jokesReducer from './jokesReducer'
+
+function App() {
+  const [jokes, dispatch] = useReducer(jokesReducer, [
+    {
+      id: 1,
+      text: "I'm afraid for the calendar. Its days are numbered.",
+      likes: 0
+    },
+    {
+      id: 2, 
+      text: "I used to be addicted to soap, but I'm clean now.",
+      likes: 0
+    }
+  ])
+
+  const handleAddJoke = (text) => {
+    const joke = {
+      text,
+      id: self.crypto.randomUUID(),
+      likes: 0
+    }
+    dispatch({ type: 'added_joke', joke })
+  }
+
+  const handleDeleteJoke = (id) => {
+    dispatch({ type: 'deleted_joke', id })
+  }
+
+  const handleLike = (id) => {
+    dispatch({ type: 'liked_joke', id })
+  }
+
+  const handleDislike = (id) => {
+    dispatch({ type: 'disliked_joke', id })
+  }
+
+  const handleSort = () => {
+    dispatch({ type: 'sorted_jokes' })
+  }
+
+  return (
+    <div className="">
+      <h1>Dad Jokes</h1>
+
+      <button onClick={handleSort}>Sort</button>
+
+      <JokeForm onAddJoke={handleAddJoke} />
+
+      {jokes.map(joke => (
+        <Joke 
+        onDelete={handleDeleteJoke} 
+        key={joke.id} 
+        onLike={handleLike}
+        onDislike={handleDislike}
+        {...joke} />
+      ))}
+
+    </div>
+  )
+}
+
+export default App
+```
+
+**jokesReducer.js**
+
+```js
+export default function jokesReducer(jokes, action) {
+  switch (action.type) {
+    case 'added_joke':
+      return [action.joke, ...jokes]
+    case 'deleted_joke':
+      return jokes.filter(joke => joke.id !== action.id)
+    case 'liked_joke':
+      return jokes.map(joke => {
+        if (joke.id === action.id) {
+          return {...joke, likes: joke.likes + 1}
+        } else {
+          return joke
+        }
+      })
+    case 'disliked_joke':
+      return jokes.map(joke => {
+        if (joke.id === action.id) {
+          return {...joke, likes: joke.likes - 1}
+        } else {
+          return joke
+        }
+      })
+    case 'sorted_jokes':
+      return [...jokes].sort((a, b) => b.likes - a.likes)
+  }
+}
+```
