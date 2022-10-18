@@ -52,6 +52,13 @@ export async function getItem(Key) {
   return data
 }
 
+function postType(entity) {
+  if (entity.type == "playlist") {
+    return "PLAYLIST"
+  }
+  return "POST"
+}
+
 
 export async function putPost(post) {
   const sk = `${post.type.toUpperCase()}#${Math.floor(new Date(post.date).getTime() / 1000)}`
@@ -62,7 +69,7 @@ export async function putPost(post) {
     ...post,
     pk: "ENTITY#" + post.slug,
     sk,
-    GSI1PK: "ENTITY#POST",
+    GSI1PK: "ENTITY#" + postType(post),
     GSI1SK
   }
   await putItem(Item)

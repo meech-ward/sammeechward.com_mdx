@@ -231,7 +231,6 @@ putSetting("featured", "featured-3", sections.find(e => e.slug === "100-dollar-d
 const mostRecentVideo = sections.find(e => e.type === 'video')
 
 const previousMostRecent = await getSetting("most-recent-video", "most-recent-video")
-console.log({previousMostRecent, mostRecentVideo})
 if (previousMostRecent?.slug !== mostRecentVideo?.slug) {
   await putSetting("most-recent-video", "most-recent-video", mostRecentVideo)
   revalidateSlugs.push("/")
@@ -239,8 +238,11 @@ if (previousMostRecent?.slug !== mostRecentVideo?.slug) {
 
 
 // Revalidation
-
-await axios.post(process.env.ROOT_URL + '/api/revalidate', {
-  secret: process.env.REVALIDATION_TOKEN,
-  slugs: revalidateSlugs
-})
+try {
+  await axios.post(process.env.ROOT_URL + '/api/revalidate', {
+    secret: process.env.REVALIDATION_TOKEN,
+    slugs: revalidateSlugs
+  })
+} catch (error) {
+  console.log("error revalidating")
+}
