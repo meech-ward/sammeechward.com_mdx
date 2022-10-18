@@ -43,6 +43,15 @@ export async function putItem(Item) {
   return data
 }
 
+export async function getItem(Key) {
+  const params = {
+    TableName: tableName,
+    Key
+  }
+  const data = await dynamodbClient.send(new GetCommand(params));
+  return data
+}
+
 
 export async function putPost(post) {
   const sk = `${post.type.toUpperCase()}#${Math.floor(new Date(post.date).getTime() / 1000)}`
@@ -66,6 +75,14 @@ export async function putSetting(pk, sk, data) {
     sk: "SETTING#" + sk
   }
   await putItem(Item)
+}
+
+export async function getSetting(pk, sk) {
+  const Key = {
+    pk: "SETTING#" + pk,
+    sk: "SETTING#" + sk
+  }
+  return (await getItem(Key)).Item
 }
 
 

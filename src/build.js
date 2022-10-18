@@ -4,7 +4,7 @@ import parseMarkdown from 'front-matter-markdown'
 import sharp from 'sharp'
 import { hashElement } from 'folder-hash'
 
-import { putPost, getAllPosts, deletePost, putSetting, queryPost } from './dynamo.js'
+import { putPost, getAllPosts, deletePost, putSetting, queryPost, getSetting } from './dynamo.js'
 
 import algoliasearch from 'algoliasearch'
 
@@ -215,17 +215,6 @@ for (let slug of deleted) {
   console.log("delete", slug)
 }
 
-putSetting("featured", "featured-1", sections.find(e => e.slug === "useeffect-everything-you-need-to-know"))
-putSetting("featured", "featured-2", sections.find(e => e.slug === "storing-images-in-s3-from-node-server"))
-putSetting("featured", "featured-3", sections.find(e => e.slug === "100-dollar-diy-ebike"))
-
-const mostRecentVideo = sections.find(e => e.type === 'video')
-
-putSetting("most-recent-video", "most-recent-video", {
-  ...mostRecentVideo
-})
-
-
 // Revalidation
 
 const revalidateSlugs = [...Array.from(created), ...Array.from(changed)].map(a => "/" + a)
@@ -233,11 +222,25 @@ if (revalidateSlugs.length > 0) {
   revalidateSlugs.push("/posts")
 }
 
+// Home Page
+
+putSetting("featured", "featured-1", sections.find(e => e.slug === "useeffect-everything-you-need-to-know"))
+putSetting("featured", "featured-2", sections.find(e => e.slug === "storing-images-in-s3-from-node-server"))
+putSetting("featured", "featured-3", sections.find(e => e.slug === "100-dollar-diy-ebike"))
+
+const mostRecentVideo = sections.find(e => e.type === 'video')
+
+const previousMostRecent = await getSetting("most-recent-video", "most-recent-video")
+console.log({previousMostRecent, mostRecentVideo})
+if (previousMostRecent?.slug !== mostRecentVideo?.slug) {
+  await putSetting("most-recent-video", "most-recent-video", mostRecentVideo)
+  revalidateSlugs.push("/")
+}
+
+
+// Revalidation
+
 await axios.post(process.env.ROOT_URL + '/api/revalidate', {
   secret: process.env.REVALIDATION_TOKEN,
   slugs: revalidateSlugs
 })
-
-
-
-// Todo: revalidate home page
