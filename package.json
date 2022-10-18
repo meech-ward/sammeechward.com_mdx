@@ -20,6 +20,7 @@
     "folder-hash": "^4.0.2",
     "front-matter-markdown": "^0.4.5",
     "git-changed-files": "^1.0.0",
+    "googleapis": "^108.0.0",
     "sharp": "^0.31.1",
     "ulid": "^2.3.0"
   }
