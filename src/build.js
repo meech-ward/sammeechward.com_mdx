@@ -4,7 +4,7 @@ import parseMarkdown from 'front-matter-markdown'
 import sharp from 'sharp'
 import { hashElement } from 'folder-hash'
 
-import { putPost, getAllPosts, deletePost, putSetting, queryPost, getSetting } from './dynamo.js'
+import { putPost, getAllPosts, deletePost, putSetting, queryPost, getSetting, putPlaylistPost, deletePlaylistChildren, deletePlaylistChild } from './dynamo.js'
 
 import algoliasearch from 'algoliasearch'
 
@@ -52,7 +52,7 @@ async function getEntities(dirPath) {
     // Check for changes 
     const hash = await hashElement(dirPath, { encoding: 'hex' })
     const folderHash = hash.hash
-    if (currentVersion && currentVersion.hash === folderHash) {
+    if (currentVersion && currentVersion.hash === folderHash && currentVersion.dirPath === relativeDirPath) {
       // No changes
       
     } else {
@@ -162,7 +162,7 @@ async function deleteFromAlgolia(entity) {
   const by = {
     filters: `objectID:${entity.slug}`
   }
-  console.log(by)
+  // console.log(by)
   await algoliaIndex.deleteBy(by)
 }
 
@@ -217,10 +217,40 @@ for (let slug of deleted) {
 
 // Revalidation
 
-const revalidateSlugs = [...Array.from(created), ...Array.from(changed)].map(a => "/" + a)
+let revalidateSlugs = [...Array.from(created), ...Array.from(changed)].map(a => "/" + a)
 if (revalidateSlugs.length > 0) {
   revalidateSlugs.push("/posts")
 }
+
+// Playlist 
+const playlists = sections.filter(e => e.type === 'playlist')
+for (let playlist of playlists) {
+  const children = playlist.children.map(slug => sections.find(e => e.slug === slug))
+  let childrenToChange = []
+  let childrenToDelete = []
+
+  const playlistCreatedOrChanged = created.has(playlist.slug) || changed.has(playlist.slug)
+  if (playlistCreatedOrChanged) {
+    // nuke
+    await deletePlaylistChildren(playlist)
+    childrenToChange = children
+    // console.log("nuke", childrenToChange)
+  } else {
+    childrenToChange = playlist.children.filter(e => changed.has(e.slug) || created.has(e.slug))
+    childrenToDelete = playlist.children.filter(e => deleted.has(e.slug))
+  }
+
+  await Promise.all(childrenToDelete.map(child => deletePlaylistChild({post: child, playlist})))
+  await Promise.all(childrenToChange.map(child => putPlaylistPost({post: child, playlist})))
+  if (childrenToChange.length > 0 || childrenToDelete.length > 0) {
+    revalidateSlugs = [...revalidateSlugs, ...childrenToChange.map(e => "/" + e.slug)]
+    revalidateSlugs.push("/playlists" + playlist.slug)
+  }
+  // console.log({childrenToChange, childrenToDelete})
+}
+
+
+
 
 // Home Page
 

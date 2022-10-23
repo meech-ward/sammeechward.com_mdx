@@ -75,6 +75,21 @@ export async function putPost(post) {
   await putItem(Item)
 }
 
+export async function putPlaylistPost({ post, playlist }) {
+  const Item = {
+    ...post,
+    pk: "PLAYLIST#" + playlist.slug,
+    sk: "ENTITY#" + post.slug,
+    playlist: {
+      slug: playlist.slug,
+      title: playlist.title,
+      description: playlist.description,
+      image: playlist.image,
+    }
+  }
+  await putItem(Item)
+}
+
 export async function putSetting(pk, sk, data) {
   const Item = {
     ...data,
@@ -96,7 +111,7 @@ export async function getSetting(pk, sk) {
 export async function getAllPosts() {
   const params = {
     TableName: tableName,
-    ProjectionExpression: "pk, sk, #h, slug, commentCount, likeCount, modified",
+    ProjectionExpression: "pk, sk, #h, slug, commentCount, likeCount, modified, dirPath",
     ExpressionAttributeNames: { "#h": "hash" },
   }
 
@@ -115,12 +130,49 @@ export function queryPost(post) {
   return dynamodbClient.send(new QueryCommand(params));
 }
 
-export async function deletePost({sk, pk}) {
+export function queryPlaylist(playlist) {
+  const params = {
+    TableName: tableName,
+    KeyConditionExpression: "pk = :pk",
+    ExpressionAttributeValues: {
+      ":pk": "PLAYLIST#" + playlist.slug,
+    }
+  }
+  return dynamodbClient.send(new QueryCommand(params));
+}
+
+export async function deletePost({ sk, pk }) {
   const params = {
     TableName: tableName,
     Key: {
       pk,
       sk
+    }
+  }
+  const data = await dynamodbClient.send(new DeleteCommand(params));
+  return data
+}
+
+export async function deletePlaylistChildren(playlist) {
+  const children = (await queryPlaylist(playlist)).Items
+  const childrenToDelete = children.filter(child => !playlist.children.includes(child.slug))
+  for (const child of childrenToDelete) {
+    const params = {
+      TableName: tableName,
+      Key: {
+        pk: "PLAYLIST#" + playlist.slug,
+        sk: "ENTITY#" + child.slug,
+      }
+    }
+    await dynamodbClient.send(new DeleteCommand(params));
+  }
+}
+export async function deletePlaylistChild({ playlist, post }) {
+  const params = {
+    TableName: tableName,
+    Key: {
+      pk: "PLAYLIST#" + playlist.slug,
+      sk: "ENTITY#" + post.slug,
     }
   }
   const data = await dynamodbClient.send(new DeleteCommand(params));
