@@ -244,7 +244,6 @@ for (let playlist of playlists) {
   await Promise.all(childrenToChange.map(child => putPlaylistPost({post: child, playlist})))
   if (childrenToChange.length > 0 || childrenToDelete.length > 0) {
     revalidateSlugs = [...revalidateSlugs, ...childrenToChange.map(e => "/" + e.slug)]
-    revalidateSlugs.push("/playlists" + playlist.slug)
   }
   // console.log({childrenToChange, childrenToDelete})
 }
@@ -268,6 +267,24 @@ if (previousMostRecent?.slug !== mostRecentVideo?.slug) {
 
 
 // Revalidation
+revalidateSlugs = [...new Set(revalidateSlugs)]
+// console.log(sections)
+revalidateSlugs = revalidateSlugs.map(slug => {
+  const entity = sections.find(e => e.slug === slug.replace('/', ''))
+  if (!entity) {
+    console.log("no entity for slug", slug)
+    return slug
+  }
+  if (entity.type === 'playlist') {
+    return `/playlists${slug}`
+  }
+  return slug
+})
+
+if (revalidateSlugs.find(e => e.startsWith("/playlists"))) {
+  revalidateSlugs.push("/playlists")
+}
+
 try {
   await axios.post(process.env.ROOT_URL + '/api/revalidate', {
     secret: process.env.REVALIDATION_TOKEN,
@@ -275,4 +292,5 @@ try {
   })
 } catch (error) {
   console.log("error revalidating")
+  console.log(error.response)
 }
