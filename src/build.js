@@ -262,7 +262,6 @@ const mostRecentVideo = sections.find(e => e.type === 'video')
 const previousMostRecent = await getSetting("most-recent-video", "most-recent-video")
 if (previousMostRecent?.slug !== mostRecentVideo?.slug) {
   await putSetting("most-recent-video", "most-recent-video", mostRecentVideo)
-  revalidateSlugs.push("/")
 }
 
 
@@ -281,9 +280,10 @@ revalidateSlugs = revalidateSlugs.map(slug => {
   return slug
 })
 
-if (revalidateSlugs.find(e => e.startsWith("/playlists"))) {
-  revalidateSlugs.push("/playlists")
-}
+
+revalidateSlugs.push("/")
+revalidateSlugs.push("/playlists")
+revalidateSlugs.push("/posts")
 
 try {
   await axios.post(process.env.ROOT_URL + '/api/revalidate', {
