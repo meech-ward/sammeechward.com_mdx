@@ -9,17 +9,23 @@ image:
   width: 1500
   height: 500
 status: 'published'
-description: 'In a previous article, we tested an express api that created a user. We only tested the http interface though, we never actually got to testing the database because we didn’t know about dependency injection yet. Now that we know how to inject the database, we can learn about mocking. In this article, we will \[…\]'
+description: 'In a previous article, we tested an express api that created a user. We only tested the http interface though, we never actually got to testing the database because we didn't know about dependency injection yet. Now that we know how to inject the database, we can learn about mocking. In this article, we will \[…\]'
 tags: []
+previousPostSlug: 'mocking-a-database-in-node-with-jest'
+nextPostSlug: "connect-to-mysql-from-node"
 ---
 
-In a previous article, we tested an express api that created a user. We only tested the http interface though, we never actually got to testing the database because we didn’t know about dependency injection yet. Now that we know how to inject the database, we can learn about mocking.
+In a previous article, we tested an express api that created a user. We only tested the http interface though, we never actually got to testing the database because we didn't know about dependency injection yet. Now that we know how to inject the database, we can learn about mocking.
 
 In this article, we will learn how to use mocking to test how an express app interacts with a database.
 
+If you prefer a video, you can watch the video version of this article. 
+
+<PostCard slug="mocking-a-database-in-node-with-jest" />
+
 ## POST /users
 
-Let’s review the post request that creates a new user. The client will send a username and password in the request body, and that data should eventually get stored in the database to persist the new user.
+Let's review the post request that creates a new user. The client will send a username and password in the request body, and that data should eventually get stored in the database to persist the new user.
 
 How do we test this?
 
@@ -27,23 +33,23 @@ How do we test this?
 *   We could then query the database directly and that check that the data actually got saved into the database correctly.
 *   Or we could then make another request to the server to try and login the user and if that works we know that the user must have been saved correctly.
 
-These tests would be really good to have in our application and test the actual user flow of the app will all of the different pieces integrated together just like they would be in production. One issue with these tests is that we end up testing a lot of things at once. The server, some internal logic, the connection to the database, and in the second example, two separate http requests. If a test fails, it could be difficult to determine which part of the application isn’t working.
+These tests would be really good to have in our application and test the actual user flow of the app will all of the different pieces integrated together just like they would be in production. One issue with these tests is that we end up testing a lot of things at once. The server, some internal logic, the connection to the database, and in the second example, two separate http requests. If a test fails, it could be difficult to determine which part of the application isn't working.
 
-What if we just want to test each piece of the app individually? Test the HTTP server, internal logic, and database layer separately. If we are able to test everything in complete isolation, we’ll know exactly what is and isn’t working. If a test fails, it will be very obvious where the issue is and it will be easier to fix that issue.
+What if we just want to test each piece of the app individually? Test the HTTP server, internal logic, and database layer separately. If we are able to test everything in complete isolation, we'll know exactly what is and isn't working. If a test fails, it will be very obvious where the issue is and it will be easier to fix that issue.
 
-We should still test the system as a whole, that’s still important, but maybe we can do that after we’ve tested everything separately.
+We should still test the system as a whole, that's still important, but maybe we can do that after we've tested everything separately.
 
 Before we can do this, we need to take a look at the dependencies:
 
 *   The http server is dependent on the internal validation logic and database wrapper. It needs to be able to execute the code from these parts of the app in order to run, so it seems a little hard to test this in isolation.
-*   The internal logic is dependent on no other parts of the app, it’s code that can easily run and be tested in isolation
-*   The database wrapper dependent on no other parts of the app, it’s dependent on an actual database, maybe mysql or mongo or something, so this will need some special consideration, but it’s not dependent on any other parts of our app.
+*   The internal logic is dependent on no other parts of the app, it's code that can easily run and be tested in isolation
+*   The database wrapper dependent on no other parts of the app, it's dependent on an actual database, maybe mysql or mongo or something, so this will need some special consideration, but it's not dependent on any other parts of our app.
 
-Let’s assume for a moment that the internal logic and database wrapper have already been fully tested. We know that these two parts of the app work in isolation. So we can forget about those for now. But how are we going to test the http server part of the app in isolation when it’s dependent on these other pieces?
+Let's assume for a moment that the internal logic and database wrapper have already been fully tested. We know that these two parts of the app work in isolation. So we can forget about those for now. But how are we going to test the http server part of the app in isolation when it's dependent on these other pieces?
 
 ## Mocking
 
-When we use a mock in an automated test, we are using a fake version of a real thing. We can use the fake version to test the interactions. We can test that the `createUser` function was actually called, and the correct data was passed in, but we won’t test the real database. Take a look at the following code block:
+When we use a mock in an automated test, we are using a fake version of a real thing. We can use the fake version to test the interactions. We can test that the `createUser` function was actually called, and the correct data was passed in, but we won't test the real database. Take a look at the following code block:
 
 ```js
 app.post('/users', async (req, res) => {
@@ -57,7 +63,7 @@ In our production application, database will be an object that makes requests to
 
 ## Mocking with Jest
 
-Here’s our express app from the previous post on testing express apis:
+Here's our express app from the previous post on testing express apis:
 
 ```js
 import express from 'express'
@@ -101,9 +107,9 @@ export default function(database) {
 }
 ```
 
-In production we’ll pass in a real database, but in our tests we’ll pass in a mock database.
+In production we'll pass in a real database, but in our tests we'll pass in a mock database.
 
-Let’s modify the app.test.js file. We’re only going to look at the tests that involve the database right now:
+Let's modify the app.test.js file. We're only going to look at the tests that involve the database right now:
 
 ```js
 import request from "supertest"
@@ -129,13 +135,13 @@ describe("POST /users", () => {
 
 [`jest.fn()`](https://jestjs.io/docs/mock-functions) creates a new general purpose mock function that we can use to test the interaction between the server and the database. So we can pass that to the app inside of an object. Remember that app is expecting a database object that contains a `createUser` function, so this is just a mock version of a database.
 
-> Note: If we’re using es modules, we need to import jest from ‘@jest/globals’
+> Note: If we're using es modules, we need to import jest from ‘@jest/globals'
 
-Jest’s mock functions will keep track of how they are called. They will store the parameters that were passed in and how many times they’ve been called an other details. Because of this, we need to reset the function before each test so we don’t get any left over state from another test.
+Jest's mock functions will keep track of how they are called. They will store the parameters that were passed in and how many times they've been called an other details. Because of this, we need to reset the function before each test so we don't get any left over state from another test.
 
 ## Mock Function Parameters
 
-The app is all setup with a mock database, now it’s time to write a test:
+The app is all setup with a mock database, now it's time to write a test:
 
 ```js
 describe("when passed a username and password", () => {
@@ -151,9 +157,9 @@ describe("when passed a username and password", () => {
 })
 ```
 
-The `createUser` function will keep track of what’s passed into the function every time it’s called. So `createUser.mock.calls[0]` represents the data that gets passed in the first time it’s called. The server should call the function with the username and password like this `createUser(username, password)`, so `createUser.mock.calls[0][0]` should be the username and `createUser.mock.calls[0][0]` should be the password.
+The `createUser` function will keep track of what's passed into the function every time it's called. So `createUser.mock.calls[0]` represents the data that gets passed in the first time it's called. The server should call the function with the username and password like this `createUser(username, password)`, so `createUser.mock.calls[0][0]` should be the username and `createUser.mock.calls[0][0]` should be the password.
 
-If we run the test it should fail because the server isn’t calling the createUser function. Let’s change that in app.js:
+If we run the test it should fail because the server isn't calling the createUser function. Let's change that in app.js:
 
 ```js
 app.post('/users', async (req, res) => {
@@ -171,9 +177,9 @@ app.post('/users', async (req, res) => {
 
 Now the test should pass because the `createUser` function is being called correctly.
 
-Remember, this isn’t testing the actual database, that’s not the point right now. We use mocks to test that the **interactions** between different parts of the app are working correctly. So as long as `createUser` on the “real” database works correctly, and the server is calling the function correctly, then everything in the finished app should work correctly.
+Remember, this isn't testing the actual database, that's not the point right now. We use mocks to test that the **interactions** between different parts of the app are working correctly. So as long as `createUser` on the “real” database works correctly, and the server is calling the function correctly, then everything in the finished app should work correctly.
 
-The test for this is not enough to make me comfortable though. It only tests a single username and password combination, I feel like there should be at least two to give me confidence that this function is being called correctly, so let’s adjust the test:
+The test for this is not enough to make me comfortable though. It only tests a single username and password combination, I feel like there should be at least two to give me confidence that this function is being called correctly, so let's adjust the test:
 
 ```js
 test("should save the username and password in the database", () => {
@@ -196,11 +202,11 @@ test("should save the username and password in the database", () => {
 })
 ```
 
-Now we’re testing two username and password combinations, but we could add more if we wanted.
+Now we're testing two username and password combinations, but we could add more if we wanted.
 
 ## Mock Function Return Value
 
-We’ve tested that app passes `createUser` the correct data, but we also need to test that it uses the return value of the function correctly. `createUser` should return the id of the user that was just created. The server needs to take that value and send it in the response back to the client.
+We've tested that app passes `createUser` the correct data, but we also need to test that it uses the return value of the function correctly. `createUser` should return the id of the user that was just created. The server needs to take that value and send it in the response back to the client.
 
 ```js
 test("should contain the userId from the database in the json body", () => {
@@ -217,7 +223,7 @@ test("should contain the userId from the database in the json body", () => {
 
 `createUser.mockResolvedValue(1)` will make `createUser` return a promise that resolves to 1. Since the real database will do things asynchronously, our mock function will need to do the same. So this will return 1 as a fake userId and the http api will need to respond with that value.
 
-This test will fail right now, so let’s implement this in app.js:
+This test will fail right now, so let's implement this in app.js:
 
 ```js
 app.post('/users', async (req, res) => {
@@ -233,7 +239,7 @@ app.post('/users', async (req, res) => {
 })
 ```
 
-That should be enough to make the test pass. This is exactly how the app.js file should be interacting with the database. But again, the test isn’t really testing enough to give me confidence, so let’s refactor the test a bit:
+That should be enough to make the test pass. This is exactly how the app.js file should be interacting with the database. But again, the test isn't really testing enough to give me confidence, so let's refactor the test a bit:
 
 ```js
 test("should contain the userId from the database in the json body", () => {
@@ -248,6 +254,6 @@ test("should contain the userId from the database in the json body", () => {
 })
 ```
 
-Now it’s testing 5 different id values. That’s just a random number I chose, but it seemed simple to just do this in a for loop. Anyway, this is enough right now to make sure that the app is communicating with the database correctly.
+Now it's testing 5 different id values. That's just a random number I chose, but it seemed simple to just do this in a for loop. Anyway, this is enough right now to make sure that the app is communicating with the database correctly.
 
 Next, we should probably actually test that database.
