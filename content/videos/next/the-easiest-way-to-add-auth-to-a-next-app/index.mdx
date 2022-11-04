@@ -1,0 +1,206 @@
+---
+type: video
+yt_id: VVU2YVRMdUlfajQtMHdpRFN6bWFQY3RRLjA3UGhJbXB4OHFV
+videoId: 07PhImpx8qU
+title: "The Easiest Way to add Auth to a Next App"
+date: "2022-11-04T13:00:01Z"
+slug: "the-easiest-way-to-add-auth-to-a-next-app"
+image:
+  name: "the-easiest-way-to-add-auth-to-a-next-app.jpg"
+  alt: "The Easiest Way to add Auth to a Next App"
+  width: 1280
+  height: 720
+status: "published"
+description: "Learn how to add auth to your next application using next auth and github login."
+tags: []
+previousPostSlug: "prisma-and-nextjs-video"
+nextPostSlug: "next-auth-and-prisma"
+---
+
+Learn how to add auth to your next application using next auth and github login. All of the code examples are using next 13, but use the pages directory, not the **app** directory.
+
+<PostCard slug="prisma-and-nextjs-video" />
+<PostCard slug="next-auth-and-prisma" />
+
+## Chapters:
+
+- 0:00​ Intro
+- 1:31 Setup Next Auth
+- 3:58 Setup Github Login
+- 6:05 Session Provider
+- 7:29 useSession
+- 11:00 unstable_getServerSession
+- 14:08 Restrict Pages
+- 15:50 Nav Bar
+- 17:17 Next Image
+- 19:12 Restrict API
+- 21:03 Summary
+
+## Code Examples
+
+https://github.com/Sam-Meech-Ward/code_snippets_prisma_next_demo/tree/auth
+
+<Tabs>
+  <Tab name="[...nextauth].js">
+    ```jsx
+    // /pages/api/auth/[...nextauth].js
+    import NextAuth from "next-auth"
+    import GithubProvider from "next-auth/providers/github"
+    import { PrismaAdapter } from "@next-auth/prisma-adapter"
+    import { prisma } from "../../../server/db/client"
+
+    export const authOptions = {
+      providers: [
+        GithubProvider({
+          clientId: process.env.GITHUB_ID,
+          clientSecret: process.env.GITHUB_SECRET,
+        }),
+        // ...add more providers here
+      ],
+    }
+
+    export default NextAuth(authOptions)
+    ```
+
+</Tab>
+  <Tab name="SiteNavigation.jsx">
+    ```jsx
+    import NavBar from "../NavBar"
+    import { useRouter } from 'next/router'
+    import { PlusCircleIcon } from '@heroicons/react/24/outline'
+
+    import { useSession, signIn, signOut } from "next-auth/react"
+
+    export default function SiteNavigation() {
+
+      const router = useRouter()
+
+      const { data: session } = useSession()
+
+      const navigation = [
+        { name: 'New', Icon: PlusCircleIcon, href: '/addPost', current: router.pathname === '/addPost' },
+      ]
+
+
+      return (
+        <NavBar
+        navigation={navigation}
+        user={session?.user}
+        onSignIn={signIn}
+        onSignOut={signOut}
+        />
+      )
+    }
+    ```
+</Tab>
+  <Tab name="_app.jsx">
+    ```jsx
+    import '../styles/globals.css'
+    import 'highlight.js/styles/stackoverflow-dark.css'
+
+    import SiteNavigation from "../components/SiteNavigation"
+
+    import { SessionProvider } from "next-auth/react"
+
+    import TimeAgo from 'javascript-time-ago'
+    import en from 'javascript-time-ago/locale/en'
+    TimeAgo.setDefaultLocale(en.locale)
+    TimeAgo.addLocale(en)
+
+    function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
+      return (
+        <>
+          <SessionProvider session={session}>
+            <SiteNavigation></SiteNavigation>
+            <Component {...pageProps} />
+          </SessionProvider>
+        </>
+      )
+    }
+
+    export default MyApp
+    ```
+
+</Tab>
+  <Tab name="SiteNavigation.jsx">
+    ```jsx
+    import NavBar from "../NavBar"
+    import { useRouter } from 'next/router'
+    import { PlusCircleIcon } from '@heroicons/react/24/outline'
+
+    import { useSession, signIn, signOut } from "next-auth/react"
+
+    export default function SiteNavigation() {
+
+      const router = useRouter()
+
+      const { data: session } = useSession()
+
+      const navigation = [
+        { name: 'New', Icon: PlusCircleIcon, href: '/addPost', current: router.pathname === '/addPost' },
+      ]
+
+
+      return (
+        <NavBar
+        navigation={navigation}
+        user={session?.user}
+        onSignIn={signIn}
+        onSignOut={signOut}
+        />
+      )
+    }
+    ```
+</Tab>
+  <Tab name="Profile.jsx">
+    ```jsx
+    // /pages/profile.jsx
+    import { useSession, signIn, signOut } from "next-auth/react"
+    import { unstable_getServerSession } from "next-auth/next"
+    import { authOptions } from "./api/auth/[...nextauth]"
+
+    export default function Component() {
+      const { data: session } = useSession()
+
+      if (session) {
+        return (
+          <>
+            Signed in as {session.user.email} <br />
+            <img src={session.user.image} /> <br />
+            {session.user.name} <br />
+            <button onClick={() => signOut()}>Sign out</button>
+          </>
+        )
+      }
+      return (
+        <>
+          Not signed in <br />
+          <button onClick={() => signIn()}>Sign in</button>
+        </>
+      )
+    }
+
+    export async function getServerSideProps(context) {
+      const session = await unstable_getServerSession(context.req, context.res, authOptions)
+
+      if (!session) {
+        //redirect to login page
+        return {
+          redirect: {
+            destination: "/api/auth/signin",
+            permanent: false,
+          },
+        }
+      }
+
+      return {
+        props: {
+          session,
+        },
+      }
+    }
+    ```
+
+  </Tab>
+</Tabs>
+
