@@ -13,11 +13,15 @@ image:
 status: 'published'
 description: "There is an updated version to this tutorial. Use the new one instead: https://youtu.be/eQAIojcArRY"
 tags: []
+previousPostSlug: 'upload-images-directly-to-s3-from-front-end'
+nextPostSlug: 'storing-images-in-s3-from-node-server'
 ---
 
-There is an updated version to this tutorial. Use the new one instead: [https://youtu.be/eQAIojcArRY](https://youtu.be/eQAIojcArRY)
-
 Learn how to store your express server's image files in an s3 bucket.
+
+There is an updated version to this tutorial. Use the new one instead: 
+
+<PostCard slug="storing-images-in-s3-from-node-server" />
 
 ## Chapters:
 
@@ -32,12 +36,149 @@ Learn how to store your express server's image files in an s3 bucket.
 * 22:28 Removing images from the server
 * 25:37 Conclusion
 
-🔗Code:
+## Code:
+
 [https://github.com/Sam-Meech-Ward/image-upload-s3](https://github.com/Sam-Meech-Ward/image-upload-s3)
 
-🔗Other tutorials:
-Upload Images Directly to S3 from Front End: [https://youtu.be/yGYeYJpRWPM](https://youtu.be/yGYeYJpRWPM)
-S3 bucket for static website: [https://youtu.be/RoY3ekCCxKc](https://youtu.be/RoY3ekCCxKc)
-Image upload without s3: [https://sammeechward.com/uploading-images-express-and-react/](https://sammeechward.com/uploading-images-express-and-react/)
+
+<Tabs>
+  <Tab name="App.js">
+    ```jsx
+    import { useState } from 'react'
+    import axios from 'axios'
+
+    import './App.css'
+
+    async function postImage({image, description}) {
+      const formData = new FormData();
+      formData.append("image", image)
+      formData.append("description", description)
+
+      const result = await axios.post('/images', formData, { headers: {'Content-Type': 'multipart/form-data'}})
+      return result.data
+    }
 
 
+    function App() {
+
+      const [file, setFile] = useState()
+      const [description, setDescription] = useState("")
+      const [images, setImages] = useState([])
+
+      const submit = async event => {
+        event.preventDefault()
+        const result = await postImage({image: file, description})
+        setImages([result.image, ...images])
+      }
+
+      const fileSelected = event => {
+        const file = event.target.files[0]
+        setFile(file)
+      }
+
+      return (
+        <div className="App">
+          <form onSubmit={submit}>
+            <input onChange={fileSelected} type="file" accept="image/*"></input>
+            <input value={description} onChange={e => setDescription(e.target.value)} type="text"></input>
+            <button type="submit">Submit</button>
+          </form>
+
+          { images.map( image => (
+            <div key={image}>
+              <img src={image}></img>
+            </div>
+          ))}
+
+        </div>
+      );
+    }
+
+    export default App;
+    ```
+</Tab>
+<Tab name="server.js">
+    ```js
+    const express = require('express')
+
+    const fs = require('fs')
+    const util = require('util')
+    const unlinkFile = util.promisify(fs.unlink)
+
+    const multer = require('multer')
+    const upload = multer({ dest: 'uploads/' })
+
+    const { uploadFile, getFileStream } = require('./s3')
+
+    const app = express()
+
+    app.get('/images/:key', (req, res) => {
+      console.log(req.params)
+      const key = req.params.key
+      const readStream = getFileStream(key)
+
+      readStream.pipe(res)
+    })
+
+    app.post('/images', upload.single('image'), async (req, res) => {
+      const file = req.file
+      console.log(file)
+
+      // apply filter
+      // resize 
+
+      const result = await uploadFile(file)
+      await unlinkFile(file.path)
+      console.log(result)
+      const description = req.body.description
+      res.send({imagePath: `/images/${result.Key}`})
+    })
+
+    app.listen(8080, () => console.log("listening on port 8080"))
+    ```
+  </Tab>
+  <Tab name="s3.js">
+    ```js
+    require('dotenv').config()
+    const fs = require('fs')
+    const S3 = require('aws-sdk/clients/s3')
+
+    const bucketName = process.env.AWS_BUCKET_NAME
+    const region = process.env.AWS_BUCKET_REGION
+    const accessKeyId = process.env.AWS_ACCESS_KEY
+    const secretAccessKey = process.env.AWS_SECRET_KEY
+
+    const s3 = new S3({
+      region,
+      accessKeyId,
+      secretAccessKey
+    })
+
+    // uploads a file to s3
+    function uploadFile(file) {
+      const fileStream = fs.createReadStream(file.path)
+
+      const uploadParams = {
+        Bucket: bucketName,
+        Body: fileStream,
+        Key: file.filename
+      }
+
+      return s3.upload(uploadParams).promise()
+    }
+    exports.uploadFile = uploadFile
+
+
+    // downloads a file from s3
+    function getFileStream(fileKey) {
+      const downloadParams = {
+        Key: fileKey,
+        Bucket: bucketName
+      }
+
+      return s3.getObject(downloadParams).createReadStream()
+    }
+    exports.getFileStream = getFileStream
+    ```
+  </Tab>
+</Tabs>
