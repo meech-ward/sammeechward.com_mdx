@@ -13,18 +13,110 @@ image:
 status: 'published'
 description: "Learn how to store your web app's image files in an s3 bucket by uploading them directly to the bucket."
 tags: []
+previousPostSlug: 's3-bucket-hosting-a-static-website'
+nextPostSlug: 'uploading-images-express-and-react'
 ---
 
-Learn how to store your web app's image files in an s3 bucket by uploading them directly to the bucket.
+Learn how to store your web app's image files in an s3 bucket by uploading them directly to the bucket. This technique is especially useful in serverless environemnts like when you're using lambda functions or a Next.js application.
 
-There is a different version of this tutorial that I suggest you check out too: [https://youtu.be/eQAIojcArRY](https://youtu.be/eQAIojcArRY)
+There is a different version of this tutorial that I suggest you check out too: 
 
-🔗Code:
+<PostCard slug="storing-images-in-s3-from-node-server" />
+
+## Code: 
+
+
 [https://github.com/Sam-Meech-Ward/s3-direct-upload](https://github.com/Sam-Meech-Ward/s3-direct-upload)
 
-🔗Other tutorials:
-Upload Images to S3 from Node Back End: [https://youtu.be/eQAIojcArRY](https://youtu.be/eQAIojcArRY)
-S3 bucket for a static website: [https://youtu.be/RoY3ekCCxKc](https://youtu.be/RoY3ekCCxKc)
-Image upload without s3: [https://sammeechward.com/uploading-images-express-and-react/](https://sammeechward.com/uploading-images-express-and-react/)
 
+<Tabs>
+  <Tab name="server.js">
+    ```js 
+    import express from 'express'
+    import { generateUploadURL } from './s3.js'
+
+    const app = express()
+
+    app.use(express.static('front'))
+
+    app.get('/s3Url', async (req, res) => {
+      const url = await generateUploadURL()
+      res.send({url})
+    })
+
+    app.listen(8080, () => console.log("listening on port 8080"))
+    ```
+</Tab>
+  <Tab name="s3.js">
+    ```js
+    import dotenv from 'dotenv'
+    import aws from 'aws-sdk'
+    import crypto from 'crypto'
+    import { promisify } from "util"
+    const randomBytes = promisify(crypto.randomBytes)
+
+    dotenv.config()
+
+    const region = "us-west-2"
+    const bucketName = "direct-upload-s3-bucket-thing"
+    const accessKeyId = process.env.AWS_ACCESS_KEY_ID
+    const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
+
+    const s3 = new aws.S3({
+      region,
+      accessKeyId,
+      secretAccessKey,
+      signatureVersion: 'v4'
+    })
+
+    export async function generateUploadURL() {
+      const rawBytes = await randomBytes(16)
+      const imageName = rawBytes.toString('hex')
+
+      const params = ({
+        Bucket: bucketName,
+        Key: imageName,
+        Expires: 60
+      })
+      
+      const uploadURL = await s3.getSignedUrlPromise('putObject', params)
+      return uploadURL
+    }
+    ```
+  </Tab>
+  <Tab name="index.js">
+    ```js
+    const imageForm = document.querySelector("#imageForm")
+    const imageInput = document.querySelector("#imageInput")
+
+    imageForm.addEventListener("submit", async event => {
+      event.preventDefault()
+      const file = imageInput.files[0]
+
+      // get secure url from our server
+      const { url } = await fetch("/s3Url").then(res => res.json())
+      console.log(url)
+
+      // post the image direclty to the s3 bucket
+      await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        body: file
+      })
+
+      const imageUrl = url.split('?')[0]
+      console.log(imageUrl)
+
+      // post requst to my server to store any extra data
+      
+      
+      const img = document.createElement("img")
+      img.src = imageUrl
+      document.body.appendChild(img)
+    })
+    ```
+  </Tab>
+</Tabs>
 
