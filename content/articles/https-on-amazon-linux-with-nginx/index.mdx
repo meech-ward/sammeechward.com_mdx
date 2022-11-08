@@ -11,6 +11,8 @@ image:
 status: 'published'
 description: 'Learn how to setup an Amazon Linux 2 EC2 instance with nginx to accept HTTPS requests. https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-amazon-linux-2.html#letsencrypt Setup First you need to create a new amazon linux 2 ec2 instance with Nginx installed. You can follow one of these videos to get started: Nginx Reverse Proxy on AWS EC2 Amazon Linux 2: https://youtu.be/\_EBARqreeao Setting Up \[…\]'
 tags: []
+previousPostSlug: 'aws-route-53-domain-name'
+nextPostSlug: 'aws-cli'
 ---
 
 Learn how to setup an Amazon Linux 2 EC2 instance with nginx to accept HTTPS requests.
@@ -19,10 +21,9 @@ Learn how to setup an Amazon Linux 2 EC2 instance with nginx to accept HTTPS req
 
 ## Setup
 
-First you need to create a new amazon linux 2 ec2 instance with Nginx installed. You can follow one of these videos to get started:
+First you need to create a new amazon linux 2 ec2 instance with Nginx installed. You can follow this vide to get started:
 
-*   [Nginx Reverse Proxy on AWS EC2 Amazon Linux 2: https://youtu.be/\_EBARqreeao](https://youtu.be/_EBARqreeao)
-*   [Setting Up And Deploying AWS EC2 Instances: https://youtu.be/GEVbYQWWJkQ](https://youtu.be/GEVbYQWWJkQ)
+<PostCard slug='nginx-reverse-proxy-on-aws-ec2-amazon-linux-2'>
 
 ```shell
 sudo amazon-linux-extras install nginx1 -y
@@ -32,7 +33,9 @@ sudo systemctl start nginx
 
 ## DNS
 
-Make sure you have a domain name pointed at the EC2’s ip address. You can follow along with this guide if you’re going to use route53: [https://faun.pub/how-to-migrate-your-domain-to-route53-and-connect-it-to-an-ec2-instance-93698085f0b3](https://faun.pub/how-to-migrate-your-domain-to-route53-and-connect-it-to-an-ec2-instance-93698085f0b3)
+Make sure you have a domain name pointed at the EC2's ip address. 
+
+<PostCard slug='aws-route-53-domain-name'>
 
 Just make sure you can access the ec2 instance on port 80 using a domain name.
 
@@ -68,7 +71,7 @@ sudo certbot certonly --standalone --debug -d your.domain.here
 
 Replace `your.domain.here` with your actual domain or sub domain.
 
-Once you’ve gone through all of the steps, you should end up with two files in the `/etc/letsencrypt/live/your.domain` directory. Of course, always replacing `your.domain` with the actual domain name you used.
+Once you've gone through all of the steps, you should end up with two files in the `/etc/letsencrypt/live/your.domain` directory. Of course, always replacing `your.domain` with the actual domain name you used.
 
 *   `/etc/letsencrypt/live/your.domain/privkey.pem`
 *   `/etc/letsencrypt/live/your.domain/fullchain.pem`
