@@ -1,0 +1,269 @@
+---
+type: article
+wp_id: 451
+title: 'Next, Storybook, and Tailwind'
+date: '2022-11-20'
+slug: 'next-storybook-tailwind'
+image: 
+  name: 'next-storybook-tailwind.png'
+  width: 3176
+  height: 2088
+status: 'published'
+description: 'Let's take a look at how to setup a next.js application using tailwindcss for css and storybook for testing the UI.'
+tags: ['mysql']
+---
+
+Let's take a look at how to setup a next.js application using [tailwindcss](https://tailwindcss.com/) for css and [storybook](https://storybook.js.org/) for testing the UI.
+
+I'll walk you through setting up your application and building out a single login form component. 
+
+## Create a next app
+
+```
+npx create-next-app <app-name>
+```
+
+Replace `<app-name>` with whatever you want to name your app.
+
+`cd` into the app directory and run `npm run dev`  or `yarn dev` to start the development server.
+
+---
+
+## Storybook
+
+### Install storybook
+
+Use the following command to install storybook
+
+```
+npx sb init --builder webpack5
+```
+
+Update the storybook scripts in package.json to serve the public directory:
+
+```
+"scripts": {
++    "storybook": "start-storybook -p 6006 -s ./public",
++    "build-storybook": "build-storybook -s public"
+}
+```
+
+### Next Images for Storybook
+
+Next and storybook sometimes conflict with eachother. For example, storybook doesn't know how to handle next `Image`s. However, we just need to install a library that fixes these types of conflicts.
+
+Install the [`storybook-addon-next`](https://storybook.js.org/addons/storybook-addon-next) addon
+
+
+```
+npm install storybook-addon-next
+```
+
+
+Then register the Addon in `.storybook/main.js`
+
+
+```js
+module.exports = {
+  // ...
+  addons: [
+    // ...
+    'storybook-addon-next'
+    // ...
+  ]
+}
+```
+
+### Global Styles
+
+Storybook also doesn't know about the global styles we're using in our app.
+
+Add the following to the top of `./storybook/preview.js` so that storybook knows about our global styles
+
+
+```js
+import "../styles/globals.css"
+```
+
+### Delete Default Stories
+
+Storybook has a stories directory that comes with the default installation, but we don't need them.
+
+Delete the `stories` directory then adjust the `stories` paths in `.storybook/main.js`:
+
+
+```js
+module.exports = {
+     stories: [
+          "../components/**/*.stories.mdx",
+          "../components/**/*.stories.@(js|jsx|ts|tsx)",
+     ],
+```
+
+We're going to keep the stories with the components, so you just need to tell storybook about where your components are going to be. 
+
+## Components
+
+Create a `components` directory in the root of your project. This is where you can store all components that aren't pages. These are the components that we will test with storybook. 
+
+## Login Form
+
+Let's make a quick login form to see how storybook works.
+
+
+Create a `LoginForm` directory in the `components` directory that contains the following two files:
+
+
+* `index.jsx` - the component
+* `LoginForm.stories.js` - the story
+
+
+Add the following code to `index.js`
+
+
+```jsx
+import { useState } from "react"
+
+export default function LoginForm({ onLogin }) {
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    onLogin({ username, password })
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="email-address">
+        Username:
+      </label>
+      <input
+        id="email-address"
+        type="text"
+        value={username}
+        onChange={(event) => setUsername(event.target.value)}
+      />
+      <label htmlFor="password">
+        Password:
+      </label>
+      <input
+        id="password"
+        type="password"
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+      />
+      <button type="submit">Login</button>
+    </form>
+  )
+}
+```
+
+This is just a super basic login form component that takes an `onLogin` prop that is called when the form is submitted. Now let's test this component. We have two options:
+
+1. Add the component to a page and test it there
+2. Create a story for the component and test it in storybook
+
+Try both ways and see what you prefer, here's how to do it in storybook:
+
+Add the following code to `LoginForm.stories.js`
+
+
+```jsx
+import LoginForm from "./index"
+
+// The default export metadata controls how Storybook lists your stories and provides information used by addons. 
+// https://storybook.js.org/docs/react/writing-stories/introduction#default-export
+export default {
+  title: "LoginForm",
+  component: LoginForm,
+}
+
+// Any other named exports will be treated as stories, which should be functions that return your component
+export const Default = () => <LoginForm />
+```
+
+At a bare minimum, that's all we need. 
+
+Each named export is a story, so `Default` is the only story in this stories file. We can add more later if we want for different variations of the component. For example, we could add a story for a loading state.
+
+
+Run `npm run storybook` or `yarn storybook` to start storybook
+
+
+The styling is awful, we'll get to that in a minute, but there's our login form.
+
+### Actions
+
+Update the Login form story to use the `actions` addon:
+
+```js
+export default {
+  title: "LoginForm",
+  component: LoginForm,
+  argTypes: {
+    onLogin: { action: 'search' },
+  }
+}
+
+export const Default = (args) => <LoginForm {...args} />
+```
+
+Now when you click the login button, you'll see the action logged in the actions panel.
+
+Now that storybook is setup, you can brows the [storybook docs](https://storybook.js.org/docs/react/writing-stories/introduction) to learn more about all the different things you can do with stories.
+
+---
+
+## Tailwind
+
+Install tailwind using these instructions:
+
+
+[https://tailwindcss.com/docs/guides/nextjs](https://tailwindcss.com/docs/guides/nextjs)
+
+Sorry for sending you to another website, but the tailwind site has great docs and I don't want to copy them here.
+
+
+Update the login form to use tailwind classes:
+
+
+```jsx
+  return (
+    <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+      <div className="-space-y-px rounded-md shadow-sm">
+        <div>
+          <label htmlFor="email-address" className="sr-only">
+            Username:
+          </label>
+          <input
+            id="email-address"
+            placeholder="Email address"
+            className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+            type="text"
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
+          />
+          <label htmlFor="password" className="sr-only">
+            Password
+          </label>
+          <input
+            id="password"
+            placeholder="Password"
+            className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+        </div>
+        <button
+          className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+
+          type="submit">Login</button>
+      </div>
+    </form>
+  )
+```
+
+Now view your login form in storybook and you'll see it looks a lot better. And now that you have storybook setup, you can easily test out different tailwind classes to see how they look. And here's a [cheat sheet](https://nerdcave.com/tailwind-cheat-sheet) to help you out. 
