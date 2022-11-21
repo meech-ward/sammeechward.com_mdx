@@ -19,7 +19,7 @@ I'll walk you through setting up your application and building out a single logi
 
 ## Create a next app
 
-```
+```sh
 npx create-next-app <app-name>
 ```
 
@@ -35,16 +35,16 @@ Replace `<app-name>` with whatever you want to name your app.
 
 Use the following command to install storybook
 
-```
+```sh
 npx sb init --builder webpack5
 ```
 
 Update the storybook scripts in package.json to serve the public directory:
 
-```
+```json
 "scripts": {
-+    "storybook": "start-storybook -p 6006 -s ./public",
-+    "build-storybook": "build-storybook -s public"
+    "storybook": "start-storybook -p 6006 -s ./public",
+    "build-storybook": "build-storybook -s public"
 }
 ```
 
@@ -55,7 +55,7 @@ Next and storybook sometimes conflict with eachother. For example, storybook doe
 Install the [`storybook-addon-next`](https://storybook.js.org/addons/storybook-addon-next) addon
 
 
-```
+```sh
 npm install storybook-addon-next
 ```
 
