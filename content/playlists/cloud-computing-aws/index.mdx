@@ -1,13 +1,52 @@
 ---
 type: playlist
-title: "Cloud Computing"
+title: "Cloud Computing with AWS"
 date: "2022"
 slug: "cloud-computing"
 image:
-  name: ""
-status: "draft"
+  name: "aws.png"
+status: "published"
 description: ""
 tags: []
 children:
-  - ""
+  - section: "The Basics"
+    children: 
+      - "s3-bucket-hosting-a-static-website"
+      - "setting-up-and-deploying-aws-ec2-instances"
+      - "deploy-node-app-on-aws-ec2-amazon-linux-2"
+      - "mysql-on-aws-ec2-amazon-linux-2"
+      - "nginx-reverse-proxy-on-aws-ec2-amazon-linux-2"
+      - "https-on-amazon-linux-with-nginx"
+      - "intro-to-iam-roles-and-policies-on-aws"
+      - "sending-logs-to-cloudwatch-from-amazon-linux-2"
+      - "horizontal-scaling-load-balancing-immutable-infrastructure-with-aws"
+      - "intro-to-rds-in-aws-for-mysql"
+      - "aws-auto-scaling-groups-and-load-balancers"
+      - "aws-route-53-domain-name"
+
+  - section: "VPC and Subnets"
+    children: 
+      - "aws-vpc-and-subnets-for-beginners"
+      - "setup-a-nat-gateway-on-aws"
+      - "vpc-gateway-endpoints-for-private-s3-bucket-connections"
+
+  - section: "Infrastructure as Code with Terraform and Packer"
+    children:
+      - "aws-cli"
+      - "aws-cli-s3-static-website"
+      - "aws-cli-vpc-subnets-ec2-and-more"
+      - "intro-to-packer-with-aws"
+      - "intro-to-terraform-with-aws"
+      - "variables-and-outputs-in-terraform"
+      - "s3-and-iam-with-terraform"
+      - "cloud-init-and-terraform-with-aws"
+      - "terraform-vpc-subnets-ec2-and-more"
+      - "terraform-modules"
+
+  - section: "S3 and CloudFront"
+    children: 
+      - "storing-images-in-s3-from-node-server"
+      - "cloudfront-signed-urls-with-nodejs"
+      - "set-up-a-cloudfront-cdn-for-an-s3-bucket"
+      - "deleting-files-from-s3-and-cloudfront-invalidate-cloudfront-cache"
 ---

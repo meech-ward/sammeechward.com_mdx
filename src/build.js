@@ -225,7 +225,16 @@ if (revalidateSlugs.length > 0) {
 // Playlist 
 const playlists = sections.filter(e => e.type === 'playlist')
 for (let playlist of playlists) {
-  const children = playlist.children.map(slug => sections.find(e => e.slug === slug))
+  let children = playlist.children
+  if (children.length === 0) {
+    continue
+  }
+  // If there are sections, then flatmap it for now
+  if (typeof children[0] !== 'string') {
+    children = children.flatMap(e => e.children)
+  }
+
+  children = children.map(slug => sections.find(e => e.slug === slug))
   let childrenToChange = []
   let childrenToDelete = []
 
@@ -247,7 +256,6 @@ for (let playlist of playlists) {
   }
   // console.log({childrenToChange, childrenToDelete})
 }
-
 
 
 
