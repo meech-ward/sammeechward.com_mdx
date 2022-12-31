@@ -298,6 +298,7 @@ try {
     secret: process.env.REVALIDATION_TOKEN,
     slugs: revalidateSlugs
   })
+  console.log("revalidated", revalidateSlugs)
 } catch (error) {
   console.log("error revalidating")
   console.log(error.response)
