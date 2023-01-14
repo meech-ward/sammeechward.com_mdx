@@ -203,7 +203,7 @@ app.get("/", async (req, res) => {
   for (let post of posts) { // For each post, generate a signed URL and save it to the post object
     post.imageUrl = await getSignedUrl(
       s3Client,
-      GetObjectCommand({
+      new GetObjectCommand({
         Bucket: bucketName,
         Key: imageName
       }),
