@@ -6,6 +6,7 @@ import dotenv from "dotenv"
 dotenv.config()
 
 const tableName = process.env.AWS_DYNAMO_POSTS_TABLE_NAME
+const secondTableName = process.env.AWS_DYNAMO_OTHER_TABLE_NAME
 const region = process.env.AWS_DYNAMO_REGION
 const accessKeyId = process.env.AWS_ACCESS_KEY
 const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
@@ -34,9 +35,9 @@ const translateConfig = { marshallOptions, unmarshallOptions }
 const dynamodbClient = DynamoDBDocumentClient.from(ddbClient, translateConfig)
 
 
-export async function putItem(Item) {
+export async function putItem(Item, TableName = tableName) {
   const params = {
-    TableName: tableName,
+    TableName,
     Item
   }
   const data = await dynamodbClient.send(new PutCommand(params));
@@ -117,6 +118,18 @@ export async function getAllPosts() {
 
   const data = await dynamodbClient.send(new ScanCommand(params));
   return data.Items.filter(i => i.pk.startsWith("ENTITY#"))
+}
+
+
+export async function getAllComments() {
+  const params = {
+    TableName: secondTableName,
+    ProjectionExpression: "pk,sk, GSI1PK,GSI1SK,GSI2PK,GSI2SK,#name,email,image,#text,created",
+    ExpressionAttributeNames: { "#name": "name", "#text": "text" },
+  }
+
+  const data = await dynamodbClient.send(new ScanCommand(params));
+  return data.Items.filter(i => i.sk.startsWith("COMMENT#"))
 }
 
 export function queryPost(post) {

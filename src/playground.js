@@ -1,12 +1,24 @@
-import { queryPost, putPost } from './dynamo.js'
+import { queryPost, putPost, getAllComments, putItem } from './dynamo.js'
 
-const posts = await queryPost({ slug: 'sql-injection-sql-is-demon-spawn' })
-const post = posts.Items[0]
+const secondTableName = process.env.AWS_DYNAMO_OTHER_TABLE_NAME
+const comments = await getAllComments()
+// console.log(comments)
+const results = await Promise.all(comments.map(comment => {
+  comment.GSI2PK = "COMMENT"
+  comment.GSI2SK = comment.sk
+  return putItem(comment, secondTableName)
+}))
+
+console.log(results)
+
+// const posts = await queryPost({ slug: 'sql-injection-sql-is-demon-spawn' })
+// const post = posts.Items[0]
+
 // post.likeCount = post.likeCount + 1
 // post.commentCount = post.commentCount + 1
 // await putPost(post)
 
-console.log(post)
+// console.log(post)
 
 
 // console.log({ deleted })
