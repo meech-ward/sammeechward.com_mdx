@@ -1,7 +1,7 @@
 ---
 type: article
 wp_id: 657
-title: 'Uploading Images – Express and React'
+title: 'Uploading Images - React, Multer, and Express'
 date: '2021-03-01T04:05:42'
 slug: 'uploading-images-express-and-react'
 image: 
@@ -9,15 +9,15 @@ image:
   width: 2560
   height: 1280
 status: 'published'
-description: 'In this article I’m going to show you how to upload an image from a react app to an express server using a library called multer. This will allow us to store the image in the server’s file system so they can be uploaded and downloaded by any client. React Let’s start with a basic \[…\]'
-tags: ['javascript', 'node']
+description: 'In this article I'm going to show you how to upload an image from a react app to an express server using a library called multer. This will allow us to store the image in the server's file system so they can be uploaded and downloaded by any client. React Let's start with a basic \[…\]'
+tags: ['javascript', 'node', 'react', 'multer', 'express']
 ---
 
-In this article I’m going to show you how to upload an image from a react app to an express server using a library called multer. This will allow us to store the image in the server’s file system so they can be uploaded and downloaded by any client.
+In this article I'm going to show you how to upload an image from a react app to an express server using a library called multer. This will allow us to store the image in the server's file system so they can be uploaded and downloaded by any client.
 
 ## React
 
-Let’s start with a basic react app. This app just contains a single form that allows the user to select an image (file), provide a description (string), and submit them.
+Let's start with a basic react app. This app just contains a single form that allows the user to select an image (file), provide a description (string), and submit them.
 
 ```js
 import { useState } from 'react'
@@ -54,9 +54,9 @@ export default function App() {
 
 So far this looks like a basic form, the only weird thing is that the file input has a type `file` and when the value changes, we selecting the `event.target.files[0]` and storing that with `useState`.
 
-Every time the user selects a file, we’re storing the [File](https://developer.mozilla.org/en-US/docs/Web/API/File) object. This object contains all of the information about the selected file and we just need to send this data to the server when the form is submitted.
+Every time the user selects a file, we're storing the [File](https://developer.mozilla.org/en-US/docs/Web/API/File) object. This object contains all of the information about the selected file and we just need to send this data to the server when the form is submitted.
 
-If we’re using `axios`, the submit file function will look like this:
+If we're using `axios`, the submit file function will look like this:
 
 ```js
 const submit = async event => {
@@ -71,17 +71,17 @@ const submit = async event => {
 }
 ```
 
-If you’re used to just posting JSON data to a server, this can look a little bit weird. An image is not a valid JSON data type which means we would either have to try and convert it to a string, send it as a json object, then convert it back to image data on the server. Or we can send it to the server using this `FormData` object, which is a much better option.
+If you're used to just posting JSON data to a server, this can look a little bit weird. An image is not a valid JSON data type which means we would either have to try and convert it to a string, send it as a json object, then convert it back to image data on the server. Or we can send it to the server using this `FormData` object, which is a much better option.
 
-When we create a new FormData object, we just append all of the data that we want to send to this object. There’s the image file, and then anything else you want to send, in this case a description.
+When we create a new FormData object, we just append all of the data that we want to send to this object. There's the image file, and then anything else you want to send, in this case a description.
 
 Then we send that data to the server, but we have to specify that the content type is `'multipart/form-data'` so the server knows what kind of data we might be sending.
 
-So that’s it for the client side, what about the server? What does the server need to do when we make a post request to `'/images'` with this form data?
+So that's it for the client side, what about the server? What does the server need to do when we make a post request to `'/images'` with this form data?
 
 ## Express
 
-Let’s start with a basic express server:
+Let's start with a basic express server:
 
 ```js
 const express = require('express')
@@ -96,7 +96,7 @@ app.post('/api/images', (req, res) => {
 app.listen(8080, () => console.log("listening on port 8080"))
 ```
 
-So a basic express server that is listening for a post request to `/images`. Obviously this isn’t going to do anything with the image data, but at least we get a nice response 🤗.
+So a basic express server that is listening for a post request to `/images`. Obviously this isn't going to do anything with the image data, but at least we get a nice response 🤗.
 
 The question now is, how do we handle the image data coming into this request and store the image as a file on the server?
 
@@ -132,19 +132,19 @@ app.post('/api/images', upload.single('image'), (req, res) => {
 ```
 
 1.  Require the multer library.
-2.  Specify the folder that the files should be saved to. We’re just going to save it to a folder called `images` on the server.
-3.  Add a middleware function that will accept the image data from the client side form data as long as it’s called `image`. Which is exactly what we called it in the react app `formData.append("image", file)`
+2.  Specify the folder that the files should be saved to. We're just going to save it to a folder called `images` on the server.
+3.  Add a middleware function that will accept the image data from the client side form data as long as it's called `image`. Which is exactly what we called it in the react app `formData.append("image", file)`
 4.  Once multer has successfully saved the image, we can access the image data from `req.file` and any other form data from `req.body`.
 
 Multer creates a unique name for the file, so the path will be something like `images/d54c8136cd238804b67e4a0c56427f8b`
 
-We probably want to save this data to a database so we can query it back later, but we don’t care about that right now. This is just a post about uploading images.
+We probably want to save this data to a database so we can query it back later, but we don't care about that right now. This is just a post about uploading images.
 
-We’re going to send the description and the path to the image back to the client so we can use it to view the uploaded image.
+We're going to send the description and the path to the image back to the client so we can use it to view the uploaded image.
 
 ## Download Image
 
-The image is currently being stored in a directory called `images` on the server. That’s great, but there’s currently no way of getting the image back from the server. We want to allow the client to request the image in an img tag like this:
+The image is currently being stored in a directory called `images` on the server. That's great, but there's currently no way of getting the image back from the server. We want to allow the client to request the image in an img tag like this:
 
 ```html
 <img src="/images/d54c8136cd238804b67e4a0c56427f8b">
@@ -156,7 +156,7 @@ Then the server needs to send the image to the client. This can be done in many 
 app.use('/images', express.static('images'))
 ```
 
-This allows anyone to view any image in the images directory. This might be exactly what you want, then yay, you’re done. But you might want to keep images private and only allow authorized users to view images. In that case, you’ll want to do something more like this:
+This allows anyone to view any image in the images directory. This might be exactly what you want, then yay, you're done. But you might want to keep images private and only allow authorized users to view images. In that case, you'll want to do something more like this:
 
 ```js
 const fs = require('fs')
@@ -173,7 +173,7 @@ app.get('/images/:imageName', (req, res) => {
 
 ## Final Code
 
-Here’s what the final code might look like for this app. The react app posts and image and then shows that image in an `img` tag. The server stores the image in its file system and serves the images when a request for an image is made:
+Here's what the final code might look like for this app. The react app posts and image and then shows that image in an `img` tag. The server stores the image in its file system and serves the images when a request for an image is made:
 
 #### React
 
