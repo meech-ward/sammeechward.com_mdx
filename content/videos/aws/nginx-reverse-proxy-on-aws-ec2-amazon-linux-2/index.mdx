@@ -13,13 +13,45 @@ image:
 status: 'published'
 description: "Install and set up an nginx reverse proxy on an Amazon Linux 2 ec2 instance."
 tags: []
+previousPostSlug: 'deploy-node-app-on-aws-ec2-amazon-linux-2'
+nextPostSlug: 'mysql-on-aws-ec2-amazon-linux-2'
 ---
 
 Install and set up an nginx reverse proxy on an Amazon Linux 2 ec2 instance.
 
-🔗Other tutorials:
-MySQL on AWS EC2 Amazon Linux 2: [https://youtu.be/N9DwaThhpsg](https://youtu.be/N9DwaThhpsg)
-Deploy Node app on AWS EC2 Amazon Linux 2: [https://youtu.be/oHAQ3TzUTro](https://youtu.be/oHAQ3TzUTro)
-Setting Up And Deploying AWS EC2 Instances: [https://youtu.be/GEVbYQWWJkQ](https://youtu.be/GEVbYQWWJkQ)
+
+MySQL on AWS EC2 Amazon Linux 2: https://youtu.be/N9DwaThhpsg
+Deploy Node app on AWS EC2 Amazon Linux 2: https://youtu.be/oHAQ3TzUTro
+Setting Up And Deploying AWS EC2 Instances: https://youtu.be/GEVbYQWWJkQ
+
+🔗Moar Links
+My Website: https://www.sammeechward.com
+Instagram: https://www.instagram.com/meech_ward
+Github: https://github.com/orgs/Sam-Meech-Ward
+
+## nginx links:
+
+* https://www.nginx.com/blog/setting-up-nginx/
+* https://www.nginx.com/blog/mitigating-ddos-attacks-with-nginx-and-nginx-plus/
+* http://nginx.org/en/docs/http/configuring_https_servers.html
+
+##  Code
 
 
+```
+sudo amazon-linux-extras install nginx1 -y
+sudo systemctl enable nginx
+sudo systemctl start nginx
+```
+
+```
+sudo vim /etc/nginx/nginx.conf
+```
+
+```
+server {
+  location / {
+        proxy_pass http://localhost:8080;
+  }
+}
+```
