@@ -1,0 +1,267 @@
+---
+type: article
+wp_id: 657
+title: 'Uploading Images - EJS, Multer, and Express'
+date: '2021-03-01T04:05:42'
+slug: 'uploading-images-ejs-multer'
+image: 
+  name: 'uploading-images-ejs-multer.png'
+  width: 2560
+  height: 1280
+status: 'published'
+description: 'In this article I'm going to show you how to upload an image from an ejs frontend to an express server using a library called multer. This will allow us to store the image in the server's file system so they can be uploaded and downloaded by any client.'
+tags: ['javascript', 'node']
+---
+
+In this article I'm going to show you how to upload an image from an ejs frontend to an express server using a library called multer. This will allow us to store the image in the server's file system so they can be uploaded and downloaded by any client.
+
+## Starter App
+
+Let's start with a basic Express app: 
+
+**app.js**
+```js
+const express = require('express')
+const app = express()
+app.set('view engine', 'ejs')
+
+app.get('/', (req, res) => {
+  res.render('index')
+})
+
+app.post('/saveImage', (req, res) => {
+  console.log(req.body)
+  res.send('ok')
+})
+
+app.listen(8080, () => console.log("listening on port 8080"))
+```
+
+This has a two routes:
+
+- a get route that renders an ejs template called `index.ejs` and
+- a post route that just logs the request body and sends back a response.
+
+**index.ejs**
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Image App</title>
+</head>
+<body>
+
+  <!-- create a form to upload an image jpeg with a description -->
+  <form action="/saveImage" method="post" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*">
+    <input type="text" name="description" placeholder="Description">
+    <button type="submit" name="submit">UPLOAD</button>
+  </form>
+  
+</body>
+</html>
+```
+
+This page just contains a single form that allows the user to select an image (file), provide a description (string), and submit them.
+
+So far this looks like a basic form, the only weird thing is that the form's enctype is set to `multipart/form-data`. This is what allows us to send files in the form data, but will require us to treat this data differntly on the server side.
+
+If you run the application right now and try to upload an image, you'll see that req.body is undefined and the image is not saved anywhere. Let's fix that. 
+
+## Upload Image
+
+When we upload an image like this using the `multipart/form-data` enctype, all of the form data is sent to the server. On the server we need to be able to access the description as a string, just like if it were any other form. When it comes to the image though, we actually want the image to be saved to the server's file system. So we'll have a folder in our express app that will contain images that users upload. Then we can allow users to download images from the server later on. 
+
+Luckily for us, there is a fantastic library called [multer](https://www.npmjs.com/package/multer) that will handle these things for us.
+
+First install the library:
+
+```shell
+npm i multer
+```
+
+Then use the library:
+
+```js
+// 1
+const multer = require('multer')
+// 2
+const upload = multer({ dest: 'images/' })
+
+// 3
+app.post('/saveImage', upload.single('image'), (req, res) => {
+  // 4
+  const imagePath = req.file.path
+  const description = req.body.description
+
+  // Save this data to a database probably
+
+  console.log(description, imagePath)
+  res.send({description, imagePath})
+})
+```
+
+1.  Require the multer library.
+2.  Specify the folder that the files should be saved to. We're just going to save it to a folder called `images` on the server.
+3.  Add a middleware function that will accept the image data from the client side form data as long as it's called `image`. Which is exactly what we called it in the ejs form. `<input type="file" name="image" accept="image/*">`
+4.  Once multer has successfully saved the image, we can access the image data from `req.file` and any other form data from `req.body`.
+
+Multer creates a unique name for the file, so the path will be something like `images/d54c8136cd238804b67e4a0c56427f8b`
+
+We probably want to save this data to a database so we can query it back later, but we don't care about that right now. This is just a post about uploading images.
+
+We're going to send the description and the path to the image back to the client so we can use it to view the uploaded image. Update the post route to render a new ejs template called `savedImage.ejs`:
+
+```js
+app.post('/saveImage', (req, res) => {
+  const imagePath = req.file.path
+  const description = req.body.description
+
+  // Save this data to a database probably
+
+  console.log(description, imagePath)
+  res.render('savedImage', {description, imagePath})
+})
+```
+
+Then create a new ejs file called `savedImage.ejs`:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Image App</title>
+</head>
+<body>
+
+  <h1>Image Saved</h1>
+  <p><%= description %></p>
+  <img src="<%= imagePath %>">
+  
+</body>
+</html>
+```
+
+This page just displays the description and the image that was uploaded. If you try to upload an image now, you should see everything is working correctly, **except** the image is not showing up. That's because we're trying to access the image from the express server, but express doesn't know how to serve the images yet.
+
+## Download Image
+
+The image is currently being stored in a directory called `images` on the server. That's great, but there's currently no way of getting the image back from the server. We want to allow the client to request the image in an img tag like this:
+
+```html
+<img src="/images/d54c8136cd238804b67e4a0c56427f8b">
+```
+
+Then the server needs to send the image to the client. This can be done in many ways, but the easiest way is to just let express serve these as static files:
+
+```js
+app.use('/images', express.static('images'))
+```
+
+This allows anyone to view any image in the images directory. This might be exactly what you want, then yay, you're done. But you might want to keep images private and only allow authorized users to view images. In that case, you'll want to do something more like this:
+
+```js
+const fs = require('fs')
+
+app.get('/images/:imageName', (req, res) => {
+  // do a bunch of if statements to make sure the user is 
+  // authorized to view this image, then
+
+  const imageName = req.params.imageName
+  const readStream = fs.createReadStream(`images/${imageName}`)
+  readStream.pipe(res)
+})
+```
+
+## Final Code
+
+Here's what the final code might look like for this app. The react app posts and image and then shows that image in an `img` tag. The server stores the image in its file system and serves the images when a request for an image is made:
+
+**app.js**
+
+```js
+const express = require('express')
+const multer = require('multer')
+const fs = require('fs')
+
+const app = express()
+const upload = multer({ dest: 'images/' })
+
+app.set('view engine', 'ejs')
+
+app.get('/', (req, res) => {
+  res.render('index')
+})
+
+app.post('/saveImage', (req, res) => {
+  const imagePath = req.file.path
+  const description = req.body.description
+
+  // Save this data to a database probably
+
+  console.log(description, imagePath)
+  res.render('savedImage', {description, imagePath})
+})
+
+app.get('/images/:imageName', (req, res) => {
+  // do a bunch of if statements to make sure the user is 
+  // authorized to view this image, then
+
+  const imageName = req.params.imageName
+  const readStream = fs.createReadStream(`images/${imageName}`)
+  readStream.pipe(res)
+})
+
+app.listen(8080, () => console.log("listening on port 8080"))
+```
+
+**index.ejs**
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Image App</title>
+</head>
+<body>
+
+  <!-- create a form to upload an image jpeg with a description -->
+  <form action="/saveImage" method="post" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*">
+    <input type="text" name="description" placeholder="Description">
+    <button type="submit" name="submit">UPLOAD</button>
+  </form>
+  
+</body>
+</html>
+```
+
+**savedImage.ejs**
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Image App</title>
+</head>
+<body>
+
+  <h1>Image Saved</h1>
+  <p><%= description %></p>
+  <img src="<%= imagePath %>">
+  
+</body>
+</html>
+```
