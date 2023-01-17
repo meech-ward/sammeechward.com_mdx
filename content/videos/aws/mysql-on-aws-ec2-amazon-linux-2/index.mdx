@@ -24,9 +24,10 @@ Install MySQL and start it using the following commands
 
 
 ```sh
-sudo yum install -y https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
-sudo amazon-linux-extras install epel -y
-sudo yum install -y mysql-community-server
+sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+wget http://dev.mysql.com/get/mysql57-community-release-el7-8.noarch.rpm
+sudo yum localinstall mysql57-community-release-el7-8.noarch.rpm
+sudo yum install mysql-community-server
 
 sudo systemctl start mysqld 
 sudo systemctl enable mysqld 
