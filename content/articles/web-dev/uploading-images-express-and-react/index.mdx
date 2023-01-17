@@ -121,13 +121,13 @@ const upload = multer({ dest: 'images/' })
 // 3
 app.post('/api/images', upload.single('image'), (req, res) => {
   // 4
-  const imagePath = req.file.path
+  const imageName = req.file.filename
   const description = req.body.description
 
   // Save this data to a database probably
 
-  console.log(description, imagePath)
-  res.send({description, imagePath})
+  console.log(description, imageName)
+  res.send({description, imageName})
 })
 ```
 
@@ -184,7 +184,7 @@ import axios from 'axios'
 export default function App() {
   const [file, setFile] = useState()
   const [description, setDescription] = useState("")
-  const [image, setImage] = useState()
+  const [imageName, setImageName] = useState()
 
   const submit = async event => {
     event.preventDefault()
@@ -194,7 +194,7 @@ export default function App() {
     formData.append("description", description)
 
     const result = await axios.post('/api/images', formData, { headers: {'Content-Type': 'multipart/form-data'}})
-    setImage(result.data.imagePath)
+    setImageName(result.data.imageName)
   }
 
   return (
@@ -240,13 +240,13 @@ app.get('/images/:imageName', (req, res) => {
 })
 
 app.post('/api/images', upload.single('image'), (req, res) => {
-  const imagePath = req.file.path
+  const imageName = req.file.filename
   const description = req.body.description
 
   // Save this data to a database probably
 
-  console.log(description, imagePath)
-  res.send({description, imagePath})
+  console.log(description, imageName)
+  res.send({description, imageName})
 })
 
 app.listen(8080, () => console.log("listening on port 8080"))
