@@ -117,13 +117,13 @@ We're going to send the description and the path to the image back to the client
 
 ```js
 app.post('/saveImage', (req, res) => {
-  const imagePath = req.file.path
+  const imageName = req.file.filename
   const description = req.body.description
 
   // Save this data to a database probably
 
-  console.log(description, imagePath)
-  res.render('savedImage', {description, imagePath})
+  console.log(description, imageName)
+  res.render('savedImage', {description, imageName})
 })
 ```
 
@@ -142,7 +142,7 @@ Then create a new ejs file called `savedImage.ejs`:
 
   <h1>Image Saved</h1>
   <p><%= description %></p>
-  <img src="<%= imagePath %>">
+  <img src="images/<%= imagePath %>">
   
 </body>
 </html>
