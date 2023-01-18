@@ -13,14 +13,11 @@ image:
 status: 'published'
 description: "Create signed urls to access files in a CloudFront distribution. Learn how to generate the signed URLs using a private key in a node application."
 tags: []
+previousPostSlug: 'set-up-a-cloudfront-cdn-for-an-s3-bucket'
+nextPostSlug: 'storing-images-in-s3-from-node-server'
 ---
 
 Create signed urls to access files in a CloudFront distribution. Learn how to generate the signed URLs using a private key in a node application.
-
-🔗Code Snippets: [https://github.com/meech-ward/s3-get-put-and-delete/blob/master/CloudFrontSignedURL.md](https://github.com/meech-ward/s3-get-put-and-delete/blob/master/CloudFrontSignedURL.md)
-
-🔗Storing Images in S3 from Node Server: [https://youtu.be/eQAIojcArRY](https://youtu.be/eQAIojcArRY)
-🔗Set up a CloudFront CDN for an S3 Bucket: [https://youtu.be/kbI7kRWAU-w](https://youtu.be/kbI7kRWAU-w)
 
 ## Chapters:
 
@@ -32,4 +29,40 @@ Create signed urls to access files in a CloudFront distribution. Learn how to ge
 * 7:59 Sign URLs in Node Server
 * 12:21 Conclusion
 
+## Code Snippets
 
+### Generate RSA Key Pair
+
+https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-trusted-signers.html
+
+> Install OpenSSL on your machine and generate the keypairs
+
+```sh
+openssl genrsa -out private_key.pem 2048
+openssl rsa -pubout -in private_key.pem -out public_key.pem
+```
+
+### Sign URLs
+
+https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/modules/_aws_sdk_cloudfront_signer.html#getsignedurl
+
+> Install and import the cloudfront signer
+
+```sh
+npm i @aws-sdk/cloudfront-signer
+```
+
+```js
+import { getSignedUrl } from "@aws-sdk/cloudfront-signer"
+```
+
+> Sign the urls before sending them to the browser
+
+```js
+const signedUrl = getSignedUrl({
+  keyPairId: process.env.CLOUDFRONT_KEYPAIR_ID,
+  privateKey: process.env.CLOUDFRONT_PRIVATE_KEY,
+  url: url,
+  dateLessThan: new Date( Date.now() + (1000 /*sec*/ * 60))
+})
+```
