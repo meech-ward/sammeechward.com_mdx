@@ -19,7 +19,9 @@ nextPostSlug: "next-auth-and-prisma"
 
 Learn how to add auth to your next application using next auth and github login. All of the code examples are using next 13, but use the pages directory, not the **app** directory.
 
-<PostCard slug="prisma-and-nextjs-video" />
+<Note>
+  `unstable_getServerSession` has now been renamed to `getServerSession`.
+</Note>
 
 ## Chapters:
 
@@ -123,7 +125,7 @@ https://github.com/Sam-Meech-Ward/code_snippets_prisma_next_demo/tree/auth
     ```jsx
     // /pages/profile.jsx
     import { useSession, signIn, signOut } from "next-auth/react"
-    import { unstable_getServerSession } from "next-auth/next"
+    import { getServerSession } from "next-auth/next"
     import { authOptions } from "./api/auth/[...nextauth]"
 
     export default function Component() {
@@ -148,7 +150,7 @@ https://github.com/Sam-Meech-Ward/code_snippets_prisma_next_demo/tree/auth
     }
 
     export async function getServerSideProps(context) {
-      const session = await unstable_getServerSession(context.req, context.res, authOptions)
+      const session = await getServerSession(context.req, context.res, authOptions)
 
       if (!session) {
         //redirect to login page
@@ -174,7 +176,7 @@ https://github.com/Sam-Meech-Ward/code_snippets_prisma_next_demo/tree/auth
     // /pages/api/posts.js
     import { prisma } from '../../server/db/client'
 
-    import { unstable_getServerSession } from "next-auth/next"
+    import { getServerSession } from "next-auth/next"
     import { authOptions } from "./auth/[...nextauth]"
 
     function titleFromCode(code) {
@@ -182,7 +184,7 @@ https://github.com/Sam-Meech-Ward/code_snippets_prisma_next_demo/tree/auth
     }
 
     async function post(req, res) {
-      const session = await unstable_getServerSession(req, res, authOptions)
+      const session = await getServerSession(req, res, authOptions)
       if (!session) {
         res.status(401).json({ error: 'Unauthorized' })
         return
