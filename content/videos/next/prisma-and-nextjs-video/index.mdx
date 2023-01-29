@@ -171,16 +171,12 @@ Right now you're just in development so a local database is a good idea, but a c
   </Tab>
 
   <Tab name="MongoDB">
-    Let's say you're using a local Mongo database with the following details:
+    Prisma needs to perform transactions, which requires your MongoDB server to be run as a replica set. You can [read the docs](https://www.mongodb.com/docs/manual/tutorial/deploy-replica-set-for-testing/) on how to do this locally, or just use [mongo atlas]().
 
-    username=`test`
-    password=`test`
-    database=`myDatabase`
-
-    Then your `DATABASE_URL` would look like this
+    Your URL will look something like this:
 
     ```sh
-    mongodb+srv://test:test@127.0.0.1/myDatabase
+    mongodb+srv://<username>:<password>@cluster0.ubflfgu.mongodb.net/myDatabase?retryWrites=true&w=majority
     ```
 
   </Tab>
@@ -218,7 +214,7 @@ Make sure that you update your db provider in the `schema.prisma` file to match 
 
 ### Cloud Database
 
-If you want to use a cloud database, then copy the url from the provider you're using. If you're not sure which provider to use, I suggest using [railway.app](https://railway.app/) because it's free and easy to use.
+If you want to use a cloud database, then you can use the url from the provider you're using. If you're not sure which provider to use, I suggest using [railway.app](https://railway.app/) for MySQL or Postgres because it's free and easy to use. And I suggest using [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) for MongoDB because it's also free and easy to use and supports replica sets.
 
 - Go to [https://railway.app/new](https://railway.app/new)
 - Select the database you want to use
@@ -277,11 +273,15 @@ Here's a really basic `Post` model that has a `title` and some `content`:
   command to migrate the database:
 </Instruction>
 
+<Note>
+  You **never** need to run this command if you're using MongoDB. MongoDB doesn't require you to setup a schema. So you can ignore anything to do with migrations if you're using MongoDB.
+</Note>
+
 ```sh
 yarn migrate:dev --name init
 ```
 
-This create a migration file, which is the raw SQL that needs to be run against the database. Then prisma runs that file against the database which in this case will create the tables.
+This create a migration file, which is the raw SQL that needs to be run against the database. Then prisma runs that file against the database which in this case will create the tables. Everytime you update your models in your `schema.prisma` file, you will need to run this command.
 
 You should now have a `/prisma/migrations` directory that contains all the raw SQL. You can completely ignore this directory, but make sure you commit it to your repo.
 
