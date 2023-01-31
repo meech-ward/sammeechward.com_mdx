@@ -48,14 +48,19 @@ These isntructions will work on an existing Next.js app. If you're starting from
 
 <Instruction>In your Next app, install and initialize prisma:</Instruction>
 
+{/* prettier-ignore */}
 <Tabs>
   <Tab name="JS">
-    {/* prettier-ignore */}
-    ```sh yarn add -D prisma npx prisma init ```
+    ```sh 
+    yarn add -D prisma 
+    npx prisma init 
+    ```
   </Tab>
   <Tab name="TS">
-    {/* prettier-ignore */}
-    ```sh yarn add prisma typescript ts-node @types/node --dev npx prisma init ```
+    ```sh 
+    yarn add prisma typescript ts-node @types/node --dev 
+    npx prisma init 
+    ```
   </Tab>
 </Tabs>
 
@@ -274,7 +279,9 @@ Here's a really basic `Post` model that has a `title` and some `content`:
 </Instruction>
 
 <Note>
-  You **never** need to run this command if you're using MongoDB. MongoDB doesn't require you to setup a schema. So you can ignore anything to do with migrations if you're using MongoDB.
+  You **never** need to run this command if you're using MongoDB. MongoDB
+  doesn't require you to setup a schema. So you can ignore anything to do with
+  migrations if you're using MongoDB.
 </Note>
 
 ```sh
@@ -438,6 +445,7 @@ Instead of creating a new instance every time we need to use prisma, we should p
 
     <Image
     src="/images/db-client-js.png"
+    alt="Create a new file at `/server/db/client.js`"
     width={512/2}
     height={373/2}
     />
@@ -466,7 +474,12 @@ Instead of creating a new instance every time we need to use prisma, we should p
 
 {" "}
 
-<Image src="/images/db-client-ts.png" width={502 / 2} height={374 / 2} />
+<Image
+  src="/images/db-client-ts.png"
+  alt="Create a new file at `/server/db/client.ts`"
+  width={502 / 2}
+  height={374 / 2}
+/>
 
 {" "}
 
