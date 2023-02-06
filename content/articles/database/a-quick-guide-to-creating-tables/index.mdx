@@ -21,22 +21,22 @@ I will be using MySQL for the syntax, but the concepts will apply to any SQL dat
 
 To get the most out of this article, you should be somewhat comfortable with Database Design and ERDs.
 
-In this article, we’re going to create tables using the following ERD for reference:
+In this article, we're going to create tables using the following ERD for reference:
 
 <Image src="/images/basic_socail_network.png" width={821} height={171} quality={100} />
 
 an ecomerce erd
 
-It’s a really really really basic e-commerce database.
+It's a really really really basic e-commerce database.
 
 *   A **user** can make many **orders** and an **order** belongs to a single **user**.
 *   An **order** can contain many **products** and a **product** can be purchased by many **orders**.
 
-In a real-world application, this database would be much larger, but this small little database works perfectly for this post. It would probably even work for the world’s simplest ecomerce site.
+In a real-world application, this database would be much larger, but this small little database works perfectly for this post. It would probably even work for the world's simplest ecomerce site.
 
 ## CREATE TABLE
 
-Each box in the ERD will be a table in the database and each row will be a column in the table. Let’s start by taking a look at the users.
+Each box in the ERD will be a table in the database and each row will be a column in the table. Let's start by taking a look at the users.
 
 ### users
 
@@ -66,7 +66,7 @@ CREATE TABLE users (
 
 Here we are defining the name of the table `users`, and name of each column in the table. `password` is a [reserved word](https://dev.mysql.com/doc/refman/8.0/en/keywords.html) in MySQL so we have to surround it with backticks.
 
-It’s not enough to just specify the table and column names—we **must** also specify a data type for each of the columns. What kind of data is an `id` or an `email`? For example, if we just wanted to use text to store all of this data, we could make each column `TEXT`:
+It's not enough to just specify the table and column names—we **must** also specify a data type for each of the columns. What kind of data is an `id` or an `email`? For example, if we just wanted to use text to store all of this data, we could make each column `TEXT`:
 
 ```sql
 CREATE TABLE users (
@@ -78,7 +78,7 @@ CREATE TABLE users (
 );
 ```
 
-This is now valid SQL, but it’s not a good practice pretty inefficient to do things this way. The TEXT data type should be used to store large amounts of text.
+This is now valid SQL, but it's not a good practice pretty inefficient to do things this way. The TEXT data type should be used to store large amounts of text.
 
 Ok, so what data type should I use?
 
@@ -122,13 +122,13 @@ CREATE TABLE users (
 
 `email` will obviously be a string. In a programming language this would be enough information, but SQL wants to know more. Will it be a constant length string or variable length string? How many characters will the string be?
 
-For an email address, the length might be different for each user. For variable length strings, `VARCHAR` is usually a good option. With a `VARCHAR` we should always specify a maximum length, but what’s a good maximum length of an email address? 20 characters? 50 characters?
+For an email address, the length might be different for each user. For variable length strings, `VARCHAR` is usually a good option. With a `VARCHAR` we should always specify a maximum length, but what's a good maximum length of an email address? 20 characters? 50 characters?
 
-We probably don’t want to choose an arbitrary value here, and I can’t really think of a good reason to restrict the size of a user’s email address. A good choice might be to use **255**.
+We probably don't want to choose an arbitrary value here, and I can't really think of a good reason to restrict the size of a user's email address. A good choice might be to use **255**.
 
 The database will have to allocate some storage for a variable that keeps track of the length of the string. If we limit the size to 255, then the database will only have to allocate 1 byte to keep track of the `VARCHAR` size. This is the largest value we can use without rolling over to 2 bytes.
 
-Also, when’s the last time you saw an email address that was this long?
+Also, when's the last time you saw an email address that was this long?
 
 ```
 thisisgoingtobeareallylongstringtogetto255characterswowimonlyat75charactersrightnowthisismoredifficultthanIthoughthowmanynow134okoverhalfwayletstryajokehowdocomputersgetdruk-theytakescreenshots-lol207stillneedsomemorecharactersknockknock-whosthe@gmail.com
@@ -146,11 +146,11 @@ CREATE TABLE users (
 
 ### `password`
 
-`password`s are also going to be variable length strings, do we want to restrict the length of a user’s password? Not really, longer passwords are generally more secure.
+`password`s are also going to be variable length strings, do we want to restrict the length of a user's password? Not really, longer passwords are generally more secure.
 
-Wait, we will **NEVER** store a password in a database. That would be a major [security risk](https://krebsonsecurity.com/2019/03/facebook-stored-hundreds-of-millions-of-user-passwords-in-plain-text-for-years/). Imagine if the database got hacked and everyone’s passwords got leaked. Your reputation would be soiled, you’d have to shut down the application, move back in with your parents and spend the rest of your days streaming League of Legends to twitch at 4am convincing yourself that this could be your new career.
+Wait, we will **NEVER** store a password in a database. That would be a major [security risk](https://krebsonsecurity.com/2019/03/facebook-stored-hundreds-of-millions-of-user-passwords-in-plain-text-for-years/). Imagine if the database got hacked and everyone's passwords got leaked. Your reputation would be soiled, you'd have to shut down the application, move back in with your parents and spend the rest of your days streaming League of Legends to twitch at 4am convincing yourself that this could be your new career.
 
-No! We won’t let it come to that. Let’s just hash the password before be store in the database. We can use bcrypt. Ok, how long’s a bcrypt hashed password? I don’t know, it’s not longer than 255 characters though.
+No! We won't let it come to that. Let's just hash the password before be store in the database. We can use bcrypt. Ok, how long's a bcrypt hashed password? I don't know, it's not longer than 255 characters though.
 
 ```sql
 CREATE TABLE users (
@@ -164,9 +164,9 @@ CREATE TABLE users (
 
 ### phone number
 
-Ok, I know this one. It’s got to be a number right, I mean the name is literally phone\_**number**. It’s tempting to want to use something like `INTEGER` here, and that would work for a lot of phone numbers. 555 555 5555 could be easily represented as an `INTEGER`. But what about numbers that start with a leading zero 07555555555. What about those weird international numbers that start with a plus or minus sign. I think it would be safer to store this kind of information as text.
+Ok, I know this one. It's got to be a number right, I mean the name is literally phone\_**number**. It's tempting to want to use something like `INTEGER` here, and that would work for a lot of phone numbers. 555 555 5555 could be easily represented as an `INTEGER`. But what about numbers that start with a leading zero 07555555555. What about those weird international numbers that start with a plus or minus sign. I think it would be safer to store this kind of information as text.
 
-I’m still unsure of the **best** way of storing a phone number, but the [E.164](https://en.wikipedia.org/wiki/E.164) format is the one suggested by [twilio](https://support.twilio.com/hc/en-us/search#stq=phone%20numbers%20how%20do%20i%20format%20phone%20numbers%20to%20work%20internationally&stp=1). This standard needs a variable length string with a maximum number of 15 characters.
+I'm still unsure of the **best** way of storing a phone number, but the [E.164](https://en.wikipedia.org/wiki/E.164) format is the one suggested by [twilio](https://support.twilio.com/hc/en-us/search#stq=phone%20numbers%20how%20do%20i%20format%20phone%20numbers%20to%20work%20internationally&stp=1). This standard needs a variable length string with a maximum number of 15 characters.
 
 ```sql
 CREATE TABLE users (
@@ -182,11 +182,11 @@ CREATE TABLE users (
 
 ### created
 
-`created` will represent the exact moment in time that the account was created. In MySQL both `DATETIME` AND `TIMESTAMP` use the following format ‘YYYY-MM-DD hh:mm:ss’.
+`created` will represent the exact moment in time that the account was created. In MySQL both `DATETIME` AND `TIMESTAMP` use the following format ‘YYYY-MM-DD hh:mm:ss'.
 
-MySQL converts `TIMESTAMP` values from the current time zone to UTC for storage, and back from UTC to the current time zone for retrieval. This is nice because now the application doesn’t have to manage any time conversions.
+MySQL converts `TIMESTAMP` values from the current time zone to UTC for storage, and back from UTC to the current time zone for retrieval. This is nice because now the application doesn't have to manage any time conversions.
 
-Try to avoid handling time conversions ever, they’re difficult and programmers can’t be trusted to do things correctly. Just let the database do it.
+Try to avoid handling time conversions ever, they're difficult and programmers can't be trusted to do things correctly. Just let the database do it.
 
 ```sql
 CREATE TABLE users (
@@ -198,7 +198,7 @@ CREATE TABLE users (
 );
 ```
 
-Ok, that’s the users table done. Now let’s create the next table, the `orders` table.
+Ok, that's the users table done. Now let's create the next table, the `orders` table.
 
 ### orders
 
@@ -228,7 +228,7 @@ CREATE TABLE orders (
 
 The `user_id` is a foreign key. It allows us to represent that one-to-many relationship needed here. But how do we represent a foreign key?
 
-**1.** Make the foreign key the **exact same type** as the primary key it’s associated with. users.id is an `INTEGER` so orders.user\_id also needs to be an `INTEGER`.
+**1.** Make the foreign key the **exact same type** as the primary key it's associated with. users.id is an `INTEGER` so orders.user\_id also needs to be an `INTEGER`.
 
 ```sql
 CREATE TABLE orders (
@@ -278,15 +278,15 @@ Imagine a situation where you have a user in the database that has made 3 orders
 +----+---------+---------------------+
 ```
 
-That user decides to delete their account, so we delete that user’s row out of the users table. What do we do with all of the orders related to that user? We can’t just leave them there, they need to reference a `user_id` and we’ve just deleted that user.
+That user decides to delete their account, so we delete that user's row out of the users table. What do we do with all of the orders related to that user? We can't just leave them there, they need to reference a `user_id` and we've just deleted that user.
 
 A Referential Action tells the DBMS what to do when an update or delete operation effects the parent-child relationship columns. So what happens if the primary key gets updated or deleted.
 
-The three most common actions that I’ve used are `CASCADE`, `SET NULL`, and `RESTRICT`. In the example above, here’s what they would do:
+The three most common actions that I've used are `CASCADE`, `SET NULL`, and `RESTRICT`. In the example above, here's what they would do:
 
 ### CASCADE
 
-`CASCADE` would delete all of the user’s orders so their complete history would be wiped clean.
+`CASCADE` would delete all of the user's orders so their complete history would be wiped clean.
 
 ```
 +----+-------------+
@@ -303,7 +303,7 @@ The three most common actions that I’ve used are `CASCADE`, `SET NULL`, and `R
 
 ### SET NULL
 
-`SET NULL` would set all of the orders’ `user_id`s to null. So the orders would still exist, but not belong to any user.
+`SET NULL` would set all of the orders' `user_id`s to null. So the orders would still exist, but not belong to any user.
 
 ```
 +----+-------------+
@@ -342,9 +342,9 @@ The three most common actions that I’ve used are `CASCADE`, `SET NULL`, and `R
 +----+---------+---------------------+
 ```
 
-If this action were in place, we would have to delete all of the user’s orders before being able to delete the user.
+If this action were in place, we would have to delete all of the user's orders before being able to delete the user.
 
-For this site, let’s go with CASCADE and just delete everything, all of the orders. Actually, on second thought that seems too risky even for me. We’ll add RESTRICT and not allow anyone to delete their data. We could always decide to add a deleted column to “fake” delete an account.
+For this site, let's go with CASCADE and just delete everything, all of the orders. Actually, on second thought that seems too risky even for me. We'll add RESTRICT and not allow anyone to delete their data. We could always decide to add a deleted column to “fake” delete an account.
 
 ```sql
 CREATE TABLE orders (
@@ -369,7 +369,7 @@ On to the next table `order_products`.
 +--------------+
 ```
 
-This is the join table between the products and order that allow for the many-to-many relationship. Wait, this table references a product\_id, but we haven’t created that table yet. We can’t setup the foreign key constraints correctly until the products table has been created.
+This is the join table between the products and order that allow for the many-to-many relationship. Wait, this table references a product\_id, but we haven't created that table yet. We can't setup the foreign key constraints correctly until the products table has been created.
 
 We also have to think about these things when inserting data into the tables. The `products` and `orders` must exist before an `order_products` row can be created.
 
@@ -413,11 +413,11 @@ price FLOAT
 
 **ABSOLUTELY NOT! NEVER STORE MONEY AS A FLOAT!**
 
-floats do not represent decimal numbers precisely. For example, javascript uses IEEE 754 Standard for Floating-Point Arithmetic. If you try adding 0.1 + 0.2 in a language like this, you’ll end up with 0.30000000000000004. Go ahead and try right now. Open up dev tools on this site and enter 0.1 + 0.2 in the console. 0.30000000000000004!
+floats do not represent decimal numbers precisely. For example, javascript uses IEEE 754 Standard for Floating-Point Arithmetic. If you try adding 0.1 + 0.2 in a language like this, you'll end up with 0.30000000000000004. Go ahead and try right now. Open up dev tools on this site and enter 0.1 + 0.2 in the console. 0.30000000000000004!
 
 That kind of precision is fine for some arithmetic, but not for money. **Never** use a FLOAT any value where complete precision and accuracy is important.
 
-What do we use then? We could use a `VARCHAR` and just sore the decimal number as a string, that would solve the precision issue “10.95”. Or we could multiply the amount by 100 and store 1095 as an `INTEGER` since we don’t have a decimal number any more. This is basically storing the value as cents instead of dollars.
+What do we use then? We could use a `VARCHAR` and just sore the decimal number as a string, that would solve the precision issue “10.95”. Or we could multiply the amount by 100 and store 1095 as an `INTEGER` since we don't have a decimal number any more. This is basically storing the value as cents instead of dollars.
 
 Using `INTEGER` would also allow us to perform math equation pretty easily like finding the average price of all products.
 
@@ -439,11 +439,11 @@ CREATE TABLE products (
 
 ##### description
 
-The product has a `name` that can be a variable length piece of text up to 255 characters. `description` is also a variable length string, but it’s probably going to be much longer than anything else we’ve seen so far.
+The product has a `name` that can be a variable length piece of text up to 255 characters. `description` is also a variable length string, but it's probably going to be much longer than anything else we've seen so far.
 
 MySQL has a few types that are designed to work with larger amounts of text data `TEXT` (max 65,535 bytes), `MEDIUMTEXT` (max 16,777,215 bytes), and `LONGTEXT` (4,294,967,295 bytes). `VARCHAR`‘s limit is usually 65,535 which is the same as `TEXT`.
 
-65,535 bytes is probably long enough for a description for most products on a site. 255 bytes might even be enough. We’re going to use `TEXT` here because it has enough space and is well suited for this kind of text data. Unlike `VARCHAR`, the contents of `TEXT` are stored separately from the rest of the row.
+65,535 bytes is probably long enough for a description for most products on a site. 255 bytes might even be enough. We're going to use `TEXT` here because it has enough space and is well suited for this kind of text data. Unlike `VARCHAR`, the contents of `TEXT` are stored separately from the rest of the row.
 
 ```sql
 CREATE TABLE products (
@@ -471,11 +471,11 @@ CREATE TABLE products (
 );
 ```
 
-However, often we’re using a MySQL database to store data for a web app. These applications have a different plan for image storage. A small application might store the database on the same machine as the server and application code. With this type of setup, we might store the image somewhere in the server’s file system and store the file path in the database. So a VARCHAR would work well here.
+However, often we're using a MySQL database to store data for a web app. These applications have a different plan for image storage. A small application might store the database on the same machine as the server and application code. With this type of setup, we might store the image somewhere in the server's file system and store the file path in the database. So a VARCHAR would work well here.
 
-In a larger application, we might store the image on a completely different server and store the URL in the database. For example, we could process the image into different sizes for different devices, distribute those images over a CDN, and our database wouldn’t know anything other than a url and the different sizes that were available.
+In a larger application, we might store the image on a completely different server and store the URL in the database. For example, we could process the image into different sizes for different devices, distribute those images over a CDN, and our database wouldn't know anything other than a url and the different sizes that were available.
 
-In this example, we’ll assume that we’re storing the single image on another server, and we’ll just store the url.
+In this example, we'll assume that we're storing the single image on another server, and we'll just store the url.
 
 ```sql
 CREATE TABLE products (
@@ -489,7 +489,7 @@ CREATE TABLE products (
 
 ### order\_products
 
-And just for completeness, here’s the `order_products`.
+And just for completeness, here's the `order_products`.
 
 ```
 +--------------+
@@ -535,9 +535,9 @@ VALUES (2, 10, NOW());
 
 If we keep creating orders like this, we will see a pattern emerge. `created` will always be `NOW()` and `id` will always be incrementing. We need to manually tell the database which `user_id` to use, but the `id` and `created` values could be managed by the database itself.
 
-This isn’t just us being lazy, although it is a little bit like that. It’s safer to have the database manage these things for us so we don’t accidentally mess things up.
+This isn't just us being lazy, although it is a little bit like that. It's safer to have the database manage these things for us so we don't accidentally mess things up.
 
-Let’s change the CREATE TABLE statement for orders:
+Let's change the CREATE TABLE statement for orders:
 
 ```sql
 CREATE TABLE orders (
@@ -548,9 +548,9 @@ CREATE TABLE orders (
 );
 ```
 
-The `AUTO_INCREMENT` attribute has been added to `id`. If we don’t manually input a value for `id`, MySQL will manage the value for us. Pretty much every primary key should have the `AUTO_INCREMENT` value.
+The `AUTO_INCREMENT` attribute has been added to `id`. If we don't manually input a value for `id`, MySQL will manage the value for us. Pretty much every primary key should have the `AUTO_INCREMENT` value.
 
-`created` now has a `DEFAULT` clause. This can be added to any column to specify a default value for that column. This is the value that will be used if we don’t provide one during an insertion. The default value in this case will be the return value of `NOW()`, which will be the exact time that the order was created.
+`created` now has a `DEFAULT` clause. This can be added to any column to specify a default value for that column. This is the value that will be used if we don't provide one during an insertion. The default value in this case will be the return value of `NOW()`, which will be the exact time that the order was created.
 
 With these two things added to our table, we really only to provide the `user_id` when inserting a value:
 
@@ -561,14 +561,14 @@ VALUES (1);
 
 ## NOT NULL
 
-Our tables are really starting to look complete, but there’s a big issue that we haven’t addressed yet. What if we accidentally forget to provide a value for he `user_id`? What if we add an order and only provide a created timestamp?
+Our tables are really starting to look complete, but there's a big issue that we haven't addressed yet. What if we accidentally forget to provide a value for he `user_id`? What if we add an order and only provide a created timestamp?
 
 ```sql
 INSERT INTO orders (created)
 VALUES (NOW());
 ```
 
-That’s ok, the `id` will be auto incremented, but what will the `user_id` be?
+That's ok, the `id` will be auto incremented, but what will the `user_id` be?
 
 ```
 +----+---------+---------------------+
@@ -588,9 +588,9 @@ VALUES (NULL);
 > NULL means “a missing unknown value”  
 > https://dev.mysql.com/doc/refman/8.0/en/working-with-null.html
 
-NULL can be handy when we need to represent the absence of a value, but it’s not really helpful in this situation. How can an order exist without a user? Who created the order? Who’s paying for it and where will it get shipped to?
+NULL can be handy when we need to represent the absence of a value, but it's not really helpful in this situation. How can an order exist without a user? Who created the order? Who's paying for it and where will it get shipped to?
 
-Ok, don’t panic, we can fix this. When we don’t want to allow the absence of a value like this, we can add a `NOT NULL` constraint to that column.
+Ok, don't panic, we can fix this. When we don't want to allow the absence of a value like this, we can add a `NOT NULL` constraint to that column.
 
 ```sql
 CREATE TABLE orders (
@@ -601,9 +601,9 @@ CREATE TABLE orders (
 );
 ```
 
-Now the `id`, `user_id` and `created` column are always guaranteed to have a value. The values can never be set to `NULL`. And in this case, it’s exactly what we want. There is no situation where having any of these columns as NULL would make sense.
+Now the `id`, `user_id` and `created` column are always guaranteed to have a value. The values can never be set to `NULL`. And in this case, it's exactly what we want. There is no situation where having any of these columns as NULL would make sense.
 
-The primary key can never be NULL, it’s never allowed. So MySQL implicitly adds a `NOT NULL` constraint to primary key columns. So the previous example is identical to the following one as far as MySQL is concenerned.
+The primary key can never be NULL, it's never allowed. So MySQL implicitly adds a `NOT NULL` constraint to primary key columns. So the previous example is identical to the following one as far as MySQL is concenerned.
 
 ```sql
 CREATE TABLE orders (
@@ -614,7 +614,7 @@ CREATE TABLE orders (
 );
 ```
 
-There are few columns in this database that would be ok as `NULL`. Like the user’s phone number, maybe that could be an optional value, but username, password, and created will all need to be `NOT NULL`
+There are few columns in this database that would be ok as `NULL`. Like the user's phone number, maybe that could be an optional value, but username, password, and created will all need to be `NOT NULL`
 
 ## All The Tables
 
@@ -655,13 +655,13 @@ CREATE TABLE order_products (
 
 ## DROP TABLE
 
-There may come a time when you want to remove one of the tables you created. This doesn’t usually happen in production, but will definitely happen in development. To drop a table just write:
+There may come a time when you want to remove one of the tables you created. This doesn't usually happen in production, but will definitely happen in development. To drop a table just write:
 
 ```sql
 DROP TABLE tablename;
 ```
 
-That’s it. Just make sure you drop the tables in an order that makes sense for the depenedencies. For example, we could drop all of the tables we just created by runnin the drop statemtents in the reverse order that they were created:
+That's it. Just make sure you drop the tables in an order that makes sense for the depenedencies. For example, we could drop all of the tables we just created by runnin the drop statemtents in the reverse order that they were created:
 
 ```sql
 DROP TABLE IF EXISTS order_products;
@@ -670,18 +670,18 @@ DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS users;
 ```
 
-`order_products` depends on `products` and `orders`. `orders` depends on `users`. Deleting the tables this way ensures that we won’t get dependency error messages.
+`order_products` depends on `products` and `orders`. `orders` depends on `users`. Deleting the tables this way ensures that we won't get dependency error messages.
 
 ## ALTER TABLE
 
-We’ve created the `users` and just realized that we didn’t make a column to add the user’s name. How are we supposed to spam our users effeciently if we don’t know their names? We could just drop the table and recreate it. With a `name` column, but that would also delete all of the data. Instead, let’s alter the table.
+We've created the `users` and just realized that we didn't make a column to add the user's name. How are we supposed to spam our users effeciently if we don't know their names? We could just drop the table and recreate it. With a `name` column, but that would also delete all of the data. Instead, let's alter the table.
 
 ```sql
 ALTER TABLE users
 ADD COLUMN full_name VARCHAR(255) NOT NULL DEFAULT 'Mary Poppins';
 ```
 
-We start the statement with `ALTER TABLE tablename` and then follow that with the changes we want to make. The alter table statement can do a lot of things and a full list for MySQL can be found [here](https://dev.mysql.com/doc/refman/8.0/en/alter-table.html). In this case, we’re just adding a new column.
+We start the statement with `ALTER TABLE tablename` and then follow that with the changes we want to make. The alter table statement can do a lot of things and a full list for MySQL can be found [here](https://dev.mysql.com/doc/refman/8.0/en/alter-table.html). In this case, we're just adding a new column.
 
 ## Summary
 
