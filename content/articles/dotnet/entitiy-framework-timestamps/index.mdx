@@ -1,0 +1,256 @@
+---
+type: article
+title: "Entity Framework Core Timestamps"
+slug: entity-framework-timestamps
+
+description: "How do I create a model using entitiy framework core that has CreatedAt and UpdatedAt properties that are managed by the relational database?"
+image: 
+  name: 'nET.png'
+  width: 1280
+  height: 720
+
+status: 'published'
+date: "2023-02-04"
+tags: ['postgres', 'entity framework core', 'createdat', 'timestamp', 'sql', 'sql server', 'mysql', 'postgres']
+---
+
+**How do I create a model using entitiy framework core that has CreatedAt and UpdatedAt properties that are managed by the relational database?**
+
+It's not uncommon to want a database entry to have `createdAt` and `updatedAt` timestamp properties that are automatically managed. 
+
+I mostly write JavaScript, and if I choose to use an ORM like prisma, I can create an entity with a `createdAt` and `updatedAt` property like this:
+
+```prisma
+model Post {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ...
+}
+```
+
+`createdAt` and `updatedAt` are completely managed for me so I never have to worry about setting those values, only reading them.
+
+Relational databases like **Postgres**, **MySQL**, and **SQL Server** have built-in functions for generating the current timestamp `now()`, but the `updatedAt` timestamp needs to be manually set each time the entity is updated. If you use prisma, it's managed in the JavaScript application for you and prisma is quite against adding functions, procedures, and triggers directly to the database. 
+
+Now i'm building an ASP.NET app and I'm wondering what the proper way of adding a `createdAt` and `updatedAt` property to my models is. On top of that, I need to know what the code looks like to make this work. So I asked chatGPT and the conversation was one of the better ones I've had with it.
+
+<GPTChat>
+
+
+<GPTChatSection role="user">
+how do I create a model using entitiy framework core that has CreatedAt and UpdatedAt properties that are managed by the relational database
+</GPTChatSection>
+
+
+
+<GPTChatSection role="assistant">
+Here's how you can create a model using Entity Framework Core that has `CreatedAt` and `UpdatedAt` properties that are managed by the relational database:
+
+1. Create a model class with `CreatedAt` and `UpdatedAt` properties. For example:
+
+```c#
+public class MyEntity
+{
+    public int Id { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+    // ... other properties
+}
+```
+
+2. In your `DbContext` class, override the `OnModelCreating` method and use the `HasDefaultValueSql` method to specify the default value for the `CreatedAt` and `UpdatedAt` properties. For example:
+
+```c#
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<MyEntity>()
+        .Property(e => e.CreatedAt)
+        .HasDefaultValueSql("getdate()");
+
+    modelBuilder.Entity<MyEntity>()
+        .Property(e => e.UpdatedAt)
+        .HasDefaultValueSql("getdate()");
+}
+```
+
+Note: The exact syntax for the default value may vary based on the relational database you're using. For example, `getdate()` is used for SQL Server, while `CURRENT_TIMESTAMP` is used for MySQL.
+
+Now, when you add a new `MyEntity` object to your context and save changes, the `CreatedAt` and `UpdatedAt` properties will be automatically set to the current time. Additionally, each time you update an existing `MyEntity` object and save changes, the `UpdatedAt` property will be automatically updated.
+</GPTChatSection>
+
+
+
+<GPTChatSection role="user">
+will that work for a postgres database?
+</GPTChatSection>
+
+
+
+<GPTChatSection role="assistant">
+Yes, it will work for a PostgreSQL database. However, the syntax for the default value will be different. In PostgreSQL, you can use the `now()` function to set the default value for the `CreatedAt` and `UpdatedAt` properties. Here's the updated code:
+
+```c#
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<MyEntity>()
+        .Property(e => e.CreatedAt)
+        .HasDefaultValueSql("now()");
+
+    modelBuilder.Entity<MyEntity>()
+        .Property(e => e.UpdatedAt)
+        .HasDefaultValueSql("now()");
+}
+```
+
+Now, when you add a new `MyEntity` object to your context and save changes, the `CreatedAt` and `UpdatedAt` properties will be automatically set to the current time, as specified by the `now()` function in PostgreSQL. Additionally, each time you update an existing `MyEntity` object and save changes, the `UpdatedAt` property will be automatically updated.
+</GPTChatSection>
+
+
+
+<GPTChatSection role="user">
+But the updated at attribute needs to update the date every time the model is updated
+</GPTChatSection>
+
+
+
+<GPTChatSection role="assistant">
+Yes, you're correct. To ensure that the `UpdatedAt` property is updated every time the model is updated, you can use a database trigger. A trigger is a special type of stored procedure that is automatically executed by the database in response to specific events, such as an update to a particular table.
+
+Here's an example of how you could create a trigger in PostgreSQL to update the `UpdatedAt` property every time a row in the `MyEntity` table is updated:
+
+```sql
+CREATE OR REPLACE FUNCTION update_updatedat_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.UpdatedAt = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_myentity_updatedat
+BEFORE UPDATE ON myentity
+FOR EACH ROW
+EXECUTE FUNCTION update_updatedat_column();
+```
+
+This trigger will run the `update_updatedat_column` function before every update to the `MyEntity` table, which will set the `UpdatedAt` property to the current date and time.
+
+Note: You will need to run this trigger creation script in a database management tool or directly in the database, as it is not possible to create triggers through Entity Framework Core directly.
+</GPTChatSection>
+
+
+
+<GPTChatSection role="user">
+What's the best way to add a trigger to my database when i'm using asp.net migrations?
+</GPTChatSection>
+
+
+
+<GPTChatSection role="assistant">
+The best way to add a trigger to your database when using ASP.NET Migrations is to create a SQL script file and run it as part of the migration process. Here's how you can do it:
+
+1. Create a SQL script file that contains the trigger definition, similar to the example I provided in my previous answer.
+
+2. Add the script file to your project, for example in a "Scripts" folder.
+
+3. In your `DbContext` class, override the `OnModelCreating` method and use the `HasDefaultValueSql` method to specify the default value for the `CreatedAt` and `UpdatedAt` properties. For example:
+
+```c#
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<MyEntity>()
+        .Property(e => e.CreatedAt)
+        .HasDefaultValueSql("now()");
+
+    modelBuilder.Entity<MyEntity>()
+        .Property(e => e.UpdatedAt)
+        .HasDefaultValueSql("now()");
+}
+```
+
+4. In the `Up` method of your migration, use the `Sql` method to execute the SQL script that contains the trigger definition. For example:
+
+```c#
+protected override void Up(MigrationBuilder migrationBuilder)
+{
+    migrationBuilder.CreateTable(
+        name: "MyEntity",
+        columns: table => new
+        {
+            Id = table.Column<int>(nullable: false)
+                .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+            CreatedAt = table.Column<DateTime>(nullable: false),
+            UpdatedAt = table.Column<DateTime>(nullable: false)
+        },
+        constraints: table =>
+        {
+            table.PrimaryKey("PK_MyEntity", x => x.Id);
+        });
+
+    migrationBuilder.Sql(File.ReadAllText("Scripts/update_updatedat_trigger.sql"));
+}
+```
+
+This way, when you run the migration, the `MyEntity` table will be created and the trigger will be added to the database automatically.
+
+Note: The exact details of the migration code may vary based on your database provider, the names of your tables, and the names of your properties.
+</GPTChatSection>
+
+
+
+<GPTChatSection role="user">
+Can I have my database context update the timestamp instead of making a trigger in the database?
+</GPTChatSection>
+
+
+
+<GPTChatSection role="assistant">
+Yes, you can have your database context update the `UpdatedAt` timestamp instead of using a trigger in the database. To do this, you can override the `SaveChanges` method of the `DbContext` class and update the `UpdatedAt` property before calling the base implementation of `SaveChanges`. Here's an example:
+
+```c#
+public override int SaveChanges()
+{
+    var entries = ChangeTracker.Entries().Where(e => e.State == EntityState.Modified || e.State == EntityState.Added);
+    foreach (var entry in entries)
+    {
+        if (entry.Entity is MyEntity myEntity)
+        {
+            myEntity.UpdatedAt = DateTime.Now;
+        }
+    }
+
+    return base.SaveChanges();
+}
+```
+
+In this example, the `SaveChanges` method retrieves all entities that have been modified or added and updates the `UpdatedAt` property with the current date and time. Then it calls the base implementation of `SaveChanges`, which will persist the changes to the database.
+
+Note: This approach may have some performance implications, especially if you have a large number of entities that need to be updated, since it updates the `UpdatedAt` property in memory before persisting the changes to the database. In such cases, it may be more efficient to use a trigger in the database.
+</GPTChatSection>
+
+
+
+<GPTChatSection role="user">
+It seems like the performance implications will be insignificant, do you have any performance benchmarks you could share with me?
+</GPTChatSection>
+
+
+
+<GPTChatSection role="assistant">
+I'm sorry, but I do not have any performance benchmarks to share with you. Performance is a complex and context-dependent issue that depends on many factors, such as the size and structure of your data, the hardware and configuration of your database server, and the load on 
+</GPTChatSection>
+
+
+
+<GPTChatSection role="assistant">
+your system. The best way to determine the performance impact of a specific solution is to test it in your own environment, using realistic data and workloads.
+
+In general, updating a timestamp in the context of a single database operation is likely to have a small impact on performance, especially if the number of entities being updated is small. However, if you have a large number of entities being updated in a single operation, or if you have a high rate of database updates, the performance impact may become more significant. In such cases, using a trigger in the database may be a more efficient solution.
+
+Ultimately, the best approach will depend on the specific requirements and constraints of your application. I would recommend testing both solutions in your own environment and measuring their performance to determine the best approach for your specific use case.
+</GPTChatSection>
+
+
+</GPTChat>
+
