@@ -8,8 +8,12 @@ import json from '../content/articles/dotnet/entitiy-framework-timestamps/chatGP
 const title = json.title
 const timestamp = json.create_time
 
+function fixMessageParts(parts) {
+  return parts.map(str => str.replace(/\n\n(?=\d\.\s)/g, '\n')).join("\n\n")
+}
+
 const messages = Object.values(json.mapping).filter(m => m.message).map(m => ({
-  messageParts: m.message.content.parts,
+  message: fixMessageParts(m.message.content.parts),
   role: m.message.role
 }))
 
@@ -18,7 +22,7 @@ const text = `# ${title}
 ${messages.map(m => (`
 
 <GPTChatSection role="${m.role}">
-${m.messageParts.join("\n\n")}
+${m.message}
 </GPTChatSection>
 
 `
