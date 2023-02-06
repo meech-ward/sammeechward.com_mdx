@@ -35,6 +35,7 @@ Relational databases like **Postgres**, **MySQL**, and **SQL Server** have built
 
 Now i'm building an ASP.NET app and I'm wondering what the proper way of adding a `createdAt` and `updatedAt` property to my models is. On top of that, I need to know what the code looks like to make this work. So I asked chatGPT and the conversation was one of the better ones I've had with it.
 
+# EF Core Model With Timestamps
 <GPTChat>
 
 
@@ -46,7 +47,6 @@ how do I create a model using entitiy framework core that has CreatedAt and Upda
 
 <GPTChatSection role="assistant">
 Here's how you can create a model using Entity Framework Core that has `CreatedAt` and `UpdatedAt` properties that are managed by the relational database:
-
 1. Create a model class with `CreatedAt` and `UpdatedAt` properties. For example:
 
 ```c#
@@ -58,7 +58,6 @@ public class MyEntity
     // ... other properties
 }
 ```
-
 2. In your `DbContext` class, override the `OnModelCreating` method and use the `HasDefaultValueSql` method to specify the default value for the `CreatedAt` and `UpdatedAt` properties. For example:
 
 ```c#
@@ -149,11 +148,8 @@ What's the best way to add a trigger to my database when i'm using asp.net migra
 
 <GPTChatSection role="assistant">
 The best way to add a trigger to your database when using ASP.NET Migrations is to create a SQL script file and run it as part of the migration process. Here's how you can do it:
-
 1. Create a SQL script file that contains the trigger definition, similar to the example I provided in my previous answer.
-
 2. Add the script file to your project, for example in a "Scripts" folder.
-
 3. In your `DbContext` class, override the `OnModelCreating` method and use the `HasDefaultValueSql` method to specify the default value for the `CreatedAt` and `UpdatedAt` properties. For example:
 
 ```c#
@@ -168,7 +164,6 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
         .HasDefaultValueSql("now()");
 }
 ```
-
 4. In the `Up` method of your migration, use the `Sql` method to execute the SQL script that contains the trigger definition. For example:
 
 ```c#
