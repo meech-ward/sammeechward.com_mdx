@@ -10,8 +10,8 @@ date: '2020-02-02T23:39:19'
 slug: 'some-unique-slug'
 image: 
   name: 'name-of-image-in-images-directory.png'
-  width: 1000
-  height: 1000
+  width: 1280
+  height: 720
 status: 'published' | 'draft'
 description: 'A short summary that will appear in the list of articles page'
 tags: ['can be helpful for algolia search']
