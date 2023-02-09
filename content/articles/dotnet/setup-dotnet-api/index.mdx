@@ -1,0 +1,505 @@
+---
+type: article
+title: "Setup an ASP.NET Core API + React client"
+date: "2023-02-08T23:23:28.003Z"
+slug: "asp-net-core-api-react-client"
+image:
+  name: "nET.png"
+  width: 1280
+  height: 720
+status: "published"
+description: "How to setup up a new ASP.NET Core API with a database and a React client."
+tags: []
+---
+
+This is more of a reference than a how to guide. It goes through the steps of setting up a new ASP.NET Core API with a database, but there's not much information on why you would do things a certain way.
+
+## Setup
+
+<Instruction>Create a new empty web app:</Instruction>
+
+```bash
+dotnet new web -o MyApp
+```
+
+If you want controller's you can add them in the endpoints section.
+
+## Database and Models
+
+<Instruction>
+  Create a `Models` directory with a model class for your resource.
+</Instruction>
+
+For example, if you were creating a `Todo` list application, you might name your model file `Todo.cs` and it would look like this:
+
+```csharp
+// /Models/Todo.cs
+namespace MyApp.Models;
+
+public class Todo
+{
+    public Todo(int id, string title, bool completed, DateTime createdAt)
+    {
+        Id = id;
+        Title = title;
+        Completed = completed;
+        CreatedAt = createdAt;
+        UpdatedAt = updatedAt;
+    }
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public bool Completed { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
+```
+
+<Instruction>
+  Create a new file in your `Models` directory to manage your database
+  connection.
+</Instruction>
+
+```csharp
+using Microsoft.EntityFrameworkCore;
+
+namespace MyApp.Models;
+
+public class DatabaseContext : DbContext
+{
+  public DatabaseContext(DbContextOptions<DatabaseContext> options)
+      : base(options) { }
+
+  public DbSet<Todo> Todos => Set<Todo>();
+
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<Todo>()
+        .Property(e => e.CreatedAt)
+        .HasDefaultValueSql("now()");
+  }
+}
+```
+
+Choose either Postgres or MySQL.
+
+{/* prettier-ignore */}
+<Tabs>
+  <Tab name="Postgres">
+    <Instruction>
+      Install the `Npgsql.EntityFrameworkCore.PostgreSQL` package:
+    </Instruction>
+
+    ```bash
+    dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
+    ```
+
+    <Instruction>
+      Add the following to your `Program.cs` file:
+    </Instruction>
+
+    ```csharp
+    var connectionString = "Host=localhost;Database=yourDBName;Username=yourUsername;Password=yourPassword";
+    services.AddDbContext<DatabaseContext>(
+        opt =>
+        {
+          opt.UseNpgsql(connectionString);
+          if (builder.Environment.IsDevelopment())
+          {
+            opt
+              .LogTo(Console.WriteLine, LogLevel.Information)
+              .EnableSensitiveDataLogging()
+              .EnableDetailedErrors();
+          }
+        }
+    );
+    ```
+
+  </Tab>
+  <Tab name="MySQL">
+    <Instruction>
+      Install the `Pomelo.EntityFrameworkCore.MySql` package:
+    </Instruction>
+
+    ```bash
+    dotnet add package Pomelo.EntityFrameworkCore.MySql --version 7.0.0
+    ```
+
+    <Instruction>
+      Add the following to your `Program.cs` file:
+    </Instruction>
+
+    ```csharp
+    var connectionString = "server=localhost;user=root;password=1234;database=my_db";
+    var serverVersion = new MySqlServerVersion(new Version(8, 0, 29));
+
+    builder.Services.AddDbContext<DatabaseContext>(
+        opt => {
+            opt
+            .UseMySql(connectionString, serverVersion)
+            if (builder.Environment.IsDevelopment())
+          {
+            opt
+              .LogTo(Console.WriteLine, LogLevel.Information)
+              .EnableSensitiveDataLogging()
+              .EnableDetailedErrors();
+          }
+        }
+    );
+    ```
+
+  </Tab>
+</Tabs>
+
+Optionally, you could also add the `Diagnostics` package to get some nice error pages when things go wrong. I haven't seen this work yet, but the docs suggest using it so 🤷‍♀️
+
+```bash
+dotnet add package Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
+```
+
+```csharp
+if (builder.Environment.IsDevelopment())
+{
+  builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+}
+```
+
+## Environment Variables
+
+This isn't really document well anywhere and seems to go against how the .NET community likes to store configuration values. However, here's my argument for using normal environment variables:
+
+1. In production, we're supposed to use a secure secret manager like [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) or [Azure Key Vault](https://azure.microsoft.com/en-us/services/key-vault/). These services are designed to store secrets and are much more secure than environment variables, or configuration files.
+2. In development, we're not really concerned with security as much, so it doesn't really matter how we store our secrets as long as they are "fake" secrets. Like the root password to my local MySQL database isn't really sensitive information in any way.
+3. Environment variables are commonly used, so most devs are familiar with them. If we're sharing code with other devs, and developing on multiple machines, it's easier to just use environment variables for secrets and configuration to avoid updating source control tracked files for each user's confiruations.
+
+<Instruction>Install the `DotNetEnv` package:</Instruction>
+
+```bash
+dotnet add package DotNetEnv
+```
+
+<Instruction>
+  Create a `.env` file in the root of your project and add your environment
+  variables:
+</Instruction>
+
+```bash
+DATABASE_CONNECTION_STRING="your database connection string"
+```
+
+<Instruction>Add the following to your `Program.cs` file:</Instruction>
+
+```csharp
+DotNetEnv.Env.Load();
+
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
+```
+
+## Migrations
+
+<Instruction>
+  Make sure you have the `dotnet-ef` tool installed on your machine:
+</Instruction>
+
+```
+dotnet tool install --global dotnet-ef
+```
+
+<Instruction>
+  Install the `Microsoft.EntityFrameworkCore.Design` package:
+</Instruction>
+
+```
+dotnet add package Microsoft.EntityFrameworkCore.Design
+```
+
+<Instruction>Create a new migration:</Instruction>
+
+```
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+```
+
+## CRUD Endpoints
+
+Once you have your database setup, you can start creating CRUD endpionts. This is the fun part!
+
+{/* prettier-ignore */}
+<Tabs>
+  <Tab name="Minimal API">
+    <Instruction>
+      Add GET, POST, PUT, and DELETE methods to the API to CRUD your resource.
+    </Instruction>
+
+    ```csharp
+    app.MapGet("/api/todoitems", async (DatabaseContext db) =>
+        await db.Todos.ToListAsync());
+
+    app.MapGet("/api/todoitems/complete", async (DatabaseContext db) =>
+        await db.Todos.Where(t => t.Completed).ToListAsync());
+
+    app.MapGet("/api/todoitems/{id}", async (int id, DatabaseContext db) =>
+        await db.Todos.FindAsync(id)
+            is Todo todo
+                ? Results.Ok(todo)
+                : Results.NotFound());
+
+    app.MapPost("/api/todoitems", async (Todo todo, DatabaseContext db) =>
+    {
+        db.Todos.Add(todo);
+        await db.SaveChangesAsync();
+
+        return Results.Created($"/api/todoitems/{todo.Id}", todo);
+    });
+
+    app.MapPut("/api/todoitems/{id}", async (int id, Todo inputTodo, DatabaseContext db) =>
+    {
+        var todo = await db.Todos.FindAsync(id);
+
+        if (todo is null) return Results.NotFound();
+
+        todo.Name = inputTodo.Name;
+        todo.IsComplete = inputTodo.IsComplete;
+
+        await db.SaveChangesAsync();
+
+        return Results.NoContent();
+    });
+
+    app.MapDelete("/api/todoitems/{id}", async (int id, DatabaseContext db) =>
+    {
+        if (await db.Todos.FindAsync(id) is Todo todo)
+        {
+            db.Todos.Remove(todo);
+            await db.SaveChangesAsync();
+            return Results.Ok(todo);
+        }
+
+        return Results.NotFound();
+    });
+    ```
+
+  </Tab>
+  <Tab name="Controllers">
+    <Instruction>
+      Create a Controllers folder and a `TodosController` class inside that folder:
+    </Instruction>
+
+    ```csharp
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using MyApp.Models;
+
+    namespace MyApp.Controllers;
+
+    [ApiController]
+    [Route("api/[controller]")]
+    public class TodosController : ControllerBase
+    {
+        private readonly DatabaseContext _context;
+
+        public TodosController(DatabaseContext context)
+        {
+            _context = context;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Todo>>> GetTodoItems()
+        {
+            return await _context.Todos.ToListAsync();
+        }
+
+        [HttpGet("complete")]
+        public async Task<ActionResult<IEnumerable<Todo>>> GetCompletedTodoItems()
+        {
+            return await _context.Todos.Where(t => t.IsComplete).ToListAsync();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Todo>> GetTodoItem(int id)
+        {
+            var todoItem = await _context.Todos.FindAsync(id);
+
+            if (todoItem == null)
+            {
+                return NotFound();
+            }
+
+            return todoItem;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Todo>> PostTodoItem(Todo todo)
+        {
+            _context.Todos.Add(todo);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetTodoItem), new { id = todo.Id }, todo);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutTodoItem(int id, Todo todo)
+        {
+            if (id != todo.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(todo).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTodoItem(int id)
+        {
+            var todoItem = await _context.Todos.FindAsync(id);
+            if (todoItem == null)
+            {
+                return NotFound();
+            }
+
+            _context.Todos.Remove(todoItem);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+    }
+    ```
+
+    <Note>
+      Instead of manually creating the controller, you can use the `dotnet aspnet-codegenerator` tool to generate the controller for you:
+
+      ```bash
+      dotnet aspnet-codegenerator controller \
+        -name TodosController \
+        -async \
+        -api \
+        -m Todo \
+        -dc DatabaseContext \
+        -outDir Controllers
+      ```
+    </Note>
+
+    <Instruction>
+      Add the following to your `Startup.cs` file:
+    </Instruction>
+
+    ```csharp
+    using TodoApi.Controllers;
+
+    // ...
+
+    builder.Services.AddControllers();
+
+    // ...
+
+    app.MapControllers();
+    ```
+
+  </Tab>
+</Tabs>
+
+You can test the API using a tool like [Postman](https://www.postman.com/), but I suggest adding swagger.
+
+## Swagger
+
+ASP.NET APIs provide built-in support for generating information about endpoints via the `Microsoft.AspNetCore.OpenApi` package.
+
+https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/openapi?view=aspnetcore-7.0
+
+<Instruction>Install the following packages for swagger:</Instruction>
+
+```
+dotnet add package Microsoft.AspNetCore.OpenApi
+dotnet add package Swashbuckle.AspNetCore
+```
+
+<Instruction>Enable swagger in your app</Instruction>
+
+```csharp
+using Microsoft.AspNetCore.OpenApi;
+
+// ...
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+```
+
+Now you can test your app and see the swagger UI at `https://localhost:5053/swagger/`
+
+## React
+
+This react app will be deployed as part of your .NET app in production. They will exist on the same server, with the .NET app serving the react app as its frontend.
+
+<Instruction>Create a new React app:</Instruction>
+
+```
+yarn vite create my-app-frontend
+```
+
+<Instruction>Proxy to the dotnet server:</Instruction>
+
+```js
+// https://vitejs.dev/config/
+export default defineConfig({
+  server: {
+    proxy: {
+      "/api": "http://localhost:5053",
+    },
+  },
+  plugins: [react()],
+})
+```
+
+<Instruction>Implement the frontend in React.</Instruction>
+
+Make GET, POST, PUT, and DELETE requests to the API to CRUD your resource. Example:
+
+```js
+async function createTodo(name) {
+  const result = await fetch("/api/todos", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name }),
+  }).then((res) => res.json())
+}
+```
+
+<Instruction>
+  When the frontend is done and your application is ready to deploy, build your
+  react app.
+</Instruction>
+
+```
+yarn build
+```
+
+<Instruction>
+  Copy the `dist` folder from your react app into your .NET project and rename
+  `dist` to `wwwroot`
+</Instruction>
+
+<Instruction>Add the following to your `Program.cs`:</Instruction>
+
+```c#
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.MapFallbackToFile("index.html");
+```
+
+The dotnet app should now serve up your frontend app when you make a request that isn't handled by the API.
+
+## Other Helpful Links
+
+- https://learn.microsoft.com/en-us/aspnet/core/fundamentals/apis?view=aspnetcore-7.0
+- https://learn.microsoft.com/en-us/ef/core/modeling/
