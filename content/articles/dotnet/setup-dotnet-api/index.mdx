@@ -38,14 +38,6 @@ namespace MyApp.Models;
 
 public class Todo
 {
-    public Todo(int id, string title, bool completed, DateTime createdAt)
-    {
-        Id = id;
-        Title = title;
-        Completed = completed;
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
-    }
     public int Id { get; set; }
     public string Title { get; set; }
     public bool Completed { get; set; }
@@ -379,7 +371,7 @@ Once you have your database setup, you can start creating CRUD endpionts. This i
         -outDir Controllers
       ```
 
-      But first you will need to install `Microsoft.VisualStudio.Web.CodeGeneration.Design` and for some reason you also need `Microsoft.EntityFrameworkCore.SqlServer` even though you're using MySQL or Postgres.
+      But first you will need to install `dotnet tool install -g dotnet-aspnet-codegenerator`, and `Microsoft.VisualStudio.Web.CodeGeneration.Design`, and and `Microsoft.EntityFrameworkCore.Tools`, and for some reason you also need `Microsoft.EntityFrameworkCore.SqlServer` even though you're using MySQL or Postgres.
     </Note>
 
     <Instruction>
