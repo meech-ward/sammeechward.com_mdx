@@ -23,6 +23,11 @@ Learn how to add auth to your next application using next auth and github login.
   `unstable_getServerSession` has now been renamed to `getServerSession`.
 </Note>
 
+<Warning>
+  `NEXTAUTH_SECRET` needs to be added as an environment variable in production, but some people experience issues in development when they don't have this environment variable set. So just to be save, add `NEXTAUTH_SECRET="some_secret"` to your `.env.local` file. Then use `openssl rand -base64 32` to generate a production secret when you deploy:
+  [https://next-auth.js.org/configuration/options#secret](https://next-auth.js.org/configuration/options#secret)
+</Warning>
+
 ## Chapters:
 
 - 0:00​ Intro
