@@ -1,0 +1,253 @@
+---
+type: article
+title: 'Deploy ASP.NET to AWS Lambda'
+date: '2023-03-06T01:27:16.470Z'
+slug: 'asp-net-aws-lambda'
+image: 
+  name: 'asp-lambda.png'
+  width: 1280
+  height: 720
+status: 'published'
+description: "AWS Lambda can be a great option for deploying your entire ASP.NET API. Whether you're a beginner or an experienced developer, AWS Lambda is a fantastic tool to have in your coding arsenal."
+tags: ['ASP.NET', '.NET', 'AWS', 'Lambda', "C#", "EFCore", "API Gateway", "Serverless", "Docker"]
+---
+
+In this tutorial, we'll be delving into the world of **AWS Lambda** and deploying an entire ASP.NET API using either **.NET Core 7** or **.NET Core 6**. To handle all incoming HTTP requests, we'll be utilizing Amazon API Gateway - a powerful tool for managing API requests and traffic.
+
+One important thing to keep in mind when it comes to serverless functions is that they are designed to handle small, specific tasks. They are not designed to handle entire monolithic applications. However, don't let that discourage you - AWS Lambda can still be a great option for deploying your entire ASP.NET API! Just keep in mind that if you really want to take advantage of the serverless model, you'll eventually want to break your application up into smaller peices and utilize other serverless services. 
+
+That being said, there are some major benefits to using Lambda functions for **any** application. For starters, their *pay-as-you-go* pricing model means that you'll only pay for the compute time that your code actually uses. In reality, the serverless pricing model means you're not going to pay any money unless you have a decent amount of traffic to your site. 
+And, because Lambda functions are highly scalable, you can rest assured that your application will be able to handle sudden spikes in traffic with ease. So, whether you're a beginner or an experienced developer, AWS Lambda is a fantastic tool to have in your coding arsenal. 
+
+## Project Setup 
+
+You should be able to deploy any existing ASP.NET API to Lambda. I have had the great results deploying **.NET 7** and **.NET 6** applications using a setup similar to this one:
+
+<PostCard slug="asp-net-core-api-react-client" />
+
+<Instruction>
+  Add the `Amazon.Lambda.AspNetCoreServer.Hosting` package to your project
+</Instruction>
+
+```
+dotnet add package Amazon.Lambda.AspNetCoreServer.Hosting
+```
+
+<Instruction>
+  Add the follwoing code to your project:
+</Instruction>
+
+```c#
+builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
+```
+
+The `AddAWSLambdaHosting` method enables an ASP.NET Core application to be hosted on AWS Lambda and handle HTTP requests from an **API Gateway**. It's important to note that we will need to setup an **API Gateway** in order to handle our HTTP requests.
+
+<Instruction>
+  Add the following code to your `.csproj` file:
+</Instruction>
+
+```
+<PropertyGroup>
+...
+  <!-- Generate ready to run images during publishing to improvement cold starts. -->
+  <PublishReadyToRun>true</PublishReadyToRun>
+</PropertyGroup>
+```
+
+
+Lambda functions only support up to **.NET 6**. However, you can still use **.NET 7** if you use docker.
+
+{/* prettier-ignore */}
+<Tabs>
+  <Tab name=".NET 6">
+    <Instruction>
+      Make sure the TargetFramework is net6.0 in `MyApp.csproj`
+    </Instruction>
+    
+    ```
+      <TargetFramework>net6.0</TargetFramework>
+    ```
+
+    <Instruction>
+      Create a new file in the root directory of you project named `aws-lambda-tools-defaults.json` and paste the following code:
+    </Instruction>
+
+    ```json
+    {
+      "profile": "",
+      "region": "us-west-2",
+      "configuration": "Release",
+      "function-architecture": "x86_64",
+      "function-runtime": "dotnet6",
+      "function-memory-size": 1024,
+      "function-timeout": 30,
+      "function-handler": "MyApp"
+    }
+    ```
+
+    * `profile` should be the name of the AWS profile you want to use. If you only have one profile, you can leave this blank.
+    * `region` should be the AWS region you want to deploy your Lambda function to.
+    * `configuration` should be the build configuration you want to use.
+    * `function-architecture` should be the architecture of your Lambda function.
+    * `function-runtime` should be the runtime of your Lambda function.
+    * `function-memory-size` should be the amount of memory you want to allocate to your Lambda function. I've found 1024 MB to be a good starting point for a small ASP.NET app.
+    * `function-timeout` should be the amount of time you want to allow your Lambda function to run before it times out. I've found 30 seconds to be a good starting point for a small ASP.NET app.
+    * `function-handler` should be the name of your ASP.NET application. Whatever comes before the `.csproj` file extension.
+
+</Tab>
+  <Tab name=".NET 7 (Docker)">
+    
+    <Instruction>
+      Create a new `Dockerfile` and paste the following code:
+    </Instruction>
+
+      ```
+      FROM public.ecr.aws/lambda/dotnet:7
+
+      WORKDIR /var/task
+
+      COPY "bin/Release/lambda-publish"  .
+      ```
+          
+    <Instruction>
+      Create a new file in the root directory of you project named `aws-lambda-tools-defaults.json` and paste the following code:
+    </Instruction>
+
+    ```json
+    {
+      "profile": "",
+      "region": "us-west-2",
+      "configuration": "Release",
+      "package-type": "image",
+      "function-memory-size": 1024,
+      "function-timeout": 30,
+      "image-command": "MyApp",
+      "docker-host-build-output-dir": "./bin/Release/lambda-publish"
+    }
+    ```
+
+    * `profile` should be the name of the AWS profile you want to use. If you only have one profile, you can leave this blank.
+    * `region` should be the AWS region you want to deploy your Lambda function to.
+    * `configuration` should be the build configuration you want to use.
+    * `package-type` should be set to `image` if you are using docker.
+    * `function-memory-size` should be the amount of memory you want to allocate to your Lambda function. I've found 1024 MB to be a good starting point for a small ASP.NET app.
+    * `function-timeout` should be the amount of time you want to allow your Lambda function to run before it times out. I've found 30 seconds to be a good starting point for a small ASP.NET app.
+    * `image-command` should be the name of your ASP.NET application. Whatever comes before the `.csproj` file extension.
+    * `docker-host-build-output-dir` should be the path to the directory where your build output is stored. This is the directory that was coppied into the docker image.
+
+  </Tab>
+</Tabs>
+
+
+## Deploying to Lambda
+
+### AWS CLI
+
+<Instruction>
+  Install the AWS CLI and configure it with your AWS credentials
+</Instruction>
+
+<PostCard slug="aws-cli" />
+
+### Dotnet Lambda Tools
+
+<Instruction>
+  Install the amazon lambda tools for .NET Core
+</Instruction>
+
+```
+dotnet tool install -g Amazon.Lambda.Tools
+```
+
+### Deploying
+
+<Instruction>
+  Run the following command to deploy the function.
+</Instruction>
+
+Replace `MyApp` with the name you want to use for your function in AWS. 
+
+```
+dotnet lambda deploy-function MyApp
+```
+
+This will prompt you to select or create an IAM role for your Lambda function which will give your function access to other AWS services like CloudWatch Logs, DynamoDB, and S3. I recommend creating a new role for each lambda function you create as it will make it easier to manage permissions later on.
+
+<Instruction>
+  Create a new IAM role for your Lambda function with the following settings: 
+</Instruction>
+
+* Select the option that says *** Create new IAM Role *** when prompted. 
+* Give your role a name like MyFunctionName_Role so you can easily identify it later.
+* Select the `AWSLambdaBasicExecutionRole` policy (option 6) so your function has basic access to CloudWatch Logs. This will allow your function to write logs and help you troubleshoot any issues that may arise.
+
+Once you've selected the role and policy, the function will deploy. Every time you make an update to your code, just re-run the `dotnet lambda deploy-function` command and your function will be updated.
+
+You can also view your function in the AWS Lambda Console at [https://console.aws.amazon.com/lambda/](console.aws.amazon.com/lambda). You can also do things like view your function's logs and memory usage and add environment variables. 
+
+Now you're all set to start using your new AWS Lambda function. But to allow your function to receive HTTP requests over the public internet, you'll also need an API gateway. 
+
+## API Gateway
+
+Lambda functions are code that run in response to triggers from other services. API Gateway is a service that allows you to create HTTP APIs that trigger Lambda functions. It's kind of like a load balancer or reverse proxy for your Lambda functions.
+
+<Instruction>
+  Create a new HTTP API from the API Gateway Console.
+</Instruction>
+
+Give it a name but leave all the other settings as the default settings.
+
+
+<Video path="/assets/create_api.mov">
+</Video>
+
+
+<Instruction>
+  Create a `/{proxy+}` route for every HTTP method in your app. 
+</Instruction>
+
+By sepecifying `/{proxy+}` as the path, API Gateway will match any path to your API. It's kind of like using a wildcard in a route.
+
+If you're unsure about what HTTP methods your app uses, define a route for all methods exept `OPTIONS` and `HEAD`. 
+
+Make sure you don't add routes for `ANY`, `OPTIONS` and `HEAD` -- You need those to be managed by API Gateway.
+
+
+<Video path="/assets/add_routes.mov">
+</Video>
+
+<Instruction>
+  Add your lambda function as a target for your API routes.
+</Instruction>
+
+* Select a route 
+* Click the `Add integration` button
+* Select `Lambda Function` as the integration type
+* Select the region your Lambda function is deployed to
+* Select your Lambda function from the dropdown
+* Click the `Save` button
+* Select another route 
+* Select the existing lambda function integration. 
+
+<Video path="/assets/lambda_integration.mp4">
+</Video>
+
+Once you've done this, your API will be ready to use but you won't be able to use it from a browser application because of CORS. 
+
+<Instruction>
+  Change the CORS settings to allow requests from your client app.
+</Instruction>
+
+In the CORS configuration page, you need to modify the `Access-Control-Allow-Origin`, `Access-Control-Allow-Headers`, and `Access-Control-Allow-Methods` settings. You should set these to be the exact values that will allow access from your client app. But in development, it's easiest to just set them to `*` even though that's unsecure. 
+
+<Video path="/assets/cors.mov">
+</Video>
+
+Now you can go to your main API Gateway settings to get the URL for your API and start using it in your client app.
+
+## Summary
+
+In this tutorial, you learned how to create a new ASP.NET Core app and deploy it to AWS Lambda using the AWS CLI and the Dotnet Lambda Tools. You also learned how to create an API Gateway that triggers your Lambda function.
+
+If you have any questions or comments, feel free to leave them below.
