@@ -9,7 +9,7 @@ image:
   height: 720
 status: 'published'
 description: "AWS Lambda can be a great option for deploying your entire ASP.NET API. Whether you're a beginner or an experienced developer, AWS Lambda is a fantastic tool to have in your coding arsenal."
-tags: ['ASP.NET', '.NET', 'AWS', 'Lambda', "C#", "EFCore", "API Gateway", "Serverless", "Docker"]
+tags: ['ASP.NET', '.NET', 'AWS', 'Lambda', "C#", 'csharp', 'dotnet', "EFCore", "API Gateway", "Serverless", 'Serverless', "Docker"]
 ---
 
 In this tutorial, we'll be delving into the world of **AWS Lambda** and deploying an entire ASP.NET API using either **.NET Core 7** or **.NET Core 6**. To handle all incoming HTTP requests, we'll be utilizing Amazon API Gateway - a powerful tool for managing API requests and traffic.
@@ -173,6 +173,8 @@ dotnet lambda deploy-function MyApp
 ```
 
 This will prompt you to select or create an IAM role for your Lambda function which will give your function access to other AWS services like CloudWatch Logs, DynamoDB, and S3. I recommend creating a new role for each lambda function you create as it will make it easier to manage permissions later on.
+
+<PostCard slug="intro-to-iam-roles-and-policies-on-aws" />
 
 <Instruction>
   Create a new IAM role for your Lambda function with the following settings: 
