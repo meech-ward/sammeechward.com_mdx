@@ -73,7 +73,9 @@ Display a card element for a post. The slug is the unique slug of the post.
 
 Display a tabbed element where each tab is a child of the Tabs component. Only one tab appears at a single time. This is handy for code examples in multiple languages.
 
+
 ```mdx
+{/* prettier-ignore */}
 <Tabs>
   <Tab name="JS">
     ```sh
@@ -111,6 +113,16 @@ For short gif-like videos, use this component. The path is the path to the video
 ```mdx
 <AutoPlayVideo path="/assets/postgres-railway.mov">
 </AutoPlayVideo>
+```
+
+
+## Video
+
+For short videos that don't auto play and expose video player controls. The path is the path to the video in the assets directory.
+
+```mdx
+<Video path="/assets/postgres-railway.mov">
+</Video>
 ```
 
 ## InteractiveParallelism
