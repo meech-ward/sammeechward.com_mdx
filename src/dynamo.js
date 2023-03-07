@@ -76,6 +76,27 @@ export async function putPost(post) {
   await putItem(Item)
 }
 
+export async function updatePostAnalytics(post) {
+  const Key = {
+    pk: "ENTITY#" + post.slug,
+    sk: post.sk
+  }
+  const UpdateExpression = "set analyticsUserEngagementDuration = :analyticsUserEngagementDuration, analyticsScreenPageViews = :analyticsScreenPageViews, analyticsActiveUsers = :analyticsActiveUsers"
+  const ExpressionAttributeValues = {
+    ":analyticsUserEngagementDuration": post.analyticsUserEngagementDuration,
+    ":analyticsActiveUsers": post.analyticsActiveUsers,
+    ":analyticsScreenPageViews": post.analyticsScreenPageViews,
+  }
+  const params = {
+    TableName: tableName,
+    Key,
+    UpdateExpression,
+    ExpressionAttributeValues
+  }
+  const data = await dynamodbClient.send(new UpdateCommand(params));
+  return data
+}
+
 export async function putPlaylistPost({ post, playlist }) {
   const Item = {
     ...post,
