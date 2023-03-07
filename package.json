@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "node src/build.js"
+    "build": "node src/build.js",
+    "anal": "node src/pullFromGoogleAnalytics.js"
   },
   "keywords": [],
   "author": "",
