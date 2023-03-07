@@ -13,7 +13,9 @@ const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
 
 const ddbConfig = {
   region,
-  credentials: {
+}
+if (accessKeyId && secretAccessKey) {
+  ddbConfig.credentials = {
     accessKeyId,
     secretAccessKey
   }
