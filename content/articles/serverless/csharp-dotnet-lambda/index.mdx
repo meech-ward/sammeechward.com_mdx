@@ -1,0 +1,193 @@
+---
+type: article
+title: 'Gettings started with .NET Lambda Functions'
+date: '2023-03-11T23:04:07.549Z'
+slug: 'csharp-dotnet-aws-lambda'
+image: 
+  name: 'asp-lambda.png'
+  width: 1280
+  height: 720
+status: 'published'
+description: "In this tutorial, we'll be dipping our toes into the world of **AWS Lambda** and deploying a small C# lambda function to AWS using either **.NET Core 7** or **.NET Core 6**."
+tags: ['ASP.NET', '.NET', 'AWS', 'Lambda', "C#", 'csharp', 'dotnet', "Serverless", "Docker"]
+---
+
+In this tutorial, we'll be dipping our toes into the world of **AWS Lambda** and deploying a small C# lambda function to AWS using either **.NET Core 7** or **.NET Core 6**.
+
+Lambda functions allow you to run small or large chunks of code in the cloud. They're a great option for deploying backend logic for a web app, but to get started, we'll be deploying a simple function that takes a string as input and returns an uppercased version of that string.
+
+In the next article, we'll take a look at how to use C# lambda functions to create a serverless API.
+
+### Dotnet Lambda Tools
+
+We can use the .NET cli to create and deploy our Lambda function, but we'll need to install the `Amazon.Lambda.Tools` package first. 
+
+<Instruction>
+  Install the amazon lambda tools for .NET Core:
+</Instruction>
+
+```shell
+dotnet tool install -g Amazon.Lambda.Tools
+```
+
+<Instruction>
+  Install the latest .NET templates for AWS Lambda:
+</Instruction>
+
+```shell
+dotnet new install Amazon.Lambda.Templates
+```
+
+Now you can run the following command to view all the available templates:
+
+```shell
+dotnet new list
+```
+
+You should see a whole bunch of `serverless` and `lambda` templates now. To keep things simple, we'll be using the `lambda.EmptyFunction` template
+
+## Function Setup
+
+Lambda functions natively only support up to **.NET 6**. However, you can still use **.NET 7** if you use docker, but you should make that decision now.
+
+
+<Instruction>
+  Create a new .NET Lambda function:
+</Instruction>
+
+{/* prettier-ignore */}
+<Tabs>
+  <Tab name=".NET 6">
+    ```
+    dotnet new lambda.EmptyFunction --name MyFunctionName
+    ```
+</Tab>
+  <Tab name=".NET 7 (Docker)">
+    ```
+    dotnet new lambda.image.EmptyFunction --name MyFunctionName
+    ```
+  </Tab>
+</Tabs>
+
+This will create a new directory called `MyFunctionName` with a `src` and a `test` directory inside of it.
+
+* `src` contains all the code that will run in AWS Lambda.
+* `test` contains all the unit tests for your function. We're going to ignore this for now.
+
+Inside the `src/MyFunctionName` directory, you'll find a `Function.cs` file. This is the entry point for your function. Your code should look something like this:
+
+```c#
+using Amazon.Lambda.Core;
+
+// Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
+[assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
+
+namespace MyFunctionName;
+
+public class Function
+{
+    public Casing FunctionHandler(string input, ILambdaContext context)
+    {
+        return new Casing(input.ToLower(), input.ToUpper());
+    }
+}
+
+public record Casing(string Lower, string Upper);
+```
+
+`FunctionHandler` is the method that will be called when your function is invoked. It takes a string as input and returns an uppercased version of that string as it's output (in the `Casing` class).
+
+<Instruction>
+  Add a `Console.WriteLine` statement to the `FunctionHandler` method to log a message:
+</Instruction>
+
+```c#
+public class Function
+{
+    public Casing FunctionHandler(string input, ILambdaContext context)
+    {
+        Console.WriteLine($"My First Lambda Function, input: {input}");
+        return new Casing(input.ToLower(), input.ToUpper());
+    }
+}
+```
+
+Let's deploy this function to AWS Lambda so we can test it out and see how it works.
+
+## Deploying to Lambda
+
+Before we can deploy to AWS Lambda, we'll need to create an AWS account and configure our local machine with our AWS credentials. If you haven't done this already, Follow the AWS CLI instructions below to get started.
+
+<PostCard slug="aws-cli" />
+
+<Instruction>
+  To deploy the function, run the following command inisde of `MyFunctionName/src/MyFunctionName`:
+</Instruction>
+
+Replace `MyApp` with the name you want to use for your function in AWS. 
+
+```shell
+dotnet lambda deploy-function MyFirstFunction
+```
+
+This will prompt you to select or create an IAM role for your Lambda function which will give your function access to other AWS services like CloudWatch Logs, DynamoDB, and S3. I recommend creating a new role for each lambda function you create as it will make it easier to manage permissions later on.
+
+<PostCard slug="intro-to-iam-roles-and-policies-on-aws" />
+
+<Instruction>
+  Create a new IAM role for your Lambda function with the following settings: 
+</Instruction>
+
+* Select the option that says *** Create new IAM Role *** when prompted. 
+* Give your role a name like MyFunctionName_Role so you can easily identify it later.
+* Select the `AWSLambdaBasicExecutionRole` policy (option 6) so your function has basic access to CloudWatch Logs. This will allow your function to write logs and help you troubleshoot any issues that may arise.
+
+Once you've selected the role and policy, the function will deploy. Every time you make an update to your code, just re-run the `dotnet lambda deploy-function` command and your function will be updated.
+
+
+## Testing in the AWS Web Console
+
+<Instruction>
+  Navigate to your function in the AWS Lambda Console [https://console.aws.amazon.com/lambda/](console.aws.amazon.com/lambda)
+</Instruction>
+
+Make sure you're in your profile's default region, this is probably **us-east-1**.
+
+Here you can manage your function's settings, view your function's logs and memory usage, and test your function.
+
+<Instruction>
+  Click the **Test** tab to create a new test event for your function.
+</Instruction>
+
+Enter any name for the test and replace the Event JSON with a single string like "test string". This is going to be the input to the C# function that will hopefully return that text in all caps.
+
+<Instruction>
+  Click the big orange **Test** button to run the function.
+</Instruction>
+
+If you expande the **Execution result** section, you should see the output from your function.
+
+<Video path="/assets/test_function.mov">
+</Video>
+
+You now have a serverless C# lambda function that you can execute through the web console. It's very basic but it's the start of building much more complex serverless applications. This is just the beinning. Feel free to tweak the code and redeploy to see how it works.
+
+## Cloudwatch Logs
+
+You might be wondering where the `Console.WriteLine` log message went. It's not in the execution result section of the test event. That's because the stdout from your lambda functions gets sent to another service in **AWS called cloudwatch**. Sometime to get used to when it comes to severless applications, almost everything is an additional service.
+
+To view the logs: 
+
+* Click the **Monitoring** tab.
+* Click the **View logs in CloudWatch** button. This sends you to the log group in cloud watch for the current lambda function.
+* Select the top log stream. Each time you deploy a new version of your function, a new log stream is created with the newest one always on top. 
+
+Once you've selected the log stream, you can view all the logs for that function. Both internal lambda logs and your own logs created with `Console.WriteLine`. Expand any logs in between a `START RequestId` and `END RequestId` to see the logs for a single execution of your function.
+
+<Video path="/assets/view_logs.mov">
+</Video>
+
+
+## Summary
+
+Lambda functions allow you to run small or large chunks of code in the cloud. They're a great option for deploying backend logic for a web app, and in the next article, we'll take a look at how to use C# lambda functions to create a serverless API. 
