@@ -1,0 +1,422 @@
+---
+type: article
+title: 'AWS CLI Lambda Function'
+date: '2023-03-13T06:27:40.912Z'
+slug: 'node-lambda-cli'
+image: 
+  name: 'lambda-cli.png'
+  width: 1280
+  height: 720
+status: 'published'
+description: "In this tutorial we will learn how to use the AWS cli to deploy a serverless node.js application using AWS Lambda and AWS API Gateway."
+tags: ['AWS', 'Lambda', "Serverless", "aws cli", "Infrastructure as code", "iac"]
+---
+
+
+In this tutorial we will learn how to use the AWS cli to deploy a serverless node.js application using AWS Lambda and AWS API Gateway. 
+
+Before we get started, I want to be honest with you. This may not be the most ideal way of doing things, but it's always helpful to understand the basics before diving into more advanced tools like terraform, serverless framework, SAM, AWS CDK, and others.
+
+Don't worry, I'll be covering some of those tools in future tutorials, but for now, let's enjoy the learning experience and appreciate the fundamentals of deploying a serverless application with AWS CLI.
+
+## AWS CLI
+
+AWS CLI is a command line tool that allows you to interact with AWS services from, you guessed it, the command line. It's a great tool to have in your arsenal, and setting it up is usually the first step before using any infrastructure as code tool. If you haven't already, follow my tutorial on how to install and configure the AWS CLI.
+
+<PostCard slug="aws-cli" />
+
+## Node.js Lambda Function 
+
+We'll start by creating a basic node function that just returns a "Hello World" message. Then we'll create a new lambda function in AWS and deploy our code.
+
+<Instruction>
+  Follow these steps to create a new node.js function:
+</Instruction>
+
+1. Create a new directory for your function and navigate to it in the terminal.
+2. Initialize your function with `npm init` and follow the prompts to create a new `package.json` file.
+3. Add `"type": "module"` to the `package.json` file to enable ES6 modules.
+4. Create a new file called `index.js` and add the following code:
+
+   ```
+   export const handler = async (event) => {
+     return {
+       statusCode: 200,
+       body: "Hello World!",
+     };
+   };
+   ```
+
+<Instruction>
+  Zip your function code into `function.zip` by running the following command: 
+</Instruction>
+
+{/* @ts-ignore */}
+<Tabs>
+  <Tab name="bash">
+    ```
+    zip -r function.zip index.js package.json
+    ```
+  </Tab>
+  <Tab name="powershell">
+    ```
+    Compress-Archive -Path index.js, package.json -DestinationPath function.zip
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+  When you have dependencies, you'll need to zip them as well. You can do this by running the following command:
+  {/* @ts-ignore */}
+  <Tabs>
+    <Tab name="bash">
+      ```
+      zip -r function.zip index.js package.json node_modules/
+      ```
+    </Tab>
+    <Tab name="powershell">
+      ```
+      Compress-Archive -Path index.js, package.json, node_modules/ -DestinationPath function.zip
+      ```
+    </Tab>
+  </Tabs>
+</Note>
+
+
+
+## Create a Lambda Function
+
+Before we can create a new Lambda function on AWS, we need to create an IAM role for the Lambda function. This role will grant the Lambda function permissions to access whichever AWS resources it needs. For now it will just need the `AWSLambdaBasicExecutionRole` policy, which grants the function basic permissions to access CloudWatch.
+
+<Instruction>
+  Run the following command to create the IAM role:
+</Instruction>
+
+
+{/* @ts-ignore */}
+<Tabs>
+  <Tab name="bash">
+    ```bash
+    aws iam create-role \
+    --role-name MyFunctionName_Role \
+    --assume-role-policy-document '{"Version": "2012-10-17","Statement": [{"Effect": "Allow","Principal": {"Service": "lambda.amazonaws.com"},"Action": "sts:AssumeRole"}]}'
+    ```
+  </Tab>
+  <Tab name="powershell">
+    ```
+    aws iam create-role `
+    --role-name MyFunctionName_Role `
+    --assume-role-policy-document '{"Version": "2012-10-17","Statement": [{"Effect": "Allow","Principal": {"Service": "lambda.amazonaws.com"},"Action": "sts:AssumeRole"}]}'
+    ```
+  </Tab>
+</Tabs>
+   
+
+<Instruction>
+  Attach the `AWSLambdaBasicExecutionRole` policy to the role by running the following command:
+</Instruction>
+
+{/* @ts-ignore */}
+<Tabs>
+  <Tab name="bash">
+    ```bash
+    aws iam attach-role-policy \
+    --role-name MyFunctionName_Role \
+    --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    ```
+  </Tab>
+  <Tab name="powershell">
+    ```
+    aws iam attach-role-policy `
+    --role-name MyFunctionName_Role `
+    --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    ```
+  </Tab>
+</Tabs>
+
+Make a note of what the role ARN is.
+   
+
+{/* In order to create a new Lambda function, we need to specify the ARN of the IAM role we just created. This includes the account ID, which we can get by running the following command:
+
+```
+aws sts get-caller-identity --query "Account" --output text
+``` */}
+
+
+<Instruction>
+  Create a new lambda function:
+</Instruction>
+
+{/* @ts-ignore */}
+<Tabs>
+  <Tab name="bash">
+     ```bash
+    aws lambda create-function \
+    --function-name MyFunctionName \
+    --runtime nodejs18.x \
+    --role <arn> \
+    --handler index.handler \
+    --zip-file fileb://function.zip
+    ```
+  </Tab>
+  <Tab name="powershell">
+     ```
+      aws lambda create-function `
+      --function-name MyFunctionName `
+      --runtime nodejs18.x `
+      --role <arn> `
+      --handler index.handler `
+      --zip-file fileb://function.zip
+      ```
+  </Tab>
+</Tabs>
+   
+  
+<Instruction>
+  Replace `<arn>` the the arn of the IAM role you created earlier.
+</Instruction>
+
+Make a note of the `FunctionArn` that is returned. You'll need this later.
+And that's it! You've now created a new Lambda function with your JS code. 
+
+## Re Deploying Code
+
+Every time you make an update to your code you'll need to redeploy it to AWS. You can do this by running the following command:
+
+<Instruction>
+  Zip your function code and dependencies by running the following command: 
+</Instruction>
+
+{/* @ts-ignore */}
+<Tabs>
+  <Tab name="bash">
+    ```
+    zip -r function.zip index.js package.json node_modules/
+    ```
+  </Tab>
+  <Tab name="powershell">
+    ```
+    Compress-Archive -Path index.js, package.json, node_modules/ -DestinationPath function.zip
+    ```
+  </Tab>
+</Tabs>
+
+
+<Instruction>
+  Update the lambda function with the new code:
+</Instruction>
+
+{/* @ts-ignore */}
+<Tabs>
+  <Tab name="bash">
+    ```bash
+    aws lambda update-function-code \
+    --function-name MyFunctionName \
+    --zip-file fileb://function.zip
+    ```
+  </Tab>
+  <Tab name="powershell">
+    ```
+    aws lambda update-function-code `
+    --function-name MyFunctionName `
+    --zip-file fileb://function.zip
+    ```
+  </Tab>
+</Tabs>
+
+
+## Deleting a Lambda Function
+
+And when you're done with your function, you can delete it by running the following command:
+
+{/* @ts-ignore */}
+<Tabs>
+  <Tab name="bash">
+    ```bash
+    aws lambda delete-function \
+    --function-name MyFunctionName
+    ```
+  </Tab>
+  <Tab name="powershell">
+    ```
+    aws lambda delete-function `
+    --function-name MyFunctionName
+    ```
+  </Tab>
+</Tabs>
+
+## API Gateway
+
+Of course, we don't want to have to call our Lambda function directly. We want to be able to call it from the web. To do this, we'll use API Gateway. But before we can do that, we need our function's ARN. 
+
+<Instruction>
+  Get the ARN of your Lambda function by running the following command:
+</Instruction>
+
+```
+aws lambda get-function --function-name MyFunctionName
+```
+
+To create a new HTTP API Gateway for the Lambda function, we can use the `create-api` and `create-resource` commands. 
+
+<Instruction>
+Run the following command to create a new HTTP API:
+</Instruction>
+
+{/* @ts-ignore */}
+<Tabs>
+  <Tab name="bash">
+    ```bash
+    aws apigatewayv2 create-api \
+    --name MyHTTPAPI \
+    --protocol-type HTTP 
+    ```
+  </Tab>
+  <Tab name="powershell">
+    ```
+    aws apigatewayv2 create-api `
+    --name MyHTTPAPI `
+    --protocol-type HTTP 
+    ```
+  </Tab>
+</Tabs>
+
+
+
+Make a note of the API id. 
+
+<Instruction>
+  Create a new auto deployment for API gateway by running the following command:
+</Instruction>
+
+```
+aws apigatewayv2 create-stage \
+--api-id <ApiId> \
+--stage-name dev \
+--auto-deploy
+```
+
+Replace `ApiId` with the id of the API you just created.
+
+Now whenever we make a change, like adding a new lambda function to the gateway, the changes will get automatically deployed. 
+
+<Instruction>
+  Add the lambda function to the API gateway by running the following command:
+</Instruction>
+
+
+{/* @ts-ignore */}
+<Tabs>
+  <Tab name="bash">
+    ```bash
+    aws apigatewayv2 create-integration \
+        --api-id <ApiId> \
+        --integration-type AWS_PROXY \
+        --integration-uri <FunctionArn> \
+        --payload-format-version 2.0
+    ```
+  </Tab>
+  <Tab name="powershell">
+    ```
+    aws apigatewayv2 create-integration `
+        --api-id <ApiId> `
+        --integration-type AWS_PROXY `
+        --integration-uri <FunctionArn> `
+        --payload-format-version 2.0
+    ```
+  </Tab>
+</Tabs>
+
+
+
+Make a note of the `IntegrationId` that is returned.
+
+<Instruction>
+  Create a new route for the API gateway by running the following command:
+</Instruction>
+
+{/* @ts-ignore */}
+<Tabs>
+  <Tab name="bash">
+    ```bash
+    aws apigatewayv2 create-route \
+    --api-id <ApiId> \
+    --route-key "GET /test" \
+    --target integrations/<IntegrationId>
+    ```
+  </Tab>
+  <Tab name="powershell">
+    ```
+    aws apigatewayv2 create-route `
+    --api-id <ApiId> `
+    --route-key "GET /test" `
+    --target integrations/<IntegrationId>
+    ```
+  </Tab>
+</Tabs>
+
+We're almost there, we just need to give API gateway permission to invoke the function. But in order to do that, you need your aws profile id which you can find by running the following command:
+
+```
+aws sts get-caller-identity --query "Account" --output text
+```
+
+<Instruction>
+  Add permission to the lambda function by running the following command:
+</Instruction>
+
+{/* @ts-ignore */}
+<Tabs>
+  <Tab name="bash">
+    ```bash
+      aws lambda add-permission \
+      --function-name <FunctionARN> \
+      --statement-id <UUID> \
+      --action lambda:InvokeFunction \
+      --principal apigateway.amazonaws.com \
+      --source-arn <API_GATEWAY_ARN> 
+    ```
+  </Tab>
+  <Tab name="powershell">
+    ```
+      aws lambda add-permission `
+      --function-name <FunctionARN> `
+      --statement-id <UUID> `
+      --action lambda:InvokeFunction `
+      --principal apigateway.amazonaws.com `
+      --source-arn <API_GATEWAY_ARN> 
+    ```
+  </Tab>
+</Tabs>
+
+
+
+The ARN of the HTTP API Gateway should be in the format `arn:aws:execute-api:<REGION>:<ACCOUNT_ID>:<API_ID>/*`.
+
+Once all of these steps have been succesfully completed, you should be able to visit your API gateway in the browser. Find the url by running the following command:
+
+{/* @ts-ignore */}
+<Tabs>
+  <Tab name="bash">
+    ```bash
+    aws apigatewayv2 get-api \
+      --api-id <ApiId>
+    ```
+  </Tab>
+  <Tab name="powershell">
+    ```
+    aws apigatewayv2 get-api `
+      --api-id <ApiId>
+    ```
+  </Tab>
+</Tabs>
+
+
+## Delete API gateway
+
+When you're ready to delete your api gateway, you can do so with this command:
+
+```
+aws apigatewayv2 delete-api --api-id <API_ID>
+```
