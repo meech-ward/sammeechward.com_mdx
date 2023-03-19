@@ -13,9 +13,8 @@ description: 'Let’s take a look at how to deploy a website to an S3 bucket usi
 tags: ['aws', 'cloud computing', 'serverless', 's3', 'static website', 'aws cli']
 ---
 
-Let’s take a look at how to deploy a website to an S3 bucket using the aws cli.
 
-In this article, we will take a look at how to deploy a website to an S3 bucket using the aws cli.
+In this article, we will take a look at how to setup an S3 bucket to host a static website using the aws cli. Skip to the bottom of the article if you just want the script.
 
 ## AWS CLI
 
@@ -25,11 +24,9 @@ The AWS Command Line Interface (CLI) lets us manage all of our AWS services from
 aws ec2 run-instances  --region $region --image-id "ami-0d4504aaac331dc68" --count 1 --instance-type t2.micro --associate-public-ip-address
 ```
 
-In this article, we will take a look at how to setup an S3 bucket to host a static website using the aws cli. Skip to the bottom of the article if you just want the script.
-
 ## Setup
 
-If you haven’t setup the AWS CLI already, you can do so using this link: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
+If you haven't setup the AWS CLI already, you can do so using this link: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
 
 The reference for all of the commands used here is available at  
 https://docs.aws.amazon.com/cli/latest/reference/
@@ -101,7 +98,7 @@ aws s3api put-bucket-policy --bucket your-bucket-name --policy "{
 
 `aws s3api put-bucket-policy` allows us to specify a bucket policy which has to be written in JSON. This policy will allow anyone to get the objects ot of the bucket.
 
-### 4\. Enable the s3 bucket to host an `index` and `error` html page
+### 4. Enable the s3 bucket to host an `index` and `error` html page
 
 ```shell
 aws s3 website "s3://your-bucket-name" --index-document index.html --error-document index.html
@@ -109,7 +106,7 @@ aws s3 website "s3://your-bucket-name" --index-document index.html --error-docum
 
 `aws s3 website` configures the bucket as a website. We have to include an index and an error page. We could specify a single page for both of these. This is usually what we want for a single page application.
 
-### 5\. Upload your static website
+### 5. Upload your static website
 
 ```shell
 aws s3 sync directory-path "s3://your-bucket-name/" 
