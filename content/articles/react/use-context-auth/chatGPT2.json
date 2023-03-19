@@ -1,0 +1,152 @@
+{
+    "title": "React Auth with Context",
+    "create_time": 1679192420.662438,
+    "mapping": {
+        "d65c5297-7bbb-43da-850d-6827e0df6f77": {
+            "id": "d65c5297-7bbb-43da-850d-6827e0df6f77",
+            "message": {
+                "id": "d65c5297-7bbb-43da-850d-6827e0df6f77",
+                "author": {
+                    "role": "system",
+                    "metadata": {}
+                },
+                "create_time": 1679192420.662438,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        ""
+                    ]
+                },
+                "end_turn": true,
+                "weight": 1.0,
+                "metadata": {},
+                "recipient": "all"
+            },
+            "parent": "db7a5ca4-89ad-40f7-b16d-90a05533d39a",
+            "children": [
+                "d1867177-b5b5-4287-acc4-231197c7e856"
+            ]
+        },
+        "db7a5ca4-89ad-40f7-b16d-90a05533d39a": {
+            "id": "db7a5ca4-89ad-40f7-b16d-90a05533d39a",
+            "children": [
+                "d65c5297-7bbb-43da-850d-6827e0df6f77"
+            ]
+        },
+        "d1867177-b5b5-4287-acc4-231197c7e856": {
+            "id": "d1867177-b5b5-4287-acc4-231197c7e856",
+            "message": {
+                "id": "d1867177-b5b5-4287-acc4-231197c7e856",
+                "author": {
+                    "role": "user",
+                    "metadata": {}
+                },
+                "create_time": 1679192420.66369,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "In the following article, can you turn the \"Wrapping the App with AuthProvider and Adding Routes\" section into to two sections. The first should have the user install react-router-dom and setup the routes, the second section should wrap everything in the provider. assume the reader already knows how to use react-router-dom but make a point to mention how the context makes it really easy to share data between pages when using react router. Keep the writing style the same but make it a tiny bit more engaging like 's writing from .com\n\nWhen a user is logged into a react app, we usually need to access that user's data in multiple components. For example, we might want to display the user's name in the header, show a list of their posts in the home screen, and display their profile picture in the sidebar. On top of that, we might want to protect certain pages from unauthenticated users.\n\nIn this guide, you'll learn how to share user data between components with the context API and the `useContext` hook. By the end, you'll be well-equipped to create seamless user experiences in your React apps by sharing user data across components effectively. Let's dive in and get started!\n\n## Setting Up the Project with Vite\n\nLet's dive right into creating a new React 18 project using Vite. The goal here is to create an app that can handle user authentication using `useContext`. So, fasten your seat belts and let's get started!\n\n<Instruction>Create a new Vite project using the React template.</Instruction>\n\n{/* prettier-ignore */}\n<Tabs>\n    <Tab name=\"npm\">\n    ```\n    npx create-vite my-auth-app --template react\n    cd my-auth-app\n    npm install\n    ```\n    </Tab>\n    <Tab name=\"yarn\">\n    ```\n    yarn create vite my-auth-app --template react\n    cd my-auth-app\n    yarn\n    ```\n    </Tab>\n</Tabs>\n\nNow that our project is ready, let's add the necessary components and set up our authentication context.\n\n## Creating the Authentication Context\n\nFirst things first, let's create a context that will manage the user's logged-in status and store their JWT token. We'll call it `AuthContext`.\n\n<Note>\nUsing Context allows us to keep track of information with `useState` or `useReducer`, then any component can access that information without having to pass it down as props.\nIf you're completely unfamiliar with how `userContext` works, check out the <a href=\"https://react.dev/reference/react/useContext\">official documentation</a>.\n</Note>\n\n<Instruction>Create a new file `src/AuthContext.jsx` and add the following content:</Instruction>\n\n```javascript\nimport { createContext, useState } from \"react\";\n\nconst AuthContext = createContext();\n\nfunction AuthProvider(props) {\n  const [isLoggedIn, setIsLoggedIn] = useState(false);\n  const [token, setToken] = useState(null);\n\n  const login = (jwtToken) => {\n    setIsLoggedIn(true);\n    setToken(jwtToken);\n  };\n\n  const logout = () => {\n    setIsLoggedIn(false);\n    setToken(null);\n  };\n\n  const value = {\n    isLoggedIn,\n    token,\n    login,\n    logout,\n  };\n\n  return <AuthContext.Provider value={value} {...props} />;\n}\n\nexport { AuthContext, AuthProvider };\n```\n\nHere's what's happening in the code above:\n\n1. Import `createContext` and `useState` from React.\n2. Create a new context called `AuthContext`.\n3. Define an `AuthProvider` function component that will wrap our entire app. This component maintains the `isLoggedIn` and `token` state.\n4. Define the `login` and `logout` functions to manage the user's logged-in status and token.\n5. Pass the context value as an object containing the state variables and functions.\n6. Finally, export the `AuthContext` and `AuthProvider` so we can use them in other parts of our app.\n\nNow we can make it so that any component is able to access the `isLoggedIn`,`token`,`login`, and `logout` values.\n\n## Creating the Login Screen\n\nWe're going to create a very simple login screen that mocks a network request for a JWT token. \n\n<Instruction>Create a new file `src/Login.jsx` and add the following content:</Instruction>\n\n```javascript\nimport { useContext, useState } from \"react\";\nimport { AuthContext } from \"./AuthContext\";\n\nfunction Login() {\n  const [email, setEmail] = useState(\"\");\n  const [password, setPassword] = useState(\"\");\n  const { login } = useContext(AuthContext);\n\n  const handleSubmit = async (event) => {\n    event.preventDefault();\n    // Fake network request for JWT token\n    const jwtToken = \"fake-jwt-token\";\n    login(jwtToken);\n  };\n\n  return (\n    <div>\n      <h1>Login</h1>\n      <form onSubmit={handleSubmit}>\n        <label htmlFor=\"email\">Email:</label>\n        <input\n          type=\"email\"\n          id=\"email\"\n          value={email}\n          onChange={(e) => setEmail(e.target.value)}\n        />\n        <br />\n        <label htmlFor=\"password\">Password:</label>\n        <input\n          type=\"password\"\n          id=\"password\"\n          value={password}\n          onChange={(e) => setPassword(e.target.value)}\n        />\n        <br />\n        <button type=\"submit\">Login</button>\n      </form>\n    </div>\n  );\n}\n\nexport default Login;\n```\n\nIn the `Login` component above, we:\n\n1. Import the necessary hooks and `AuthContext`.\n2. Use the `useContext` hook to access the `login` function from our `AuthContext`.\n3. Define local state for email and password input fields.\n4. Define a `handleSubmit` function that simulates a network request for a JWT token and calls the `login` function with the fake token.\n5. Render a simple form with email and password input fields and a submit button.\n\n## Creating the Home Screen\n\nNow let's create a basic home screen that will display the user's logged-in status and allow them to log out.\n\n<Instruction>Create a new file `src/Home.jsx` and add the following content:</Instruction>\n\n```javascript\nimport { useContext } from \"react\";\nimport { AuthContext } from \"./AuthContext\";\n\nfunction Home() {\n  const { isLoggedIn, logout } = useContext(AuthContext);\n\n  return (\n    <div>\n      <h1>Home</h1>\n      {isLoggedIn ? (\n        <>\n          <p>Welcome! You are logged in.</p>\n          <button onClick={logout}>Logout</button>\n        </>\n      ) : (\n        <p>Please log in to access more features.</p>\n      )}\n    </div>\n  );\n}\n\nexport default Home;\n```\n\nIn the `Home` component above, we:\n1. Import the necessary hooks and `AuthContext`.\n2. Use the `useContext` hook to access the `isLoggedIn` and `logout` functions from our `AuthContext`.\n3. Render a welcome message and a logout button if the user is logged in, otherwise, display a message prompting the user to log in.\n\n## Wrapping the App with AuthProvider and Adding Routes\n\nIt's time to put it all together. We'll wrap our entire app with the `AuthProvider` and add routes for the `Home` and `Login` components.\n\n<Instruction>Modify `src/App.jsx` to include the new routes and `AuthProvider`.</Instruction>\n\n```javascript\nimport { BrowserRouter, Link, Route, Routes } from \"react-router-dom\";\nimport { AuthProvider } from \"./AuthContext\";\nimport Home from \"./Home\";\nimport Login from \"./Login\";\n\nfunction App() {\n  return (\n    <AuthProvider>\n      <BrowserRouter>\n        <nav>\n          <ul>\n            <li>\n              <Link to=\"/\">Home</Link>\n            </li>\n            <li>\n              <Link to=\"/login\">Login</Link>\n            </li>\n          </ul>\n        </nav>\n\n        <main>\n          <Routes>\n            <Route path=\"/\" element={<Home />} />\n            <Route path=\"/login\" element={<Login />} />\n          </Routes>\n        </main>\n      </BrowserRouter>\n    </AuthProvider>\n  );\n}\n\nexport default App;\n```\n\nIn the `App` component above, we:\n1. Import the necessary components and `AuthProvider`.\n2. Wrap our entire app with the `AuthProvider` component.\n3. Add routes for the `Home` and `Login` components.\n\n"
+                    ]
+                },
+                "weight": 1.0,
+                "metadata": {
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "d65c5297-7bbb-43da-850d-6827e0df6f77",
+            "children": [
+                "e0d4344c-a8d1-41b4-8adf-c3e9268ce8ab"
+            ]
+        },
+        "e0d4344c-a8d1-41b4-8adf-c3e9268ce8ab": {
+            "id": "e0d4344c-a8d1-41b4-8adf-c3e9268ce8ab",
+            "message": {
+                "id": "e0d4344c-a8d1-41b4-8adf-c3e9268ce8ab",
+                "author": {
+                    "role": "assistant",
+                    "metadata": {}
+                },
+                "create_time": 1679192506.701998,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "## Setting Up Routes with react-router-dom\n\nBefore diving into wrapping our app with `AuthProvider`, let's first install `react-router-dom` and set up routes for our `Home` and `Login` components. This will make it even easier to share data between pages when using React Router.\n\n<Instruction>Install `react-router-dom` using npm or yarn:</Instruction>\n\n```bash\nnpm install react-router-dom\n```\nor\n```bash\nyarn add react-router-dom\n```\n\n<Instruction>Now, modify `src/App.jsx` to include the new routes:</Instruction>\n\n```javascript\nimport { BrowserRouter, Link, Route, Routes } from \"react-router-dom\";\nimport Home from \"./Home\";\nimport Login from \"./Login\";\n\nfunction App() {\n  return (\n    <BrowserRouter>\n      <nav>\n        <ul>\n          <li>\n            <Link to=\"/\">Home</Link>\n          </li>\n          <li>\n            <Link to=\"/login\">Login</Link>\n          </li>\n        </ul>\n      </nav>\n\n      <main>\n        <Routes>\n          <Route path=\"/\" element={<Home />} />\n          <Route path=\"/login\" element={<Login />} />\n        </Routes>\n      </main>\n    </BrowserRouter>\n  );\n}\n\nexport default App;\n```\n\n## Wrapping the App with AuthProvider\n\nWith our routes in place, let's wrap our entire app with the `AuthProvider`. This will make the user data available to any component nested inside it.\n\n<Instruction>Modify `src/App.jsx` to include the `AuthProvider`:</Instruction>\n\n```javascript\nimport { BrowserRouter, Link, Route, Routes } from \"react-router-dom\";\nimport { AuthProvider } from \"./AuthContext\";\nimport Home from \"./Home\";\nimport Login from \"./Login\";\n\nfunction App() {\n  return (\n    <AuthProvider>\n      <BrowserRouter>\n        <nav>\n          <ul>\n            <li>\n              <Link to=\"/\">Home</Link>\n            </li>\n            <li>\n              <Link to=\"/login\">Login</Link>\n            </li>\n          </ul>\n        </nav>\n\n        <main>\n          <Routes>\n            <Route path=\"/\" element={<Home />} />\n            <Route path=\"/login\" element={<Login />} />\n          </Routes>\n        </main>\n      </BrowserRouter>\n    </AuthProvider>\n  );\n}\n\nexport default App;\n```\n\nBy dividing the section into two parts, we first focused on installing `react-router-dom` and setting up the routes, making it easier to share data between pages. Then, we wrapped the app with `AuthProvider`, ensuring that user data is accessible throughout the app. 's engaging writing style from .com served as an inspiration to make the content a bit more lively."
+                    ]
+                },
+                "end_turn": true,
+                "weight": 1.0,
+                "metadata": {
+                    "model_slug": "gpt-4",
+                    "finish_details": {
+                        "type": "stop",
+                        "stop": "<|diff_marker|>"
+                    },
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "d1867177-b5b5-4287-acc4-231197c7e856",
+            "children": [
+                "5448e1de-8ea8-4000-9215-b36ba799902b"
+            ]
+        },
+        "5448e1de-8ea8-4000-9215-b36ba799902b": {
+            "id": "5448e1de-8ea8-4000-9215-b36ba799902b",
+            "message": {
+                "id": "5448e1de-8ea8-4000-9215-b36ba799902b",
+                "author": {
+                    "role": "user",
+                    "metadata": {}
+                },
+                "create_time": 1679192577.283212,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "keep going"
+                    ]
+                },
+                "weight": 1.0,
+                "metadata": {
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "e0d4344c-a8d1-41b4-8adf-c3e9268ce8ab",
+            "children": [
+                "8a839322-958c-4089-a661-3b90369a29df"
+            ]
+        },
+        "8a839322-958c-4089-a661-3b90369a29df": {
+            "id": "8a839322-958c-4089-a661-3b90369a29df",
+            "message": {
+                "id": "8a839322-958c-4089-a661-3b90369a29df",
+                "author": {
+                    "role": "assistant",
+                    "metadata": {}
+                },
+                "create_time": 1679192702.683297,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "## Adding a Protected Route\n\nNow that we have our `AuthProvider` and routes set up, let's add a protected route to our app. This route will only be accessible to authenticated users. We'll create a `Profile` component that will be our protected route.\n\n### Creating the Profile Component\n\n<Instruction>Create a new file `src/Profile.jsx` and add the following content:</Instruction>\n\n```javascript\nimport { useContext } from \"react\";\nimport { AuthContext } from \"./AuthContext\";\n\nfunction Profile() {\n  const { token } = useContext(AuthContext);\n\n  return (\n    <div>\n      <h1>Profile</h1>\n      <p>Your secret token is: {token}</p>\n    </div>\n  );\n}\n\nexport default Profile;\n```\n\nIn the `Profile` component above, we:\n\n1. Import the necessary hooks and `AuthContext`.\n2. Use the `useContext` hook to access the `token` from our `AuthContext`.\n3. Render the user's secret token as part of their profile information.\n\n### Creating a Route Guard\n\nTo protect the `Profile` route, we'll create a higher-order component called `RouteGuard` that will check if the user is logged in before rendering the protected component.\n\n<Instruction>Create a new file `src/RouteGuard.jsx` and add the following content:</Instruction>\n\n```javascript\nimport { useContext } from \"react\";\nimport { Navigate } from \"react-router-dom\";\nimport { AuthContext } from \"./AuthContext\";\n\nfunction RouteGuard({ children }) {\n  const { isLoggedIn } = useContext(AuthContext);\n\n  return isLoggedIn ? children : <Navigate to=\"/login\" />;\n}\n\nexport default RouteGuard;\n```\n\nIn the `RouteGuard` component above, we:\n\n1. Import the necessary hooks, `Navigate` from `react-router-dom`, and `AuthContext`.\n2. Use the `useContext` hook to access the `isLoggedIn` value from our `AuthContext`.\n3. Check if the user is logged in, and if so, render the protected component. Otherwise, redirect the user to the `/login` page.\n\n### Adding the Protected Route\n\nFinally, let's add the `Profile` component as a protected route in our `App` component.\n\n<Instruction>Modify `src/App.jsx` to include the `Profile` route and wrap it with the `RouteGuard`:</Instruction>\n\n```javascript\nimport { BrowserRouter, Link, Route, Routes } from \"react-router-dom\";\nimport { AuthProvider } from \"./AuthContext\";\nimport Home from \"./Home\";\nimport Login from \"./Login\";\nimport Profile from \"./Profile\";\nimport RouteGuard from \"./RouteGuard\";\n\nfunction App() {\n  return (\n    <AuthProvider>\n      <BrowserRouter>\n        <nav>\n          <ul>\n            <li>\n              <Link to=\"/\">Home</Link>\n            </li>\n            <li>\n              <Link to=\"/login\">Login</Link>\n            </li>\n            <li>\n              <Link to=\"/profile\">Profile</Link>\n            </li>\n          </ul>\n        </nav>\n\n        <main>\n          <Routes>\n            <Route path=\"/\" element={<Home />} />\n            <Route path=\"/login\" element={<Login />} />\n            <Route\n              path=\"/profile\"\n              element={\n                <RouteGuard>\n                  <Profile />\n                </RouteGuard>\n              }\n            />\n          </Routes>\n        </main>\n      </BrowserRouter>\n    </AuthProvider>\n  );\n}\n\nexport default App;\n```\n\nNow, the `Profile` route is protected by the `RouteGuard` component. Users who aren't logged in will be redirected to the `/login` page when trying to access the `/profile` route.\n\nWith this setup, you've successfully implemented a protected route in your"
+                    ]
+                },
+                "end_turn": false,
+                "weight": 1.0,
+                "metadata": {
+                    "model_slug": "gpt-4",
+                    "finish_details": {
+                        "type": "max_tokens"
+                    },
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "5448e1de-8ea8-4000-9215-b36ba799902b",
+            "children": []
+        }
+    },
+    "moderation_results": [],
+    "current_node": "8a839322-958c-4089-a661-3b90369a29df"
+}
