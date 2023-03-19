@@ -9,7 +9,7 @@
     "anal": "node src/pullFromGoogleAnalytics.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "me",
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.183.0",

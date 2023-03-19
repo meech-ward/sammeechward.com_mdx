@@ -4,6 +4,9 @@ import { updatePostAnalytics, getAllPosts } from './dynamo.js'
 
 import { updateAlgolia } from './algolia.js'
 
+import dotenv from "dotenv"
+dotenv.config()
+
 const GA4_PROPERTY_ID = '336033649';
 
 // Using a default constructor instructs the client to use the credentials
