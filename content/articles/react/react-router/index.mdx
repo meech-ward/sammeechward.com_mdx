@@ -1,0 +1,246 @@
+---
+type: article
+title: "Adding React Router 6"
+slug: react-router-6
+
+description: "In this tutorial, we'll explore the process of adding React Router 6 to a React 18 application using Vite"
+image:
+  name: "react.js.png"
+  width: 1280
+  height: 720
+
+status: "published"
+date: "2023-03-18T22:43:07.381Z"
+tags: ["React Router", "React", "JavaScript", "Frontend"]
+---
+
+In this tutorial, we'll explore the process of adding **React Router 6** to a React 18 application using **Vite**. We'll create a simple application with a few routes and configure Vite to make it all work together seamlessly.
+
+## Project Setup
+
+First, we need to create a new React project using Vite.
+
+<Instruction>Create a new Vite project using the React template.</Instruction>
+
+{/* prettier-ignore */}
+<Tabs>
+    <Tab name="npm">
+    ```
+    npx create-vite my-react-router-app --template react
+    cd my-react-router-app
+    npm install
+    ```
+    </Tab>
+    <Tab name="yarn">
+    ```
+    yarn create vite my-react-router-app --template react
+    cd my-react-router-app
+    yarn
+    ```
+    </Tab>
+</Tabs>
+
+Now that we've set up our project, let's add React Router 6 to it.
+
+## Adding React Router 6
+
+<Instruction>Install React Router 6 as a dependency.</Instruction>
+
+{/* prettier-ignore */}
+<Tabs>
+    <Tab name="npm">
+    ```
+    npm install react-router-dom
+    ```
+    </Tab>
+    <Tab name="yarn">
+    ```
+    yarn add react-router-dom
+    ```
+    </Tab>
+</Tabs>
+
+With React Router 6 installed, let's create a simple application with a few routes to demonstrate its usage.
+
+## Creating Components and Routes
+
+<Instruction>
+  Create three new components: `Home.jsx`, `About.jsx`, and `Contact.jsx` in the
+  `src` folder.
+</Instruction>
+
+**src/Home.jsx**
+
+```javascript
+export default function Home() {
+  return (
+    <div>
+      <h1>Home</h1>
+      <p>Welcome to our home page!</p>
+    </div>
+  )
+}
+```
+
+**src/About.jsx**
+
+```javascript
+export default function About() {
+  return (
+    <div>
+      <h1>About</h1>
+      <p>Learn more about us!</p>
+    </div>
+  )
+}
+```
+
+**src/Contact.jsx**
+
+```javascript
+export default function Contact() {
+  return (
+    <div>
+      <h1>Contact</h1>
+      <p>Get in touch with us!</p>
+    </div>
+  )
+}
+```
+
+Now that we have our components, let's create routes for them using React Router 6.
+
+<Instruction>Modify `src/App.jsx` to include the new routes.</Instruction>
+
+**src/App.jsx**
+
+```javascript
+import React from 'react';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import Home from './Home';
+import About from './About';
+import Contact from './Contact';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/about">About</Link>
+          </li>
+          <li>
+            <Link to="/contact">Contact</Link>
+          </li>
+        </ul>
+      </nav>
+
+      <main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </main>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+
+I'll explain the code above in more detail below, but first, let's run our application and see React Router 6 in action.
+
+## Running the Application
+
+<Instruction>Start the development server.</Instruction>
+
+{/* prettier-ignore */}
+<Tabs>
+    <Tab name="npm">
+    ```
+    npm run dev
+    ```
+    </Tab>
+    <Tab name="yarn">
+    ```
+    yarn dev
+    ```
+    </Tab>
+</Tabs>
+
+Open your browser and navigate to `http://localhost:5173`. You should see the home page of our application with the navigation links at the top. Clicking on these links will navigate you to the corresponding pages, demonstrating React Router 6 functionality.
+
+## Explaining `App.jsx`
+
+Let's go through the `App.jsx` code snippet step by step to explain how it works.
+
+```jsx
+import React from 'react';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { HomePage } from './pages/HomePage';
+import { AboutPage } from './pages/AboutPage';
+import { ContactPage } from './pages/ContactPage';
+```
+
+In the beginning, we import the necessary React and React Router components. We also import the `HomePage`, `AboutPage`, and `ContactPage` components from their respective files.
+
+```jsx
+function App() {
+  return (
+    <BrowserRouter>
+```
+
+We define the `App` component, which will serve as the root component of our application. Inside the `App` component, we use the `BrowserRouter` component, which is responsible for handling the routing and history manipulation for our app.
+
+```jsx
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/about">About</Link>
+          </li>
+          <li>
+            <Link to="/contact">Contact</Link>
+          </li>
+        </ul>
+      </nav>
+```
+
+We create a simple navigation menu using the `nav` and `ul` HTML elements. Within the menu, we use the `Link` component from React Router to create links for our routes. The `to` prop in each `Link` component specifies the destination URL for the link.
+
+```jsx
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+        </Routes>
+      </main>
+```
+
+We use the `Routes` component to define our application's routes. Inside the `Routes` component, we add a `Route` component for each of our pages. The `path` prop specifies the URL path for the route, while the `element` prop defines the component to render when the route is active.
+
+```jsx
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+Finally, we close the `BrowserRouter` component and export the `App` component as the default export of the module.
+
+This `App.jsx` file sets up a basic React app with three routes (home, about, and contact) and a navigation menu. When users click on the navigation links, the corresponding route will be activated, and the associated component will be rendered within the `main` element.
+
+## Summary
+
+In this tutorial, we've successfully added React Router 6 to a React 18 application using Vite. We created a simple application with a few routes, set up navigation links, and demonstrated how React Router 6 handles navigation between pages.
+
+If you have any questions or comments, feel free to leave them below. Happy coding!
