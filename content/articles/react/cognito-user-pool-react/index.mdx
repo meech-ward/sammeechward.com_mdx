@@ -873,7 +873,6 @@ function AuthProvider({ children }) {
   const getCurrentUser = async () => {
     try {
       const user = await auth.getCurrentUser()
-      console.log("current user", user)
       setUser(user)
     } catch (err) {
       // not logged in
@@ -979,7 +978,6 @@ export default function Login() {
     }
   }
 
-  console.log({user})
   // If the user is logged in, don't show the login form
   if (user) {
     // Redirect to the profile page
