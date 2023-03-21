@@ -15,6 +15,8 @@ image:
 status: 'published' | 'draft'
 description: 'A short summary that will appear in the list of articles page'
 tags: ['can be helpful for algolia search']
+previousPostSlug: 'aws-route-53-domain-name'
+nextPostSlug: 'aws-cli'
 ---
 ```
 
