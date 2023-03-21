@@ -51,7 +51,7 @@ We'll start by creating a basic node function that just returns a "Hello World" 
   Zip your function code into `function.zip` by running the following command: 
 </Instruction>
 
-{/* @ts-ignore */}
+{/* prettier-ignore */}
 <Tabs>
   <Tab name="bash">
     ```
@@ -67,7 +67,7 @@ We'll start by creating a basic node function that just returns a "Hello World" 
 
 <Note>
   When you have dependencies, you'll need to zip them as well. You can do this by running the following command:
-  {/* @ts-ignore */}
+  {/* prettier-ignore */}
   <Tabs>
     <Tab name="bash">
       ```
@@ -93,7 +93,7 @@ Before we can create a new Lambda function on AWS, we need to create an IAM role
 </Instruction>
 
 
-{/* @ts-ignore */}
+{/* prettier-ignore */}
 <Tabs>
   <Tab name="bash">
     ```bash
@@ -116,7 +116,7 @@ Before we can create a new Lambda function on AWS, we need to create an IAM role
   Attach the `AWSLambdaBasicExecutionRole` policy to the role by running the following command:
 </Instruction>
 
-{/* @ts-ignore */}
+{/* prettier-ignore */}
 <Tabs>
   <Tab name="bash">
     ```bash
@@ -140,7 +140,7 @@ Make a note of what the role ARN is.
   Create a new lambda function:
 </Instruction>
 
-{/* @ts-ignore */}
+{/* prettier-ignore */}
 <Tabs>
   <Tab name="bash">
      ```bash
@@ -180,7 +180,7 @@ Every time you make an update to your code you'll need to redeploy it to AWS. Yo
   Zip your function code and dependencies by running the following command: 
 </Instruction>
 
-{/* @ts-ignore */}
+{/* prettier-ignore */}
 <Tabs>
   <Tab name="bash">
     ```
@@ -199,7 +199,7 @@ Every time you make an update to your code you'll need to redeploy it to AWS. Yo
   Update the lambda function with the new code:
 </Instruction>
 
-{/* @ts-ignore */}
+{/* prettier-ignore */}
 <Tabs>
   <Tab name="bash">
     ```bash
@@ -222,7 +222,7 @@ Every time you make an update to your code you'll need to redeploy it to AWS. Yo
 
 And when you're done with your function, you can delete it by running the following command:
 
-{/* @ts-ignore */}
+{/* prettier-ignore */}
 <Tabs>
   <Tab name="bash">
     ```bash
@@ -256,7 +256,7 @@ To create a new HTTP API Gateway for the Lambda function, we can use the `create
 Run the following command to create a new HTTP API:
 </Instruction>
 
-{/* @ts-ignore */}
+{/* prettier-ignore */}
 <Tabs>
   <Tab name="bash">
     ```bash
@@ -298,7 +298,7 @@ Now whenever we make a change, like adding a new lambda function to the gateway,
 </Instruction>
 
 
-{/* @ts-ignore */}
+{/* prettier-ignore */}
 <Tabs>
   <Tab name="bash">
     ```bash
@@ -328,7 +328,7 @@ Make a note of the `IntegrationId` that is returned.
   Create a new route for the API gateway by running the following command:
 </Instruction>
 
-{/* @ts-ignore */}
+{/* prettier-ignore */}
 <Tabs>
   <Tab name="bash">
     ```bash
@@ -358,7 +358,7 @@ aws sts get-caller-identity --query "Account" --output text
   Add permission to the lambda function by running the following command:
 </Instruction>
 
-{/* @ts-ignore */}
+{/* prettier-ignore */}
 <Tabs>
   <Tab name="bash">
     ```bash
@@ -386,9 +386,14 @@ aws sts get-caller-identity --query "Account" --output text
 
 The ARN of the HTTP API Gateway should be in the format `arn:aws:execute-api:<REGION>:<ACCOUNT_ID>:<API_ID>/*`.
 
-Once all of these steps have been succesfully completed, you should be able to visit your API gateway in the browser. Find the url by running the following command:
+Once all of these steps have been succesfully completed, you should be able to visit your API gateway in the browser. 
 
-{/* @ts-ignore */}
+<Instruction>
+Find the url by running the following command:
+</Instruction>
+
+
+{/* prettier-ignore */}
 <Tabs>
   <Tab name="bash">
     ```bash
