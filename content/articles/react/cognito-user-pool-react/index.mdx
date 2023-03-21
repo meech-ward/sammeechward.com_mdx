@@ -21,7 +21,7 @@ tags:
     "aws",
   ]
 previousPostSlug: 'use-context-auth'
-# nextPostSlug: 'aws-cli'
+nextPostSlug: 'cognito-identity-pool-react'
 ---
 
 Hey there, future-authentication-ninja! Are you ready to dive into the world of user authentication and management with Amazon Cognito?
@@ -891,7 +891,7 @@ function AuthProvider({ children }) {
   const signIn = async (username, password) => {
     debugger
     await auth.signIn(username, password)
-    await fetchUser()
+    await getCurrentUser()
   }
   const signOut = async () => {
     await auth.signOut()
