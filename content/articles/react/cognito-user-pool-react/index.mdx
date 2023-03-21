@@ -1,0 +1,1439 @@
+---
+type: article
+title: "AWS Cognito User Pool & React.js"
+date: "2023-03-21T00:03:38.361Z"
+slug: "cognito-user-pool-react"
+image:
+  name: "react.js.png"
+  width: 1280
+  height: 720
+status: "published"
+description: "This tutorial will guide you through the process of adding `amazon-cognito-identity-js` to your React app so that your users can authenticate with an Amazon Cognito User Pool."
+tags:
+  [
+    "react js",
+    "aws cognito",
+    "aws cognito user pool",
+    "aws cognito identity pool",
+    "aws cognito user pool authentication",
+    "authentication",
+    "react",
+    "aws",
+  ]
+---
+
+Hey there, future-authentication-ninja! Are you ready to dive into the world of user authentication and management with Amazon Cognito?
+
+This tutorial will guide you through the process of adding `amazon-cognito-identity-js` to your React app so that your users can authenticate with an Amazon Cognito User Pool. We'll cover everything you need to know to implement:
+
+- SignUp
+- Email Confirmation
+- Login
+- Logout
+- Forgot password
+
+Let's get started!
+
+<Note>
+  Once you've followed this tutorial to setup authentication with cognito,
+  you'll be able authorize users in any backend application by verifying the
+  auth token that cognito saves in your react app's local storage. It doesn't
+  matter if you create a custom backend or if you use an API Gateway with a JWT
+  authorizer, you can use the cognito auth token to authorize in any backend.
+  I'll be adding tutorials on how to do that.
+</Note>
+
+## Amazon Cognito User Pool
+
+Before we dive into creating our React app, let's first set up our Amazon Cognito User Pool and create an `auth.js` file that will contain our helper functions for authentication.
+
+To keep things easy, we are going to use the simplest settings. That means only authenticaing with username, email address, and password--and avoiding features like 2FA.
+
+<Instruction>Create a new Cognito User Pool</Instruction>
+
+<Video path="/assets/create-basic-user-pool.mov"></Video>
+
+When you finish the User Pool setup, take note of the **Pool Id** and the **App Client Id** for a newly created App Client.
+
+## Project Setup
+
+This tutorial will cover how to implement basic UI for all the authentication functions, and uses React Router to handle the routing to pages. If you already have a react app, you can implement this tutorial in your existing project. If you don't have a react app, you can create a new react app using the following command:
+
+{/* prettier-ignore */}
+<Tabs>
+    <Tab name="npm">
+    ```
+    npx create-vite my-react-router-app --template react
+    cd my-react-router-app
+    npm install
+    ```
+    </Tab>
+    <Tab name="yarn">
+    ```
+    yarn create vite my-react-router-app --template react
+    cd my-react-router-app
+    yarn
+    ```
+    </Tab>
+</Tabs>
+
+## Installation
+
+Now we need to install the `amazon-cognito-identity-js` package that contains all of the functionality we need to interact with our Cognito User Pool.
+
+<Instruction>Install `amazon-cognito-identity-js` as a dependency.</Instruction>
+
+{/* prettier-ignore */}
+<Tabs>
+    <Tab name="npm">
+    ```
+    npm install amazon-cognito-identity-js
+    ```
+    </Tab>
+    <Tab name="yarn">
+    ```
+    yarn add amazon-cognito-identity-js
+    ```
+    </Tab>
+</Tabs>
+
+The `amazon-cognito-identity-js` package references `global` which is not defined in a Vite environment by default. So to make sure we don't encounter any issues with the library, we need to define a `global` variable in our `vite.config.js` file.
+
+<Instruction>Define an empty `global` object in `vite.config.js`</Instruction>
+
+```js
+// vite.config.js
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  define: {
+    global: {},
+  },
+})
+```
+
+Now that we've got our package installed, it's time to get our hands dirty!
+
+## Cognito Configuration
+
+Before we get to the fun part (creating forms and managing user details), we need to set up our Cognito configuration. You'll need your Cognito User Pool ID and Client ID, which you should have already created in AWS.
+
+<Instruction>Create a `cognitoConfig.js` file in the `src` folder.</Instruction>
+
+**src/cognitoConfig.js**
+
+```javascript
+export const cognitoConfig = {
+  UserPoolId: "your-user-pool-id",
+  ClientId: "your-client-id",
+}
+```
+
+Don't forget to replace `"your-user-pool-id"` and `"your-client-id"` with your actual User Pool ID and Client ID, respectively.
+
+## Authentication Helper
+
+For a smooth and reusable authentication experience, let's create a helper file to manage our Cognito-related functions. This file will serve as a bridge between our components and the `amazon-cognito-identity-js` package.
+
+<Instruction>Create an `auth.js` file in the `src` folder.</Instruction>
+
+**src/auth.js**
+
+```javascript
+import {
+  CognitoUserPool,
+  CognitoUser,
+  AuthenticationDetails,
+} from "amazon-cognito-identity-js"
+import { cognitoConfig } from "./cognitoConfig"
+
+const userPool = new CognitoUserPool({
+  UserPoolId: cognitoConfig.UserPoolId,
+  ClientId: cognitoConfig.ClientId,
+})
+
+export function signUp(username, email, password) {
+  // Sign up implementation
+}
+
+export function confirmSignUp(username, code) {
+  // Confirm sign up implementation
+}
+
+export function signIn(username, password) {
+  // Sign in implementation
+}
+
+export function forgotPassword(username) {
+  // Forgot password implementation
+}
+
+export function confirmPassword(username, code, newPassword) {
+  // Confirm password implementation
+}
+
+export function signOut() {
+  // Sign out implementation
+}
+
+export function getCurrentUser() {
+  // Get current user implementation
+}
+
+export function getSession() {
+  // Get session implementation
+}
+```
+
+Now that we have our helper functions set up, we'll need to go through each one and add the Cognito code. We'll go over the code for each function step by step so you can understand what's happening under the hood. But before we do that, we'll setup the UI to be able to sign in, so let's setup a very basic Sign Up page.
+
+## Sign Up Page
+
+Now that we have our Cognito User Pool and `auth.js` helper file set up, let's create the SignUp page that interacts with the signUp function. We'll create a new file called `SignUp.js` inside the src folder.
+
+SignUp Page
+
+**src/SignUp.js**
+
+<Instruction>Create an `SignUp.js` file in the `src` folder.</Instruction>
+
+```jsx
+import { useState } from "react"
+import { signUp } from "./auth"
+
+export default function SignUp() {
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError("")
+
+    try {
+      await signUp(username, email, password)
+      setSuccess(true)
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
+  if (success) {
+    return (
+      <div>
+        <h2>SignUp successful!</h2>
+        <p>Please check your email for the confirmation code.</p>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <h2>SignUp</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit">SignUp</button>
+      </form>
+      {error && <p>{error}</p>}
+    </div>
+  )
+}
+```
+
+In this `SignUp` component, we are using state variables to manage the form input fields and error messages. When the form is submitted, we call the `handleSubmit` function. **Inside `handleSubmit`, we call the `signUp` function from auth.js and pass in the `username`, `email`, and `password`**. If the signUp is successful, we show a message asking the user to check their email for the confirmation code. If there's an error, we display the error message.
+
+We still need to implement the `signUp` function in our `auth.js` helper file for this to work. But first, let's quickly setup routing so we can navigate to the different pages as we build them.
+
+## React Router
+
+If you're not familiar with react router, you can check out my post on React Router 6.
+
+<PostCard slug="react-router-6" />
+
+<Instruction>Install React Router 6 as a dependency.</Instruction>
+
+{/* prettier-ignore */}
+<Tabs>
+    <Tab name="npm">
+    ```
+    npm install react-router-dom
+    ```
+    </Tab>
+    <Tab name="yarn">
+    ```
+    yarn add react-router-dom
+    ```
+    </Tab>
+</Tabs>
+
+<Instruction>Modify `src/App.jsx` to include the signUp route.</Instruction>
+
+```jsx
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import SignUp from "./SignUp"
+
+function App() {
+  return (
+    <Router>
+      <Switch>
+        <Route path="/signUp" component={<SignUp />} />
+        {/* Add other routes here */}
+      </Switch>
+    </Router>
+  )
+}
+
+export default App
+```
+
+Here, we import the SignUp component and add a route to the `/signUp` path. Now you can navigate to `http://localhost:5172/signUp` in your application to access the SignUp page.
+
+## SignUp Logic
+
+Now, let's create the `signUp` function in our `auth.js` helper file that the `SignUp` component will use.
+
+```js
+export function signUp(username, email, password) {
+  // Sign up implementation
+}
+```
+
+Our `signUp` function takes three arguments: `username`, `email`, and `password`. It will create a new user in the Cognito User Pool.
+
+<Instruction>
+  Update the `auth.js` helper file to implement the `signUp` function with the
+  following code:
+</Instruction>
+
+```js
+export function signUp(username, email, password) {
+  return new Promise((resolve, reject) => {
+    userPool.signUp(
+      username,
+      password,
+      [{ Name: "email", Value: email }],
+      null,
+      (err, result) => {
+        if (err) {
+          reject(err)
+          return
+        }
+        resolve(result.user)
+      }
+    )
+  })
+}
+```
+
+We're returning a Promise that will resolve with the new user or reject with an error. Unfortunately, the Cognito User Pool SDK doesn't support Promises, so we have to wrap the all the functions in Promises.
+
+The `userPool.signUp()` method takes the `username`, `password` for the user that we're signing up, plus a list of user attributes. In this case, we're only adding an `email`.
+
+Go ahead and sign up right now, you should receive an confirmation email from Cognito.
+
+## Confirm Sign Up Page
+
+Now that we've got our sign-up page up and running, it's time to create another amazing page for users to confirm their registration using the code sent to their email address. Ready for some more coding action? Let's do this!
+
+<Instruction>
+  Create a `ConfirmSignUp.js` file in the `src` folder, and let the magic begin!
+</Instruction>
+
+**src/ConfirmSignUp.js**
+
+```jsx
+import { useState } from "react"
+import { confirmSignUp } from "./auth"
+
+export default function ConfirmSignUp() {
+  const [username, setUsername] = useState("")
+  const [code, setCode] = useState("")
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError("")
+
+    try {
+      await confirmSignUp(username, code)
+      setSuccess(true)
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
+  if (success) {
+    return (
+      <div>
+        <h2>Confirmation successful!</h2>
+        <p>You can now log in with your credentials. Go rock that app!</p>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <h2>Confirm Sign Up</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Confirmation code"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+        />
+        <button type="submit">Confirm</button>
+      </form>
+      {error && <p>{error}</p>}
+    </div>
+  )
+}
+```
+
+In our `ConfirmSignUp` component, we're using state variables to manage the form input fields and error messages. When the form is submitted, the `handleSubmit` function comes to life! **Inside `handleSubmit`, we call the `confirmSignUp` function from our `auth.js` file and pass in the `username` and `code`**. If the confirmation is successful, we throw a mini-celebration and display a message saying that the user can now log in with their credentials. However, if there's an error, we show some empathy and display the error message (which you should be doing in all your react apps).
+
+To make all this work seamlessly, we need to implement the `confirmSignUp` function in our `auth.js` helper file. So let's roll up our sleeves and dive into the code!
+
+Alright! Time to implement the `confirmSignUp` function in our trusty `auth.js` helper file. Are you ready? Let's jump right in!
+
+```js
+export function confirmSignUp(username, code) {
+  // Confirm sign up implementation
+}
+```
+
+Our `confirmSignUp` function takes two arguments: `username` and `code`. Its purpose is to confirm the user's registration in the Cognito User Pool using the unique confirmation code sent to their email.
+
+<Instruction>
+  Update the `auth.js` helper file to implement the `confirmSignUp` function
+  with the following code:
+</Instruction>
+
+```js
+export function confirmSignUp(username, code) {
+  return new Promise((resolve, reject) => {
+    const cognitoUser = new CognitoUser({
+      Username: username,
+      Pool: userPool,
+    })
+
+    cognitoUser.confirmRegistration(code, true, (err, result) => {
+      if (err) {
+        reject(err)
+        return
+      }
+      resolve(result)
+    })
+  })
+}
+```
+
+Once again, we're returning a Promise that resolves with the confirmation result or rejects with an error. As we know, the Cognito User Pool SDK isn't the biggest fan of Promises, so we'll have to wrap this function in a Promise as well.
+
+- We first create a new `CognitoUser` instance with the provided `username` and our `userPool`.
+- Next, we call the `cognitoUser.confirmRegistration()` method, passing in the confirmation `code`, a boolean flag to indicate whether we want to mark the email as verified (we do, so we pass `true`), and a callback function.
+- If there's an error, the Promise is rejected; otherwise, it resolves with the result of the confirmation.
+
+Now that we have the `confirmSignUp` function ready, let's update our routing in `src/App.jsx` to include the Confirm Sign Up page.
+
+<Instruction>
+  Modify `src/App.jsx` to include the confirm sign-up route.
+</Instruction>
+
+```jsx
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import SignUp from "./SignUp"
+import ConfirmSignUp from "./ConfirmSignUp"
+
+function App() {
+  return (
+    <Router>
+      <Switch>
+        <Route path="/signUp" component={<SignUp />} />
+        <Route path="/confirm-sign-up" component={<ConfirmSignUp />} />
+        {/* Add other routes here */}
+      </Switch>
+    </Router>
+  )
+}
+
+export default App
+```
+
+Here, we import the `ConfirmSignUp` component and add a route to the `/confirm-sign-up` path. Now, when users navigate to the `/confirm-sign-up` path in the application, they'll see the Confirm Sign Up page in all its glory.
+
+You're on fire! 🔥 Now that we've conquered the Sign Up and Confirm Sign Up pages, let's move on to the Login page, where users can enter their credentials and access the fantastic features of your app.
+
+## Login Page
+
+<Instruction>
+  Create a `Login.js` file in the `src` folder and let's get our login party
+  started!
+</Instruction>
+
+**src/Login.js**
+
+```jsx
+import { useState } from "react"
+import { signIn } from "./auth"
+
+export default function Login() {
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError("")
+
+    try {
+      await signIn(username, password)
+      // Redirect to the app's main page or dashboard
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
+  return (
+    <div>
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit">Login</button>
+      </form>
+      {error && <p>{error}</p>}
+    </div>
+  )
+}
+```
+
+In our `Login` component, we're using state variables to manage the form input fields and error messages. When the form is submitted, the `handleSubmit` function springs into action! **Inside `handleSubmit`, we call the `signIn` function from our `auth.js` file and pass in the `username` and `password`**.
+
+If the login is successful, we can redirect the user to the app's main page or dashboard (you'll need to implement this part depending on your app's structure). However, if there's an error, we kindly display the error message.
+
+<Instruction>Modify `src/App.jsx` to include the login route.</Instruction>
+
+```jsx
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import SignUp from "./SignUp"
+import ConfirmSignUp from "./ConfirmSignUp"
+import Login from "./Login"
+
+function App() {
+  return (
+    <Router>
+      <Switch>
+        <Route path="/signUp" component={<SignUp />} />
+        <Route path="/confirm-sign-up" component={<ConfirmSignUp />} />
+        <Route path="/login" component={<Login />} />
+        {/* Add other routes here */}
+      </Switch>
+    </Router>
+  )
+}
+
+export default App
+```
+
+To make everything work smoothly, we need to implement the `signIn` function in our `auth.js` helper file. Let's dive into the code again!
+
+```js
+export function signIn(username, password) {
+  // Sign in implementation
+}
+```
+
+Our `signIn` function takes two arguments: `username` and `password`. Its mission is to authenticate the user in the Cognito User Pool using these credentials.
+
+<Instruction>
+  Update the `auth.js` helper file to implement the `signIn` function with the
+  following code:
+</Instruction>
+
+```js
+export function signIn(username, password) {
+  return new Promise((resolve, reject) => {
+    const authenticationDetails = new AuthenticationDetails({
+      Username: username,
+      Password: password,
+    })
+
+    const cognitoUser = new CognitoUser({
+      Username: username,
+      Pool: userPool,
+    })
+
+    cognitoUser.authenticateUser(authenticationDetails, {
+      onSuccess: (result) => {
+        resolve(result)
+      },
+      onFailure: (err) => {
+        reject(err)
+      },
+    })
+  })
+}
+```
+
+As usual, we're returning a Promise that resolves with the login result or rejects with an error. To authenticate the user:
+
+- First create an `AuthenticationDetails` instance using the provided `username` and `password`.
+- Next, we create a `CognitoUser` instance with the same `username` and our `userPool`.
+- Then call the `cognitoUser.authenticateUser()` method, passing in the `authenticationDetails` and an object with `onSuccess` and `onFailure` callback functions.
+
+## Fetching User Data
+
+After a user logs in, you might want to fetch their data from Cognito to personalize their experience or display specific information. Or you might want to grab their access or id tokens which are both JWTs that you could send to your server.
+
+To access the user's data, we'll implement the `getCurrentUser` and `getSession` functions in our `auth.js` helper file.
+
+<Instruction>
+  Add the following code to the `auth.js` file to implement the `getSession`
+  function:
+</Instruction>
+
+```js
+export function getSession() {
+  const cognitoUser = userPool.getCurrentUser()
+  return new Promise((resolve, reject) => {
+    if (!cognitoUser) {
+      reject(new Error("No user found"))
+      return
+    }
+    cognitoUser.getSession((err, session) => {
+      if (err) {
+        reject(err)
+        return
+      }
+      resolve(session)
+    })
+  })
+}
+```
+
+The `getSession` function checks if there's a currently authenticated user. If so, it fetches the user's session and returns it as a Promise. This session object contains the user's access and id tokens, which you can use to make authenticated requests to your server.
+
+For example:
+
+```js
+const session = await getSession()
+const accessToken = session.accessToken
+fetch("/api/protected", {
+  headers: {
+    Authorization: `Bearer ${accessToken}`,
+  },
+})
+```
+
+But how you use the accessToken is completely dependant on your application's architecture. So let's move on to the user data, which is a bit more universal.
+
+<Instruction>
+  Add the following code to the `auth.js` file to implement the `getCurrentUser`
+  function:
+</Instruction>
+
+```js
+export async function getCurrentUser() {
+  return new Promise((resolve, reject) => {
+    const cognitoUser = userPool.getCurrentUser()
+
+    if (!cognitoUser) {
+      reject(new Error("No user found"))
+      return
+    }
+
+    cognitoUser.getSession((err, session) => {
+      if (err) {
+        reject(err)
+        return
+      }
+      cognitoUser.getUserAttributes((err, attributes) => {
+        if (err) {
+          reject(err)
+          return
+        }
+        const userData = attributes.reduce((acc, attribute) => {
+          acc[attribute.Name] = attribute.Value
+          return acc
+        }, {})
+
+        resolve({ ...userData, username: cognitoUser.username })
+      })
+    })
+  })
+}
+```
+
+The `getCurrentUser` function checks if there's a currently authenticated user. If so, it fetches the user's session and attributes, converting the attributes into a more convenient JavaScript object. This object contains the user's:
+
+- `username`
+- `email`
+- `sub` (the user's unique identifier)
+
+Now you can use this `getCurrentUser` function in any component that needs to fetch the user's data.
+
+<Instruction>Create an `UserProfile.js` file in the `src` folder.</Instruction>
+
+```jsx
+import { useEffect, useState } from "react"
+import { getCurrentUser } from "./auth"
+
+export default function UserProfile() {
+  const [user, setUser] = useState()
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await getCurrentUser()
+        setUser(user)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    fetchUser()
+  }, [])
+
+  return (
+    <div>
+      {userData && (
+        <div>
+          <h2>User Profile</h2>
+          <p>Username: {userData.username}</p>
+          <p>Email: {userData.email}</p>
+          {/* Display any other user data here */}
+        </div>
+      )}
+    </div>
+  )
+}
+```
+
+In the `UserProfile` component, we use the `useEffect` hook to call our `getUserData` function when the component mounts. We store the fetched data in the `userData` state variable and display it in our component.
+
+<Instruction>
+  Modify `src/App.jsx` to include the user profile route.
+</Instruction>
+
+```jsx
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import SignUp from "./SignUp"
+import ConfirmSignUp from "./ConfirmSignUp"
+import Profile from "./Profile"
+
+function App() {
+  return (
+    <Router>
+      <Switch>
+        <Route path="/signUp" component={<SignUp />} />
+        <Route path="/confirm-sign-up" component={<ConfirmSignUp />} />
+        <Route path="/login" component={<Login />} />
+        <Route path="/profile" component={<Profile />} />
+        {/* Add other routes here */}
+      </Switch>
+    </Router>
+  )
+}
+
+export default App
+```
+
+Now you should be able to see the user's profile data when you navigate to the `/profile` route.
+
+## Sign Out
+
+We've almost got all the basic functions down, but we're still missing a big one: signing out. To sign out a user, we'll implement the `signOut` function in our `auth.js` helper file, then we can add a Sign Out button to the profile page.
+
+<Instruction>
+  Add the following code to the `auth.js` file to implement the `signOut`
+  function:
+</Instruction>
+
+```js
+export function signOut() {
+  const cognitoUser = userPool.getCurrentUser()
+  if (cognitoUser) {
+    cognitoUser.signOut()
+  }
+}
+```
+
+The `signOut` function checks if there's a currently authenticated user. If so, it signs the user out.
+
+<Instruction>
+  Modify the `Profile` component to add a Sign Out button:
+</Instruction>
+```jsx import {(useEffect, useState)} from "react" import {
+  (getCurrentUser, signOut)
+} from "./auth"
+
+export default function UserProfile() {
+  const [user, setUser] = useState()
+
+useEffect(() => {
+const fetchUser = async () => {
+try {
+const user = await getCurrentUser()
+setUser(user)
+} catch (err) {
+console.error(err)
+}
+}
+
+    fetchUser()
+
+}, [])
+
+return (
+<div>
+{userData && (
+<div>
+<h2>User Profile</h2>
+<p>Username: {userData.username}</p>
+<p>Email: {userData.email}</p>
+{/* Display any other user data here */}
+</div>
+)}
+
+      <button onClick={signOut}>Sign Out</button>
+    </div>
+
+)
+}
+
+````
+
+Now you should be able to sign out of your application by clicking the Sign Out button. But there's a few things that are very wrong with the application right now.
+
+- The user can still access the `/profile` route even if they're not signed in.
+- The user can still access the `/login` route even if they're already signed in.
+
+We'll fix these issues but redirecting the user to the `/login` route if they're not signed in, and redirecting the user to the `/profile` route if they're already signed in.
+
+But before we do that, let's setup an `AuthContext` to make it easier to manage the currently logged in user from any component in our application.
+
+## Auth Context
+
+Before we protect routes, let's add a `AuthContext` to our application. This will allow us to access the user's data from any component in our application. It also means that if one component updates any user state (login, logout, update), the other components will be notified and can update their state accordingly.
+
+If you haven't used React's Context API before, check out my other tutorial:
+
+<PostCard slug="use-context-auth" />
+
+<Instruction>
+  Create a new file `src/AuthContext.jsx` and add the following content:
+</Instruction>
+
+```javascript
+import { createContext, useState, useEffect } from "react";
+import * as auth from "./Auth/auth";
+
+const AuthContext = createContext();
+
+function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getCurrentUser = async () => {
+    try {
+      const user = await auth.getCurrentUser();
+      console.log("current user", user);
+      setUser(user);
+    } catch (err) {
+      // not logged in
+      console.log(err);
+      setUser(null);
+    }
+  };
+
+  useEffect(() => {
+    getCurrentUser()
+      .then(() => setIsLoading(false))
+      .catch(() => setIsLoading(false));
+  }, []);
+
+  const signIn = async (username, password) => {
+    debugger;
+    await auth.signIn(username, password);
+    await fetchUser();
+  };
+  const signOut = async () => {
+    await auth.signOut();
+    setUser(null);
+  };
+
+  const authValue = {
+    user,
+    isLoading,
+    signIn,
+    signOut,
+  };
+
+  return (
+    <AuthContext.Provider value={authValue}>{children}</AuthContext.Provider>
+  );
+}
+
+export { AuthProvider, AuthContext };
+````
+
+Here's what's happening in the code above:
+
+1. Import `createContext` and `useState` from React.
+2. Create a new context called `AuthContext`.
+3. Define an `AuthProvider` function component that will wrap our entire app. This component maintains the `user` state.
+4. Define a `fetchUser` function to fetch the user's data. This function is called when the component is mounted.
+5. Define a `signIn` function that calls the cognito `signIn` function and updates the user state. This should be called by the Login form instead of the cognito `signIn` function.
+6. Define a `signOut` function that calls the cognito `signOut` function and updates the user state. This should be called any component that logs the user out instead of the cognito `signOut` function.
+7. Pass the context value as an object containing the state variables and functions.
+8. Finally, export the `AuthContext` and `AuthProvider` so we can use them in other parts of our app.
+
+## Wrapping the App with AuthProvider
+
+Now let's wrap our entire app with the `AuthProvider`. This will make the user data available to any component nested inside it.
+
+<Instruction>Modify `src/App.jsx` to include the `AuthProvider`:</Instruction>
+
+{/* prettier-ignore */}
+```javascript
+import { AuthProvider } from "./AuthContext"
+// all other imports
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        {/* all other components */}
+      </Router>
+    </AuthProvider>
+  )
+}
+
+export default App
+```
+
+## `useContext(AuthContext)`
+
+Now we can use the `useContext` hook to access the user data, or update the user data, from any component. Let's start with the login form.
+
+<Instruction>Modify `src/Login.jsx` to use the `AuthContext`:</Instruction>
+
+**src/Login.js**
+
+```jsx
+import { useState, useContext } from "react"
+import { AuthContext } from "../AuthContext"
+import { Navigate } from "react-router-dom";
+
+export default function Login() {
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+
+  const { user, signIn } = useContext(AuthContext)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError("")
+
+    try {
+      await signIn(username, password)
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
+  console.log({user})
+  // If the user is logged in, don't show the login form
+  if (user) {
+    // Redirect to the profile page
+    return <Navigate to="/profile" />
+  }
+
+  return (
+    // ...
+  )
+}
+```
+
+- We're not calling the context `signIn` function to update the user data in the context. This will trigger a re-render of any components that use the `useContext` hook.
+- If the user object is defined, then the user is logged in. Instead of showing the login form, we redirect the user to the profile page.
+
+<Instruction>
+  Modify `src/UserProfile.jsx` to use the `AuthContext`:
+</Instruction>
+
+```jsx
+import { useContext } from "react"
+import { AuthContext } from "../AuthContext"
+
+export default function UserProfile() {
+  const { user, signOut } = useContext(AuthContext)
+
+  return (
+    <div>
+      {user && (
+        <div>
+          <h2>User Profile</h2>
+          <p>Username: {user.username}</p>
+          <p>Email: {user.email}</p>
+          {/* Display any other user data here */}
+        </div>
+      )}
+      <button onClick={signOut}>Sign Out</button>
+    </div>
+  )
+}
+```
+
+Look at that! It's so much nicer than having to fetch the user data in each component. Just remember to always access the user data through the `AuthContext`.
+
+Now to tackle the next problem: We're allowing a user to access the profile page even if they're not logged in. Let's fix that with a `RouteGuard` component.
+
+## Creating a Route Guard
+
+To protect the `Profile` route, we'll create a higher-order component called `RouteGuard` that will check if the user is logged in before rendering the protected component.
+
+<Instruction>
+  Create a new file `src/RouteGuard.jsx` and add the following content:
+</Instruction>
+
+```javascript
+import { useContext } from "react"
+import { Navigate } from "react-router-dom"
+import { AuthContext } from "./AuthContext"
+
+function RouteGuard({ children }) {
+  const { user, isLoading } = useContext(AuthContext)
+
+  if (isLoading) {
+    return <></>
+  }
+
+  if (!user) {
+    return <Navigate to="/login" />
+  }
+
+  return children
+}
+
+export default RouteGuard
+```
+
+- Import the necessary hooks, `Navigate` from `react-router-dom`, and `AuthContext`.
+- Use the `useContext` hook to access the `user`, and `isLoading` value from our `AuthContext`.
+- If the user data hasn't been checked yet (remember this happens async through the cognito library), `isLoading` will be true and we'll return an empty fragment to "do nothing" while we wait.
+- If the user is not logged in, we'll redirect them to the login page.
+- Otherwise, the user is logged in and we'll render the child components.
+
+## Adding the Protected Route
+
+Now let's add the `UserProfile` component as a _protected_ route in our `App` component.
+
+<Instruction>
+  Modify `src/App.jsx` to wrap the `UserProfile` page with the `RouteGuard`:
+</Instruction>
+
+```javascript
+// All other imports
+import RouteGuard from "./RouteGuard"
+
+function App() {
+  return (
+    <AuthProvider>
+      return (
+      <Router>
+        <Switch>
+          <Route path="/signUp" component={<SignUp />} />
+          <Route path="/confirm-sign-up" component={<ConfirmSignUp />} />
+          <Route path="/login" component={<Login />} />
+
+          <Route
+            path="/profile"
+            component={
+              <RouteGuard>
+                <Profile />
+              </RouteGuard>
+            }
+          />
+          {/* Add other routes here */}
+        </Switch>
+      </Router>
+      )
+    </AuthProvider>
+  )
+}
+
+export default App
+```
+
+Now, the `UserProfile` route is protected by the `RouteGuard` component. Users who aren't logged in will be redirected to the `/login` page when trying to access the `/profile` route.
+
+## Dynamic Navigation Bar & Sign Out
+
+To make our app even more engaging and user-friendly, let's create a dynamic navigation bar that updates its content based on the user's logged-in status.
+
+<Instruction>
+  Modify the `src/App.jsx` file to include a separate `Navigation` component:
+</Instruction>
+
+```javascript
+// .. All imports
+
+function Navigation() {
+  const { user } = useContext(AuthContext)
+
+  return (
+    <nav>
+      <ul>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        {user ? (
+          <>
+            <li>
+              <Link to="/profile">Profile</Link>
+            </li>
+          </>
+        ) : (
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        )}
+      </ul>
+    </nav>
+  )
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <Navigation />
+        <main>
+          <Routes>{/* All routes */}</Routes>
+        </main>
+      </BrowserRouter>
+    </AuthProvider>
+  )
+}
+
+export default App
+```
+
+In the `Navigation` component above, we:
+
+1. Import the necessary hooks and `AuthContext`.
+2. Use the `useContext` hook to access the `isLoggedIn` value from our `AuthContext`.
+3. Conditionally render the "Profile" or "Login" link based on the user's logged-in status.
+
+Now, the navigation bar will display the "Profile" link only when the user is logged in. Otherwise, it will show the "Login" link.
+
+Congratulations! 🎉 You've now implemented the Sign Up, Confirm Sign Up, Login, and User Profile pages, complete with all the underlying Cognito code. You've also learned how to use the `useContext` hook to access the user data from any component. That is a lot of work, and you should take a moment to celebrate your accomplishments! Also test your app and make sure it's working as expected, maybe take another moment to make sure you understand what's going on before moving on.
+
+With the core functionality in place, it's time to tackle another common challenge: the Forgot Password page. Let's make sure our users can recover their accounts without breaking a sweat!
+
+## Forgot Password Page
+
+<Instruction>
+  Create a `ForgotPassword.js` file in the `src` folder and let's help our users
+  regain access to their accounts!
+</Instruction>
+
+**src/ForgotPassword.js**
+
+```jsx
+import { useState } from "react"
+import { forgotPassword } from "./auth"
+import { Link } from "react-router-dom"
+
+export default function ForgotPassword() {
+  const [username, setUsername] = useState("")
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError("")
+
+    try {
+      await forgotPassword(username)
+      setSuccess(true)
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
+  if (success) {
+    return (
+      <div>
+        <h2>Reset password</h2>
+        <p>
+          Check your email for the confirmation code to reset your password.
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <h2>Forgot Password</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <button type="submit">Submit</button>
+      </form>
+      {error && <p>{error}</p>}
+      <Link to="/login">Sign In</Link>
+    </div>
+  )
+}
+```
+
+In our `ForgotPassword` component, we use state variables to manage the form input fields and error messages. When the form is submitted, the `handleSubmit` function takes charge! Inside `handleSubmit`, we call the `forgotPassword` function from our `auth.js` file and pass in the `username`. If the request is successful, we inform the user to check their email for the confirmation code. If there's an error, we display the error message.
+
+Now, let's implement the `forgotPassword` function in our `auth.js` helper file.
+
+```js
+export function forgotPassword(username) {
+  // Forgot password implementation
+}
+```
+
+Our `forgotPassword` function takes one argument: `username`. Its purpose is to initiate the password reset process for the specified user.
+
+<Instruction>
+  Update the `auth.js` helper file to implement the `forgotPassword` function
+  with the following code:
+</Instruction>
+
+```js
+export function forgotPassword(username) {
+  return new Promise((resolve, reject) => {
+    const cognitoUser = new CognitoUser({
+      Username: username,
+      Pool: userPool,
+    })
+
+    cognitoUser.forgotPassword({
+      onSuccess: () => {
+        resolve()
+      },
+      onFailure: (err) => {
+        reject(err)
+      },
+    })
+  })
+}
+```
+
+As you might have guessed, we're returning a Promise that resolves on success or rejects with an error. We create a `CognitoUser` instance with the given `username` and our `userPool`. We then call the `cognitoUser.forgotPassword()` method, passing in an object with `onSuccess` and `onFailure` callback functions. This will trigger the password reset process and send a confirmation code to the user's email address.
+
+<Instruction>
+  Update the `Login.jsx` file to include a "Forgot Password" link that redirects
+  to the `ForgotPassword` page:
+</Instruction>
+
+**src/Login.jsx**
+
+```jsx
+// .. All other imports
+import { Link } from "react-router-dom"
+
+export default function Login() {
+  // .. The rest of the Login Component
+      <Link to="/forgot-password">Forgot Password</Link>
+    </div>
+  );
+}
+```
+
+<Instruction>
+  Add a route to the `App.jsx` file that renders the `ForgotPassword` component
+  when the user navigates to the `/forgot-password` path:
+</Instruction>
+
+**src/App.jsx**
+
+```jsx
+<Route path="/forgot-password" element={<ForgotPassword />} />
+```
+
+Go ahead and try out this new feature. You should receive an email with a confirmation code.
+
+Now that users can initiate the password reset process, we need to provide them with a way to set a new password using the confirmation code they receive via email. Let's create the Reset Password page!
+
+## Reset Password Page
+
+<Instruction>
+  Create a `ResetPassword.js` file in the `src` folder and let's help our users
+  set a new password and regain access to their accounts!
+</Instruction>
+
+**src/ResetPassword.js**
+
+```jsx
+import { useState } from "react"
+import { confirmPassword } from "./auth"
+
+export default function ResetPassword() {
+  const [username, setUsername] = useState("")
+  const [confirmationCode, setConfirmationCode] = useState("")
+  const [newPassword, setNewPassword] = useState("")
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError("")
+
+    try {
+      await confirmPassword(username, confirmationCode, newPassword)
+      setSuccess(true)
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
+  if (success) {
+    return (
+      <div>
+        <h2>Reset password</h2>
+        <p>Your password has been reset successfully!</p>
+        <Link to="/reset-password">Reset Password</Link>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <h2>Reset Password</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Confirmation code"
+          value={confirmationCode}
+          onChange={(e) => setConfirmationCode(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="New password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
+        <button type="submit">Submit</button>
+      </form>
+      {error && <p>{error}</p>}
+    </div>
+  )
+}
+```
+
+In our `ResetPassword` component, we use state variables to manage the form input fields and error messages. When the form is submitted, the `handleSubmit` function takes the reins! Inside `handleSubmit`, we call the `confirmPassword` function from our `auth.js` file and pass in the `username`, `confirmationCode`, and `newPassword`. If the reset is successful, we let the user know their password has been reset. If there's an error, we display the error message.
+
+Now, it's time to implement the `confirmPassword` function in our `auth.js` helper file.
+
+```js
+export function confirmPassword(username, confirmationCode, newPassword) {
+  // Reset password implementation
+}
+```
+
+Our `confirmPassword` function takes three arguments: `username`, `confirmationCode`, and `newPassword`. Its goal is to update the user's password using the provided confirmation code.
+
+<Instruction>
+  Update the `auth.js` helper file to implement the `confirmPassword` function
+  with the following code:
+</Instruction>
+
+```js
+export function confirmPassword(username, confirmationCode, newPassword) {
+  return new Promise((resolve, reject) => {
+    const cognitoUser = new CognitoUser({
+      Username: username,
+      Pool: userPool,
+    })
+
+    cognitoUser.confirmPassword(confirmationCode, newPassword, {
+      onSuccess: () => {
+        resolve()
+      },
+      onFailure: (err) => {
+        reject(err)
+      },
+    })
+  })
+}
+```
+
+As expected, we're returning a Promise that resolves on success or rejects with an error.
+
+- We create a `CognitoUser` instance with the given `username` and our `userPool`.
+- We then call the `cognitoUser.confirmPassword()` method, passing in the `confirmationCode`, `newPassword`, and an object with `onSuccess` and `onFailure` callback functions.
+
+The cognito js library is inconsistent with how it handles async code, sometimes a single callback and sometimes multiple callbacks. This is why it's important for us to wrap the cognito js library in a Promise so we can just use `async/await` syntax.
+
+<Instruction>
+  Update the `App.jsx` file to include a route to the `ResetPassword` component
+  when the user navigates to the `/reset-password` path:
+</Instruction>
+
+**src/App.jsx**
+
+```jsx
+<Route path="/reset-password" element={<ResetPassword />} />
+```
+
+You should now be able to reset your password using the confirmation code you received via email.
+
+## Summary
+
+Congratulations! 🎉 You've just built an engaging, friendly, and secure authentication flow for your React app using `amazon-cognito-identity-js`. You've not only learned how to implement each page and function, but you've also done it in a way that keeps the user experience delightful.
+
+Now it's time to celebrate your achievements and continue building awesome features for your app. Keep up the great work!

@@ -1,0 +1,266 @@
+{
+  "title": "amazon cognito identity",
+  "create_time": 1679190277.582292,
+  "mapping": {
+      "9da5c266-4988-40ab-997f-d6c69a4cbace": {
+          "id": "9da5c266-4988-40ab-997f-d6c69a4cbace",
+          "message": {
+              "id": "9da5c266-4988-40ab-997f-d6c69a4cbace",
+              "author": {
+                  "role": "system",
+                  "metadata": {}
+              },
+              "create_time": 1679190277.582292,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      ""
+                  ]
+              },
+              "end_turn": true,
+              "weight": 1.0,
+              "metadata": {},
+              "recipient": "all"
+          },
+          "parent": "eee03310-7e3d-4474-8934-ad9add405630",
+          "children": [
+              "ad97d52a-31e1-4b94-9c9d-a4d082b0e1a6"
+          ]
+      },
+      "eee03310-7e3d-4474-8934-ad9add405630": {
+          "id": "eee03310-7e3d-4474-8934-ad9add405630",
+          "children": [
+              "9da5c266-4988-40ab-997f-d6c69a4cbace"
+          ]
+      },
+      "ad97d52a-31e1-4b94-9c9d-a4d082b0e1a6": {
+          "id": "ad97d52a-31e1-4b94-9c9d-a4d082b0e1a6",
+          "message": {
+              "id": "ad97d52a-31e1-4b94-9c9d-a4d082b0e1a6",
+              "author": {
+                  "role": "user",
+                  "metadata": {}
+              },
+              "create_time": 1679190277.58363,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "Write a tutorial on how to use `amazon-cognito-identity-js` in a react app that uses vite. This tutorial should focus on how to get the following things working: login, confirmation, signup, forgot password, logout. Show how to create the different forms needed for this and how to use the library to acheive these things. Also show how to access the tokens and user details so the reader knows how to use them in the rest of there app. Assume the user has already setup a cognito user pool in aws and that the reader already knows the basics of how to use react 18 and vite.\n\nWrite it in the same style as me but also make it engaging like the writing of  from . Here's an example of a completely different post I wrote about how to use react router for a reference on my writing style. \n\nIn this tutorial, we'll explore the process of adding **React Router 6** to a React 18 application using **Vite**. We'll create a simple application with a few routes and configure Vite to make it all work together seamlessly.\n\n## Project Setup\n\nFirst, we need to create a new React project using Vite.\n\n<Instruction>Create a new Vite project using the React template.</Instruction>\n\n{/* prettier-ignore */}\n<Tabs>\n    <Tab name=\"npm\">\n    ```\n    npx create-vite my-react-router-app --template react\n    cd my-react-router-app\n    npm install\n    ```\n    </Tab>\n    <Tab name=\"yarn\">\n    ```\n    yarn create vite my-react-router-app --template react\n    cd my-react-router-app\n    yarn\n    ```\n    </Tab>\n</Tabs>\n\nNow that we've set up our project, let's add React Router 6 to it.\n\n## Adding React Router 6\n\n<Instruction>Install React Router 6 as a dependency.</Instruction>\n\n{/* prettier-ignore */}\n<Tabs>\n    <Tab name=\"npm\">\n    ```\n    npm install react-router-dom\n    ```\n    </Tab>\n    <Tab name=\"yarn\">\n    ```\n    yarn add react-router-dom\n    ```\n    </Tab>\n</Tabs>\n\nWith React Router 6 installed, let's create a simple application with a few routes to demonstrate its usage.\n\n## Creating Components and Routes\n\n<Instruction>\n  Create three new components: `Home.jsx`, `About.jsx`, and `Contact.jsx` in the\n  `src` folder.\n</Instruction>\n\n**src/Home.jsx**\n\n```javascript\nexport default function Home() {\n  return (\n    <div>\n      <h1>Home</h1>\n      <p>Welcome to our home page!</p>\n    </div>\n  )\n}\n```\n\n**src/About.jsx**\n\n```javascript\nexport default function About() {\n  return (\n    <div>\n      <h1>About</h1>\n      <p>Learn more about us!</p>\n    </div>\n  )\n}\n```\n\n**src/Contact.jsx**\n\n```javascript\nexport default function Contact() {\n  return (\n    <div>\n      <h1>Contact</h1>\n      <p>Get in touch with us!</p>\n    </div>\n  )\n}\n```\n\nNow that we have our components, let's create routes for them using React Router 6.\n\n<Instruction>Modify `src/App.jsx` to include the new routes.</Instruction>\n\n**src/App.jsx**\n\n```javascript\nimport React from 'react';\nimport { BrowserRouter, Link, Route, Routes } from 'react-router-dom';\nimport Home from './Home';\nimport About from './About';\nimport Contact from './Contact';\n\nfunction App() {\n  return (\n    <BrowserRouter>\n      <nav>\n        <ul>\n          <li>\n            <Link to=\"/\">Home</Link>\n          </li>\n          <li>\n            <Link to=\"/about\">About</Link>\n          </li>\n          <li>\n            <Link to=\"/contact\">Contact</Link>\n          </li>\n        </ul>\n      </nav>\n\n      <main>\n        <Routes>\n          <Route path=\"/\" element={<Home />} />\n          <Route path=\"/about\" element={<About />} />\n          <Route path=\"/contact\" element={<Contact />} />\n        </Routes>\n      </main>\n    </BrowserRouter>\n  );\n}\n\nexport default App;\n```\n\n\nI'll explain the code above in more detail below, but first, let's run our application and see React Router 6 in action.\n\n## Running the Application\n\n<Instruction>Start the development server.</Instruction>\n\n{/* prettier-ignore */}\n<Tabs>\n    <Tab name=\"npm\">\n    ```\n    npm run dev\n    ```\n    </Tab>\n    <Tab name=\"yarn\">\n    ```\n    yarn dev\n    ```\n    </Tab>\n</Tabs>\n\nOpen your browser and navigate to `http://localhost:5173`. You should see the home page of our application with the navigation links at the top. Clicking on these links will navigate you to the corresponding pages, demonstrating React Router 6 functionality.\n\n## Explaining `App.jsx`\n\nLet's go through the `App.jsx` code snippet step by step to explain how it works.\n\n```jsx\nimport React from 'react';\nimport { BrowserRouter, Link, Route, Routes } from 'react-router-dom';\nimport { HomePage } from './pages/HomePage';\nimport { AboutPage } from './pages/AboutPage';\nimport { ContactPage } from './pages/ContactPage';\n```\n\nIn the beginning, we import the necessary React and React Router components. We also import the `HomePage`, `AboutPage`, and `ContactPage` components from their respective files.\n\n```jsx\nfunction App() {\n  return (\n    <BrowserRouter>\n```\n\nWe define the `App` component, which will serve as the root component of our application. Inside the `App` component, we use the `BrowserRouter` component, which is responsible for handling the routing and history manipulation for our app.\n\n```jsx\n      <nav>\n        <ul>\n          <li>\n            <Link to=\"/\">Home</Link>\n          </li>\n          <li>\n            <Link to=\"/about\">About</Link>\n          </li>\n          <li>\n            <Link to=\"/contact\">Contact</Link>\n          </li>\n        </ul>\n      </nav>\n```\n\nWe create a simple navigation menu using the `nav` and `ul` HTML elements. Within the menu, we use the `Link` component from React Router to create links for our routes. The `to` prop in each `Link` component specifies the destination URL for the link.\n\n```jsx\n      <main>\n        <Routes>\n          <Route path=\"/\" element={<HomePage />} />\n          <Route path=\"/about\" element={<AboutPage />} />\n          <Route path=\"/contact\" element={<ContactPage />} />\n        </Routes>\n      </main>\n```\n\nWe use the `Routes` component to define our application's routes. Inside the `Routes` component, we add a `Route` component for each of our pages. The `path` prop specifies the URL path for the route, while the `element` prop defines the component to render when the route is active.\n\n```jsx\n    </BrowserRouter>\n  );\n}\n\nexport default App;\n```\n\nFinally, we close the `BrowserRouter` component and export the `App` component as the default export of the module.\n\nThis `App.jsx` file sets up a basic React app with three routes (home, about, and contact) and a navigation menu. When users click on the navigation links, the corresponding route will be activated, and the associated component will be rendered within the `main` element.\n\n## Summary\n\nIn this tutorial, we've successfully added React Router 6 to a React 18 application using Vite. We created a simple application with a few routes, set up navigation links, and demonstrated how React Router 6 handles navigation between pages.\n\nIf you have any questions or comments, feel free to leave them below. Happy coding!\n"
+                  ]
+              },
+              "weight": 1.0,
+              "metadata": {
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "9da5c266-4988-40ab-997f-d6c69a4cbace",
+          "children": [
+              "eabd0fa8-02fb-4b7b-91af-7679da45b0fb"
+          ]
+      },
+      "eabd0fa8-02fb-4b7b-91af-7679da45b0fb": {
+          "id": "eabd0fa8-02fb-4b7b-91af-7679da45b0fb",
+          "message": {
+              "id": "eabd0fa8-02fb-4b7b-91af-7679da45b0fb",
+              "author": {
+                  "role": "assistant",
+                  "metadata": {}
+              },
+              "create_time": 1679190370.923568,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "**Adding Amazon Cognito to a React 18 Vite Application**\n\nHey there, future-authentication-ninja! Are you ready to dive into the world of user authentication and management with Amazon Cognito? This tutorial will guide you through the process of adding `amazon-cognito-identity-js` to your React 18 app using Vite. We'll cover everything you need to know, including login, confirmation, signup, forgot password, and logout functionality. Let's get started!\n\n## Installation\n\nOur first step is to install the `amazon-cognito-identity-js` package.\n\n<Instruction>Install `amazon-cognito-identity-js` as a dependency.</Instruction>\n\n{/* prettier-ignore */}\n<Tabs>\n    <Tab name=\"npm\">\n    ```\n    npm install amazon-cognito-identity-js\n    ```\n    </Tab>\n    <Tab name=\"yarn\">\n    ```\n    yarn add amazon-cognito-identity-js\n    ```\n    </Tab>\n</Tabs>\n\nNow that we've got our package installed, it's time to get our hands dirty!\n\n## Cognito Configuration\n\nBefore we get to the fun part (creating forms and managing user details), we need to set up our Cognito configuration. You'll need your Cognito User Pool ID and Client ID, which you should have already created in AWS.\n\n<Instruction>Create a `cognitoConfig.js` file in the `src` folder.</Instruction>\n\n**src/cognitoConfig.js**\n\n```javascript\nexport const cognitoConfig = {\n  UserPoolId: \"your-user-pool-id\",\n  ClientId: \"your-client-id\",\n};\n```\n\nDon't forget to replace `\"your-user-pool-id\"` and `\"your-client-id\"` with your actual User Pool ID and Client ID, respectively.\n\n## Authentication Helper\n\nFor a smooth and reusable authentication experience, let's create a helper file to manage our Cognito-related functions. This file will serve as a bridge between our components and the `amazon-cognito-identity-js` package.\n\n<Instruction>Create an `auth.js` file in the `src` folder.</Instruction>\n\n**src/auth.js**\n\n```javascript\nimport { CognitoUserPool, CognitoUser, AuthenticationDetails } from 'amazon-cognito-identity-js';\nimport { cognitoConfig } from './cognitoConfig';\n\nconst userPool = new CognitoUserPool({\n  UserPoolId: cognitoConfig.UserPoolId,\n  ClientId: cognitoConfig.ClientId,\n});\n\n// Your authentication helper functions go here\n```\n\nWith our authentication helper file created, it's time to add the functions needed for managing user authentication.\n\n## Signup, Confirmation, Login, Forgot Password, and Logout\n\nIn this section, we'll create the helper functions for signup, confirmation, login, forgot password, and logout. These functions will interact with the `amazon-cognito-identity-js` library to perform the desired actions.\n\n<Instruction>Add the following helper functions to the `auth.js` file.</Instruction>\n\n**src/auth.js**\n\n```javascript\n// ... previous code ...\n\n// Signup\nexport const signup = (email, password) => {\n  return new Promise((resolve, reject) => {\n    userPool.signUp(email, password, null, null, (err, result) => {\n      if (err) {\n        reject(err);\n      } else {\n        resolve(result);\n      }\n    });\n  });\n};\n\n// Confirmation\nexport const confirm = (username, code) => {\n  const cognitoUser = new CognitoUser({\n    Username: username,\n    Pool: userPool,\n  });\n\n  return new Promise((resolve, reject) => {\n    cognitoUser.confirmRegistration(code, true, (err, result) => {\n      if (err) {\n        reject(err);\n      } else {\n"
+                  ]
+              },
+              "end_turn": false,
+              "weight": 1.0,
+              "metadata": {
+                  "model_slug": "gpt-4",
+                  "finish_details": {
+                      "type": "max_tokens"
+                  },
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "ad97d52a-31e1-4b94-9c9d-a4d082b0e1a6",
+          "children": [
+              "b6d65739-f9d5-4fc3-9fa5-ba054e206c1a"
+          ]
+      },
+      "b6d65739-f9d5-4fc3-9fa5-ba054e206c1a": {
+          "id": "b6d65739-f9d5-4fc3-9fa5-ba054e206c1a",
+          "message": {
+              "id": "b6d65739-f9d5-4fc3-9fa5-ba054e206c1a",
+              "author": {
+                  "role": "user",
+                  "metadata": {}
+              },
+              "create_time": 1679190528.743307,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "keep going"
+                  ]
+              },
+              "weight": 1.0,
+              "metadata": {
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "eabd0fa8-02fb-4b7b-91af-7679da45b0fb",
+          "children": [
+              "ebcb6df4-282f-42c9-8b89-e97dad062cee"
+          ]
+      },
+      "ebcb6df4-282f-42c9-8b89-e97dad062cee": {
+          "id": "ebcb6df4-282f-42c9-8b89-e97dad062cee",
+          "message": {
+              "id": "ebcb6df4-282f-42c9-8b89-e97dad062cee",
+              "author": {
+                  "role": "assistant",
+                  "metadata": {}
+              },
+              "create_time": 1679190646.041669,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "        resolve(result);\n      }\n    });\n  });\n};\n\n// Login\nexport const login = (username, password) => {\n  const authenticationDetails = new AuthenticationDetails({\n    Username: username,\n    Password: password,\n  });\n\n  const cognitoUser = new CognitoUser({\n    Username: username,\n    Pool: userPool,\n  });\n\n  return new Promise((resolve, reject) => {\n    cognitoUser.authenticateUser(authenticationDetails, {\n      onSuccess: (result) => {\n        resolve(result);\n      },\n      onFailure: (err) => {\n        reject(err);\n      },\n    });\n  });\n};\n\n// Forgot Password\nexport const forgotPassword = (username) => {\n  const cognitoUser = new CognitoUser({\n    Username: username,\n    Pool: userPool,\n  });\n\n  return new Promise((resolve, reject) => {\n    cognitoUser.forgotPassword({\n      onSuccess: () => {\n        resolve();\n      },\n      onFailure: (err) => {\n        reject(err);\n      },\n    });\n  });\n};\n\n// Reset Password\nexport const resetPassword = (username, code, newPassword) => {\n  const cognitoUser = new CognitoUser({\n    Username: username,\n    Pool: userPool,\n  });\n\n  return new Promise((resolve, reject) => {\n    cognitoUser.confirmPassword(code, newPassword, {\n      onSuccess: () => {\n        resolve();\n      },\n      onFailure: (err) => {\n        reject(err);\n      },\n    });\n  });\n};\n\n// Logout\nexport const logout = () => {\n  const cognitoUser = userPool.getCurrentUser();\n  if (cognitoUser) {\n    cognitoUser.signOut();\n  }\n};\n\n// Get Current User\nexport const getCurrentUser = () => {\n  return userPool.getCurrentUser();\n};\n\n// Get User Details\nexport const getUserDetails = (cognitoUser) => {\n  return new Promise((resolve, reject) => {\n    if (!cognitoUser) {\n      reject(new Error('User not found'));\n    } else {\n      cognitoUser.getSession((err, session) => {\n        if (err) {\n          reject(err);\n        } else {\n          cognitoUser.getUserAttributes((err, attributes) => {\n            if (err) {\n              reject(err);\n            } else {\n              const userDetails = {};\n              for (const attribute of attributes) {\n                userDetails[attribute.getName()] = attribute.getValue();\n              }\n              resolve(userDetails);\n            }\n          });\n        }\n      });\n    }\n  });\n};\n```\n\nWith our helper functions in place, it's time to create the forms for user interaction.\n\n## Creating Forms\n\nIn this section, we'll create the forms needed for the various authentication functions: signup, confirmation, login, forgot password, and logout. These forms will use the helper functions from the `auth.js` file to interact with the Cognito service.\n\n<Instruction>Create the following components in the `src` folder: `SignupForm.jsx`, `ConfirmationForm.jsx`, `LoginForm.jsx`, `ForgotPasswordForm.jsx`, and `LogoutForm.jsx`.</Instruction>\n\n**src/SignupForm.jsx**\n\n```javascript\nimport React, { useState } from 'react';\nimport { signup } from './auth';\n\nconst SignupForm = () => {\n  const [email, setEmail] = useState('');\n  const [password, setPassword] = useState('');\n\n  const handleSubmit = async (e) => {\n    e.preventDefault();\n    try {\n      const result = await signup(email, password);\n      console.log('Signup success:', result);\n    } catch (err) {\n      console.error('Signup error:', err);\n    }\n  };\n\n  return (\n    <form onSubmit={handleSubmit}>\n      <h1>Signup</h1>\n      <label>\n        Email:\n        <input"
+                  ]
+              },
+              "end_turn": false,
+              "weight": 1.0,
+              "metadata": {
+                  "model_slug": "gpt-4",
+                  "finish_details": {
+                      "type": "max_tokens"
+                  },
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "b6d65739-f9d5-4fc3-9fa5-ba054e206c1a",
+          "children": [
+              "b10f5b40-5af4-4347-af2a-19ecff8496b5"
+          ]
+      },
+      "b10f5b40-5af4-4347-af2a-19ecff8496b5": {
+          "id": "b10f5b40-5af4-4347-af2a-19ecff8496b5",
+          "message": {
+              "id": "b10f5b40-5af4-4347-af2a-19ecff8496b5",
+              "author": {
+                  "role": "user",
+                  "metadata": {}
+              },
+              "create_time": 1679190820.924635,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "keep going"
+                  ]
+              },
+              "weight": 1.0,
+              "metadata": {
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "ebcb6df4-282f-42c9-8b89-e97dad062cee",
+          "children": [
+              "1ebe5447-63b8-42ac-bdcf-23b3919e863e"
+          ]
+      },
+      "1ebe5447-63b8-42ac-bdcf-23b3919e863e": {
+          "id": "1ebe5447-63b8-42ac-bdcf-23b3919e863e",
+          "message": {
+              "id": "1ebe5447-63b8-42ac-bdcf-23b3919e863e",
+              "author": {
+                  "role": "assistant",
+                  "metadata": {}
+              },
+              "create_time": 1679190936.778345,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "        type=\"email\"\n        value={email}\n        onChange={(e) => setEmail(e.target.value)}\n      />\n      </label>\n      <label>\n        Password:\n        <input\n          type=\"password\"\n          value={password}\n          onChange={(e) => setPassword(e.target.value)}\n        />\n      </label>\n      <button type=\"submit\">Signup</button>\n    </form>\n  );\n};\n\nexport default SignupForm;\n```\n\n**src/ConfirmationForm.jsx**\n\n```javascript\nimport React, { useState } from 'react';\nimport { confirm } from './auth';\n\nconst ConfirmationForm = () => {\n  const [username, setUsername] = useState('');\n  const [code, setCode] = useState('');\n\n  const handleSubmit = async (e) => {\n    e.preventDefault();\n    try {\n      const result = await confirm(username, code);\n      console.log('Confirmation success:', result);\n    } catch (err) {\n      console.error('Confirmation error:', err);\n    }\n  };\n\n  return (\n    <form onSubmit={handleSubmit}>\n      <h1>Confirmation</h1>\n      <label>\n        Username:\n        <input\n          type=\"text\"\n          value={username}\n          onChange={(e) => setUsername(e.target.value)}\n        />\n      </label>\n      <label>\n        Code:\n        <input\n          type=\"text\"\n          value={code}\n          onChange={(e) => setCode(e.target.value)}\n        />\n      </label>\n      <button type=\"submit\">Confirm</button>\n    </form>\n  );\n};\n\nexport default ConfirmationForm;\n```\n\n**src/LoginForm.jsx**\n\n```javascript\nimport React, { useState } from 'react';\nimport { login } from './auth';\n\nconst LoginForm = () => {\n  const [username, setUsername] = useState('');\n  const [password, setPassword] = useState('');\n\n  const handleSubmit = async (e) => {\n    e.preventDefault();\n    try {\n      const result = await login(username, password);\n      console.log('Login success:', result);\n    } catch (err) {\n      console.error('Login error:', err);\n    }\n  };\n\n  return (\n    <form onSubmit={handleSubmit}>\n      <h1>Login</h1>\n      <label>\n        Username:\n        <input\n          type=\"text\"\n          value={username}\n          onChange={(e) => setUsername(e.target.value)}\n        />\n      </label>\n      <label>\n        Password:\n        <input\n          type=\"password\"\n          value={password}\n          onChange={(e) => setPassword(e.target.value)}\n        />\n      </label>\n      <button type=\"submit\">Login</button>\n    </form>\n  );\n};\n\nexport default LoginForm;\n```\n\n**src/ForgotPasswordForm.jsx**\n\n```javascript\nimport React, { useState } from 'react';\nimport { forgotPassword } from './auth';\n\nconst ForgotPasswordForm = () => {\n  const [username, setUsername] = useState('');\n\n  const handleSubmit = async (e) => {\n    e.preventDefault();\n    try {\n      await forgotPassword(username);\n      console.log('Forgot password success');\n    } catch (err) {\n      console.error('Forgot password error:', err);\n    }\n  };\n\n  return (\n    <form onSubmit={handleSubmit}>\n      <h1>Forgot Password</h1>\n      <label>\n        Username:\n        <input\n          type=\"text\"\n          value={username}\n          onChange={(e) => setUsername(e.target.value)}\n        />\n      </label>\n      <button type=\"submit\">Submit</button>\n    </form>\n  );\n};\n\nexport default ForgotPasswordForm;\n```\n\n**src/LogoutForm.jsx**\n\n```javascript\nimport React from 'react';\nimport { logout } from './auth';\n\nconst LogoutForm = () =>"
+                  ]
+              },
+              "end_turn": false,
+              "weight": 1.0,
+              "metadata": {
+                  "model_slug": "gpt-4",
+                  "finish_details": {
+                      "type": "max_tokens"
+                  },
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "b10f5b40-5af4-4347-af2a-19ecff8496b5",
+          "children": [
+              "64524cb3-8173-4698-8bae-60913d4fb86c"
+          ]
+      },
+      "64524cb3-8173-4698-8bae-60913d4fb86c": {
+          "id": "64524cb3-8173-4698-8bae-60913d4fb86c",
+          "message": {
+              "id": "64524cb3-8173-4698-8bae-60913d4fb86c",
+              "author": {
+                  "role": "user",
+                  "metadata": {}
+              },
+              "create_time": 1679191109.795781,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "keep going"
+                  ]
+              },
+              "weight": 1.0,
+              "metadata": {
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "1ebe5447-63b8-42ac-bdcf-23b3919e863e",
+          "children": [
+              "1972e966-549e-4814-a243-3c2f26b9e4c7"
+          ]
+      },
+      "1972e966-549e-4814-a243-3c2f26b9e4c7": {
+          "id": "1972e966-549e-4814-a243-3c2f26b9e4c7",
+          "message": {
+              "id": "1972e966-549e-4814-a243-3c2f26b9e4c7",
+              "author": {
+                  "role": "assistant",
+                  "metadata": {}
+              },
+              "create_time": 1679191264.038786,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "  const handleLogout = () => {\n    logout();\n    console.log('Logout success');\n  };\n\n  return (\n    <div>\n      <h1>Logout</h1>\n      <button onClick={handleLogout}>Logout</button>\n    </div>\n  );\n};\n\nexport default LogoutForm;\n```\n\nNow that we've created the forms, let's integrate them into our application.\n\n## Adding the Forms to the Application\n\n<Instruction>Modify `src/App.jsx` to include the new forms.</Instruction>\n\n**src/App.jsx**\n\n```javascript\nimport React from 'react';\nimport { BrowserRouter, Link, Route, Routes } from 'react-router-dom';\nimport SignupForm from './SignupForm';\nimport ConfirmationForm from './ConfirmationForm';\nimport LoginForm from './LoginForm';\nimport ForgotPasswordForm from './ForgotPasswordForm';\nimport LogoutForm from './LogoutForm';\n\nfunction App() {\n  return (\n    <BrowserRouter>\n      <nav>\n        <ul>\n          <li>\n            <Link to=\"/signup\">Signup</Link>\n          </li>\n          <li>\n            <Link to=\"/confirm\">Confirm</Link>\n          </li>\n          <li>\n            <Link to=\"/login\">Login</Link>\n          </li>\n          <li>\n            <Link to=\"/forgot-password\">Forgot Password</Link>\n          </li>\n          <li>\n            <Link to=\"/logout\">Logout</Link>\n          </li>\n        </ul>\n      </nav>\n\n      <main>\n        <Routes>\n          <Route path=\"/signup\" element={<SignupForm />} />\n          <Route path=\"/confirm\" element={<ConfirmationForm />} />\n          <Route path=\"/login\" element={<LoginForm />} />\n          <Route path=\"/forgot-password\" element={<ForgotPasswordForm />} />\n          <Route path=\"/logout\" element={<LogoutForm />} />\n        </Routes>\n      </main>\n    </BrowserRouter>\n  );\n}\n\nexport default App;\n```\n\n## Running the Application\n\n<Instruction>Start the development server.</Instruction>\n\n{/* prettier-ignore */}\n<Tabs>\n    <Tab name=\"npm\">\n    ```\n    npm run dev\n    ```\n    </Tab>\n    <Tab name=\"yarn\">\n    ```\n    yarn dev\n    ```\n    </Tab>\n</Tabs>\n\nOpen your browser and navigate to `http://localhost:3000`. You should see the navigation links at the top. Clicking on these links will take you to the respective forms, demonstrating the Cognito authentication functionality.\n\nYou can now use the forms to sign up, confirm your account, log in, reset your password, and log out. Additionally, you can access the tokens and user details using the helper functions from the `auth.js` file in the rest of your application as needed.\n\n## Summary\n\nIn this tutorial, we've successfully integrated Amazon Cognito authentication into a React app using Vite and `amazon-cognito-identity-js`. We created helper functions for common authentication tasks, designed forms for user interaction, and demonstrated how to access tokens and user details for use throughout the app.\n\nIf you have any questions or comments, feel free to leave them below. Happy coding!"
+                  ]
+              },
+              "end_turn": true,
+              "weight": 1.0,
+              "metadata": {
+                  "model_slug": "gpt-4",
+                  "finish_details": {
+                      "type": "stop",
+                      "stop": "<|diff_marker|>"
+                  },
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "64524cb3-8173-4698-8bae-60913d4fb86c",
+          "children": []
+      }
+  },
+  "moderation_results": [],
+  "current_node": "1972e966-549e-4814-a243-3c2f26b9e4c7"
+}
