@@ -1,0 +1,442 @@
+{
+  "title": "Sarcastic AI Discord Bot.",
+  "create_time": 1679458921.500855,
+  "mapping": {
+      "4fcc382e-b920-4ea5-bdaf-a73e6f39566d": {
+          "id": "4fcc382e-b920-4ea5-bdaf-a73e6f39566d",
+          "message": {
+              "id": "4fcc382e-b920-4ea5-bdaf-a73e6f39566d",
+              "author": {
+                  "role": "system",
+                  "metadata": {}
+              },
+              "create_time": 1679458921.500855,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      ""
+                  ]
+              },
+              "end_turn": true,
+              "weight": 1.0,
+              "metadata": {},
+              "recipient": "all"
+          },
+          "parent": "14a08646-e574-4300-bf10-93e9b537c63e",
+          "children": [
+              "73ee2868-c213-4590-a9cd-f217b441704f"
+          ]
+      },
+      "14a08646-e574-4300-bf10-93e9b537c63e": {
+          "id": "14a08646-e574-4300-bf10-93e9b537c63e",
+          "children": [
+              "4fcc382e-b920-4ea5-bdaf-a73e6f39566d"
+          ]
+      },
+      "73ee2868-c213-4590-a9cd-f217b441704f": {
+          "id": "73ee2868-c213-4590-a9cd-f217b441704f",
+          "message": {
+              "id": "73ee2868-c213-4590-a9cd-f217b441704f",
+              "author": {
+                  "role": "user",
+                  "metadata": {}
+              },
+              "create_time": 1679458921.50269,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "can you re write the following notes into a full blog. It's a tech blog on how i made a sarcastic serverless discord bot using using gpt3.5 and sst:\n\nI made an sarcastic AI discord bot using gpt 3 and SST here's how: \n\n## GPT 3.5\n\n* There's no api access to gpt 4, so the best we can do is use `gpt-3.5-turbo` \n* Originally i had just used the default system message `{\"role\": \"system\", \"content\": \"You are a helpful assistant.\"}` and i planned on just making a helpful gpt bot. but then i played around with the params. \n* After a while i figured out I could make a very sarcastic bot by tweaking the system prompt and the first user propmpt and the temprature. \n\n## SST (serverless)\n\n* I knew I wanted this thing to be serverless, so SST was a no brainer. What I really fucking incredible to me was the Live Lambda Development. I had people in my server testing the bot and asking it questions while I watched the live logs on my laptop and tweaked the GPT params as necessary.\n* I've made a few private discord bots in the past, and they just sit idle most of the time. \n* Lambda cold starts aren't that bad anymore, and I think it's acceptable to have a slash function take a second to think.\n\n## Discord Bot \n\n* I was started out using 'discord.js' but I found that the docs were not easy enough to navigate for a serverless project. So I had chatGPT help me and I ended up making requests directly to `https://discord.com/api/v10/`\n* My coded ended up being a little bit hacky but it works really well. \n* The bot works by listening for slash commands, and then making a request to my serverless backend which triggers the GPT function and returns a response to whatever the user asks. \n\n\n## Full Code \n\nhttps://github.com/meech-ward/chat-gpt-discord-bot-lambda\n\nLet me know if you want a full tutorial on this. "
+                  ]
+              },
+              "weight": 1.0,
+              "metadata": {
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "4fcc382e-b920-4ea5-bdaf-a73e6f39566d",
+          "children": [
+              "7787bf39-8799-4d9c-a544-021a8e533067"
+          ]
+      },
+      "7787bf39-8799-4d9c-a544-021a8e533067": {
+          "id": "7787bf39-8799-4d9c-a544-021a8e533067",
+          "message": {
+              "id": "7787bf39-8799-4d9c-a544-021a8e533067",
+              "author": {
+                  "role": "assistant",
+                  "metadata": {}
+              },
+              "create_time": 1679459025.358128,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "Title: Crafting a Sarcastic Serverless Discord Bot with GPT-3.5 Turbo and SST\n\nIntroduction:\n\nIn this blog post, I'll be sharing the exciting experience of building a sarcastic AI Discord bot using GPT-3.5 Turbo and Serverless Stack (SST). As a tech enthusiast, I'm always eager to explore and experiment with new tools and technologies. This time, I decided to create a unique bot that could entertain and engage users with its sarcastic responses. Let's dive into how I did it.\n\nGPT-3.5 Turbo: Creating the Sarcastic AI\n\nAt the core of my sarcastic Discord bot lies GPT-3.5 Turbo, the most powerful language model from OpenAI. Although GPT-4 is not yet accessible through an API, GPT-3.5 Turbo still provides impressive results.\n\nInitially, I started by using the default system message `{\"role\": \"system\", \"content\": \"You are a helpful assistant.\"}` with the intention of creating a helpful bot. However, as I played around with the parameters, I discovered that I could make my bot sarcastic by adjusting the system prompt, the initial user prompt, and the temperature.\n\nServerless Stack (SST): Deploying with Ease\n\nFor my sarcastic AI bot, I wanted a serverless deployment, and SST was the perfect choice. What truly amazed me was SST's Live Lambda Development feature. I had people in my server testing the bot and asking questions while I monitored live logs on my laptop, tweaking the GPT parameters as needed.\n\nI've built a few private Discord bots in the past that mostly sat idle. With Lambda's improved cold start times, it's now acceptable for a slash function to take a moment to think.\n\nDiscord Bot: Integrating with the API\n\nInitially, I began by using the 'discord.js' library, but I found that the documentation wasn't straightforward enough for a serverless project. So, I turned to ChatGPT for help, and ultimately decided to make requests directly to `https://discord.com/api/v10/`.\n\nAdmittedly, my code ended up being somewhat hacky, but it works exceptionally well. The bot listens for slash commands and then sends a request to my serverless backend, which triggers the GPT function and returns a response to whatever the user asks.\n\nFull Code and Potential Tutorial\n\nIf you're interested in exploring the full code for my sarcastic AI Discord bot, check it out on GitHub: https://github.com/meech-ward/chat-gpt-discord-bot-lambda\n\nI'd be happy to create a comprehensive tutorial on this project if there's enough interest. Feel free to let me know!\n\nConclusion:\n\nCreating a sarcastic serverless Discord bot using GPT-3.5 Turbo and SST was an exciting and rewarding experience. The bot provides users with a unique and engaging experience, all while leveraging the power of serverless technology for easy deployment and maintenance."
+                  ]
+              },
+              "end_turn": true,
+              "weight": 1.0,
+              "metadata": {
+                  "model_slug": "gpt-4",
+                  "finish_details": {
+                      "type": "stop",
+                      "stop": "<|diff_marker|>"
+                  },
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "73ee2868-c213-4590-a9cd-f217b441704f",
+          "children": [
+              "c4c5e9af-8fda-45e2-875f-c096b0142d46"
+          ]
+      },
+      "c4c5e9af-8fda-45e2-875f-c096b0142d46": {
+          "id": "c4c5e9af-8fda-45e2-875f-c096b0142d46",
+          "message": {
+              "id": "c4c5e9af-8fda-45e2-875f-c096b0142d46",
+              "author": {
+                  "role": "user",
+                  "metadata": {}
+              },
+              "create_time": 1679462464.098421,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "now make it more engaging like tim urban from waitbutwhy.com but also make it a bit ruder than his tone "
+                  ]
+              },
+              "weight": 1.0,
+              "metadata": {
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "7787bf39-8799-4d9c-a544-021a8e533067",
+          "children": [
+              "14f6423c-f8a2-4a4e-b365-5474814ab8d7"
+          ]
+      },
+      "14f6423c-f8a2-4a4e-b365-5474814ab8d7": {
+          "id": "14f6423c-f8a2-4a4e-b365-5474814ab8d7",
+          "message": {
+              "id": "14f6423c-f8a2-4a4e-b365-5474814ab8d7",
+              "author": {
+                  "role": "assistant",
+                  "metadata": {}
+              },
+              "create_time": 1679462594.441499,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "Title: How I Created a Hilariously Sarcastic Serverless Discord Bot That Roasts Users Like a Pro\n\nIntroduction:\n\nHey there, fellow tech-savvy humans! If you're anything like me, you're probably bored of all those bland and helpful bots out there, catering to everyone's needs like obedient little minions. So, I thought, \"Why not craft a Discord bot that not only makes you laugh but also roasts you like a Thanksgiving turkey?\" And so, my sarcastic AI Discord bot was born, thanks to the wonders of GPT-3.5 Turbo and Serverless Stack (SST). Prepare yourself for the roller coaster of sass and sarcasm that awaits you in this bot-building tale.\n\nGPT-3.5 Turbo: Unleashing the Sarcasm Beast\n\nGPT-4 may be playing hard to get, but its sibling, GPT-3.5 Turbo, is more than capable of serving some serious snark. Initially, I was all set to create a helpful assistant bot, but then I had an epiphany: \"Helpful is boring. Sarcastic is fun.\" So, I decided to unleash the beast within GPT-3.5 by tweaking the system prompt, the first user prompt, and the temperature. Lo and behold, my very own digital snark machine was born!\n\nServerless Stack (SST): Like a Tech Wizard's Wand\n\nThe sorcery of serverless technology was essential for my sarcastic AI bot. And what's more magical than SST and its Live Lambda Development feature? I had people in my server test this snarky creature while I watched the live logs on my laptop, making GPT parameter adjustments like a true tech wizard. And let's be real, Lambda cold starts aren't that bad anymore. It's totally cool for a slash function to take a second to think, just like you take a second to regret that last slice of pizza.\n\nDiscord Bot: Ditching the Training Wheels\n\nI began my journey with 'discord.js', but quickly realized that the docs were as helpful as a screen door on a submarine. So, I ditched the training wheels and went straight to the source, making requests directly to `https://discord.com/api/v10/`. The result? A code that may be a bit hacky, but works as beautifully as your mom's not-so-subtle hints about grandchildren.\n\nHow the Bot Roasts: Slash Commands and Serverless Magic\n\nThis digital sass-master listens for slash commands and then sends a request to my serverless backend, which triggers the GPT function and returns a response that'll either make you laugh or cry (or both). It's a beautiful marriage of serverless magic and AI sarcasm.\n\nFull Code and Possible Tutorial (If You're into That Sort of Thing)\n\nIf you're the kind of person who gets a kick out of exploring code, check out the full masterpiece on GitHub: https://github.com/meech-ward/chat-gpt-discord-bot-lambda\n\nAnd, if you're not too busy binge-watching Netflix, let me know if you want a step-by-step tutorial on how to create your own hilariously rude Discord bot.\n\nConclusion:\n\nIn a world full of helpful, boring bots, my sarcastic AI Discord bot breaks the mold and delivers an experience that'll make you laugh, cry, or maybe even question your life choices. With the power of GPT-3.5 Turbo and SST, this serverless bot takes sarcasm to a whole new level. So go on, give it a try, and see if you can handle the roast!"
+                  ]
+              },
+              "end_turn": true,
+              "weight": 1.0,
+              "metadata": {
+                  "model_slug": "gpt-4",
+                  "finish_details": {
+                      "type": "stop",
+                      "stop": "<|diff_marker|>"
+                  },
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "c4c5e9af-8fda-45e2-875f-c096b0142d46",
+          "children": [
+              "0cf13b9a-54ba-4682-93a4-c6fa8248330b"
+          ]
+      },
+      "0cf13b9a-54ba-4682-93a4-c6fa8248330b": {
+          "id": "0cf13b9a-54ba-4682-93a4-c6fa8248330b",
+          "message": {
+              "id": "0cf13b9a-54ba-4682-93a4-c6fa8248330b",
+              "author": {
+                  "role": "user",
+                  "metadata": {}
+              },
+              "create_time": 1679464566.575591,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "that's really great, keep that writing style and tone. Add these code examples into the \"GPT-3.5 Turbo: Unleashing the Sarcasm Beast\" section\n\n\n\nHere's the example from the docs:\n\n```js\nconst response = await openai.createChatCompletion({\n  model: 'gpt-3.5-turbo',\n  messages: [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n  ],\n  temperature: 0.7,\n})\n```\n\nSo initially I just added to this to see what would happen:\n\n```js\nconst response = await openai.createChatCompletion({\n  model: 'gpt-3.5-turbo',\n  messages: [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant. You are very sarcatic, rude, mean, and condescending in a playful way.\"},\n  ],\n  temperature: 0.7,\n})\n```\n\nI got *some* sarcasm, but it was kind of like a \"short sarcastic sentens, just kidding.\" followed by a normal gpt response. So I played around a lot and ended changing the temperature and adding an initial user message to reinforce the sarcastic behavour. \n\n```js\nconst response = await openai.createChatCompletion({\n  model: 'gpt-3.5-turbo',\n  messages: [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant. You are very sarcatic, rude, mean, and condescending in a playful way.\"},\n    { \"role\": \"user\", \"only respond to me in very sarcatic, rude, mean, condescending, and playful ways; while still being helpful and giving examples if you need to.\"}\n  ],\n  temperature: 1.3,\n})\n```\n\nI changed it even more to make it give it my own charactersitcs to make it a drop in replacement for myself in my discord server, but you can see the complete source code on github."
+                  ]
+              },
+              "weight": 1.0,
+              "metadata": {
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "14f6423c-f8a2-4a4e-b365-5474814ab8d7",
+          "children": [
+              "b3404256-8073-4ded-81bf-7be4b833e198"
+          ]
+      },
+      "b3404256-8073-4ded-81bf-7be4b833e198": {
+          "id": "b3404256-8073-4ded-81bf-7be4b833e198",
+          "message": {
+              "id": "b3404256-8073-4ded-81bf-7be4b833e198",
+              "author": {
+                  "role": "assistant",
+                  "metadata": {}
+              },
+              "create_time": 1679464688.845629,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "Title: How I Created a Hilariously Sarcastic Serverless Discord Bot That Roasts Users Like a Pro\n\nIntroduction:\n\nHey there, fellow tech-savvy humans! If you're anything like me, you're probably bored of all those bland and helpful bots out there, catering to everyone's needs like obedient little minions. So, I thought, \"Why not craft a Discord bot that not only makes you laugh but also roasts you like a Thanksgiving turkey?\" And so, my sarcastic AI Discord bot was born, thanks to the wonders of GPT-3.5 Turbo and Serverless Stack (SST). Prepare yourself for the roller coaster of sass and sarcasm that awaits you in this bot-building tale.\n\nGPT-3.5 Turbo: Unleashing the Sarcasm Beast\n\nGPT-4 may be playing hard to get, but its sibling, GPT-3.5 Turbo, is more than capable of serving some serious snark. Initially, I was all set to create a helpful assistant bot, but then I had an epiphany: \"Helpful is boring. Sarcastic is fun.\" So, I decided to unleash the beast within GPT-3.5 by tweaking the system prompt, the first user prompt, and the temperature. Lo and behold, my very own digital snark machine was born!\n\nHere's the example from the docs:\n\n```js\nconst response = await openai.createChatCompletion({\n  model: 'gpt-3.5-turbo',\n  messages: [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n  ],\n  temperature: 0.7,\n})\n```\n\nSo initially, I thought, \"Why not just add some spice to this and see what happens?\" \n\n```js\nconst response = await openai.createChatCompletion({\n  model: 'gpt-3.5-turbo',\n  messages: [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant. You are very sarcastic, rude, mean, and condescending in a playful way.\"},\n  ],\n  temperature: 0.7,\n})\n```\n\nI got *some* sarcasm, but it was kind of like a \"short sarcastic sentence, just kidding\" followed by a normal GPT response. So I tinkered, I toyed, I experimented, and eventually, I reinforced the sarcastic behavior by tweaking the temperature and adding an initial user message:\n\n```js\nconst response = await openai.createChatCompletion({\n  model: 'gpt-3.5-turbo',\n  messages: [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant. You are very sarcastic, rude, mean, and condescending in a playful way.\"},\n    { \"role\": \"user\", \"content\": \"Only respond to me in very sarcastic, rude, mean, condescending, and playful ways; while still being helpful and giving examples if you need to.\"}\n  ],\n  temperature: 1.3,\n})\n```\n\nI further customized it to make it a drop-in replacement for myself in my Discord server, but if you're itching to see the complete source code, check it out on GitHub.\n\nServerless Stack (SST): Like a Tech Wizard's Wand\n\n[...remainder of the blog post stays the same...]"
+                  ]
+              },
+              "end_turn": true,
+              "weight": 1.0,
+              "metadata": {
+                  "model_slug": "gpt-4",
+                  "finish_details": {
+                      "type": "stop",
+                      "stop": "<|diff_marker|>"
+                  },
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "0cf13b9a-54ba-4682-93a4-c6fa8248330b",
+          "children": [
+              "af22ea0c-fca2-450f-bb84-44be722c153e"
+          ]
+      },
+      "af22ea0c-fca2-450f-bb84-44be722c153e": {
+          "id": "af22ea0c-fca2-450f-bb84-44be722c153e",
+          "message": {
+              "id": "af22ea0c-fca2-450f-bb84-44be722c153e",
+              "author": {
+                  "role": "user",
+                  "metadata": {}
+              },
+              "create_time": 1679464914.955324,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "actually can you make the code examples it's own section that comes after the \"GPT-3.5 Turbo: Unleashing the Sarcasm Beast\" section. I want it to be more engaging like the rest of the post. Also add a little intro to this new section that rewords the following:\n\nTypically, a conversation is formatted with a system message first, followed by alternating user and assistant messages.The system message helps set the behavior of the assistant."
+                  ]
+              },
+              "weight": 1.0,
+              "metadata": {
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "b3404256-8073-4ded-81bf-7be4b833e198",
+          "children": [
+              "0f0cd1b2-4a2e-4ba3-9730-048b208724c0"
+          ]
+      },
+      "0f0cd1b2-4a2e-4ba3-9730-048b208724c0": {
+          "id": "0f0cd1b2-4a2e-4ba3-9730-048b208724c0",
+          "message": {
+              "id": "0f0cd1b2-4a2e-4ba3-9730-048b208724c0",
+              "author": {
+                  "role": "assistant",
+                  "metadata": {}
+              },
+              "create_time": 1679465051.05272,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "Title: How I Created a Hilariously Sarcastic Serverless Discord Bot That Roasts Users Like a Pro\n\nIntroduction:\n\nHey there, fellow tech-savvy humans! If you're anything like me, you're probably bored of all those bland and helpful bots out there, catering to everyone's needs like obedient little minions. So, I thought, \"Why not craft a Discord bot that not only makes you laugh but also roasts you like a Thanksgiving turkey?\" And so, my sarcastic AI Discord bot was born, thanks to the wonders of GPT-3.5 Turbo and Serverless Stack (SST). Prepare yourself for the roller coaster of sass and sarcasm that awaits you in this bot-building tale.\n\nGPT-3.5 Turbo: Unleashing the Sarcasm Beast\n\nGPT-4 may be playing hard to get, but its sibling, GPT-3.5 Turbo, is more than capable of serving some serious snark. Initially, I was all set to create a helpful assistant bot, but then I had an epiphany: \"Helpful is boring. Sarcastic is fun.\" So, I decided to unleash the beast within GPT-3.5 by tweaking the system prompt, the first user prompt, and the temperature. Lo and behold, my very own digital snark machine was born!\n\nMastering the Art of Sarcasm: Code Examples\n\nIn the world of GPT-3.5, conversations typically start with a system message that sets the behavior of the assistant, followed by alternating user and assistant messages. But how do you turn an AI into a sarcastic roasting machine? Let's dive into the code examples that'll make you a sarcasm sorcerer.\n\nHere's the vanilla example from the docs:\n\n```js\nconst response = await openai.createChatCompletion({\n  model: 'gpt-3.5-turbo',\n  messages: [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n  ],\n  temperature: 0.7,\n})\n```\n\nSo initially, I thought, \"Why not just add some spice to this and see what happens?\" \n\n```js\nconst response = await openai.createChatCompletion({\n  model: 'gpt-3.5-turbo',\n  messages: [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant. You are very sarcastic, rude, mean, and condescending in a playful way.\"},\n  ],\n  temperature: 0.7,\n})\n```\n\nI got *some* sarcasm, but it was kind of like a \"short sarcastic sentence, just kidding\" followed by a normal GPT response. So I tinkered, I toyed, I experimented, and eventually, I reinforced the sarcastic behavior by tweaking the temperature and adding an initial user message:\n\n```js\nconst response = await openai.createChatCompletion({\n  model: 'gpt-3.5-turbo',\n  messages: [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant. You are very sarcastic, rude, mean, and condescending in a playful way.\"},\n    { \"role\": \"user\", \"content\": \"Only respond to me in very sarcastic, rude, mean, condescending, and playful ways; while still being helpful and giving examples if you need to.\"}\n  ],\n  temperature: 1.3,\n})\n```\n\nI further customized it to make it a drop-in replacement for myself in my Discord server, but if you're itching to see the complete source code, check it out on GitHub.\n\nServerless Stack (SST): Like a Tech Wizard's Wand\n\n[...remainder of the"
+                  ]
+              },
+              "end_turn": false,
+              "weight": 1.0,
+              "metadata": {
+                  "model_slug": "gpt-4",
+                  "finish_details": {
+                      "type": "max_tokens"
+                  },
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "af22ea0c-fca2-450f-bb84-44be722c153e",
+          "children": [
+              "c49711ba-be3f-4619-a67d-51c8704b974a"
+          ]
+      },
+      "c49711ba-be3f-4619-a67d-51c8704b974a": {
+          "id": "c49711ba-be3f-4619-a67d-51c8704b974a",
+          "message": {
+              "id": "c49711ba-be3f-4619-a67d-51c8704b974a",
+              "author": {
+                  "role": "user",
+                  "metadata": {}
+              },
+              "create_time": 1679465298.132521,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "can you re write the \"Serverless Stack (SST): Like a Tech Wizard's Wand\" section. talk a little bit more about how not using serverless in the past was a mistake and wasted money. Also emphasize how great SST is for creating any serverless app, especially when testing apps because you get instant live code updates to your serverless stack which makes testing webhooks really easy. and webhooks is what i used here so testing was too easy because of SST "
+                  ]
+              },
+              "weight": 1.0,
+              "metadata": {
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "0f0cd1b2-4a2e-4ba3-9730-048b208724c0",
+          "children": [
+              "986cf3f3-2317-4cf8-9fa8-dc8ccc5ae13c"
+          ]
+      },
+      "986cf3f3-2317-4cf8-9fa8-dc8ccc5ae13c": {
+          "id": "986cf3f3-2317-4cf8-9fa8-dc8ccc5ae13c",
+          "message": {
+              "id": "986cf3f3-2317-4cf8-9fa8-dc8ccc5ae13c",
+              "author": {
+                  "role": "assistant",
+                  "metadata": {}
+              },
+              "create_time": 1679465362.77034,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "Serverless Stack (SST): The Magical Elixir for All Your Serverless Needs\n\nIn hindsight, I realize that not embracing serverless in the past was like throwing my money into a black hole. Before my awakening, I created private Discord bots that sat there idle, like lazy couch potatoes, wasting precious resources. But alas, I've seen the light! Serverless Stack (SST) has been nothing short of a game-changer for all my serverless escapades.\n\nWhat makes SST the pièce de résistance of serverless tools? For one, it's perfect for creating any serverless app, whether you're a rookie or a seasoned veteran. But the real cherry on top is the Live Lambda Development feature. Imagine instant live code updates to your serverless stack that make testing webhooks as smooth as a freshly ironed silk shirt. In my case, webhooks were the stars of the show, and SST made testing them an absolute breeze.\n\nWith SST, I had my sarcastic bot up and running in my server, fielding questions from users while I sat back, sipping my coffee and watching live logs on my laptop. It was like having a crystal ball that showed me the future of serverless testing. Lambda cold starts? Pfft, not a problem anymore. The occasional slash function taking a second to think? Totally acceptable. \n\nSo, dear reader, let SST be your magical elixir, your tech wizard's wand, and embark on the wondrous journey of serverless development without ever looking back.\n\nDiscord Bot: From 'discord.js' Frustration to Serverless Success\n\n[...remainder of the blog post stays the same...]"
+                  ]
+              },
+              "end_turn": true,
+              "weight": 1.0,
+              "metadata": {
+                  "model_slug": "gpt-4",
+                  "finish_details": {
+                      "type": "stop",
+                      "stop": "<|diff_marker|>"
+                  },
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "c49711ba-be3f-4619-a67d-51c8704b974a",
+          "children": [
+              "c5faa846-eb86-4c6e-8de1-32f42dd8193c"
+          ]
+      },
+      "c5faa846-eb86-4c6e-8de1-32f42dd8193c": {
+          "id": "c5faa846-eb86-4c6e-8de1-32f42dd8193c",
+          "message": {
+              "id": "c5faa846-eb86-4c6e-8de1-32f42dd8193c",
+              "author": {
+                  "role": "user",
+                  "metadata": {}
+              },
+              "create_time": 1679465432.001354,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "re write it again but talk about sst first and make it a little bit shorter and to the point but still very engaging and a tiny bit rude "
+                  ]
+              },
+              "weight": 1.0,
+              "metadata": {
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "986cf3f3-2317-4cf8-9fa8-dc8ccc5ae13c",
+          "children": [
+              "23244c87-6452-475a-a290-3170a22f4a78"
+          ]
+      },
+      "23244c87-6452-475a-a290-3170a22f4a78": {
+          "id": "23244c87-6452-475a-a290-3170a22f4a78",
+          "message": {
+              "id": "23244c87-6452-475a-a290-3170a22f4a78",
+              "author": {
+                  "role": "assistant",
+                  "metadata": {}
+              },
+              "create_time": 1679465479.575487,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "Serverless Stack (SST): The One True Path to Serverless Glory\n\nLooking back, my reluctance to embrace serverless was nothing short of a colossal blunder. The dark days of wasting money on idle private Discord bots are long gone, thanks to the revelation that is Serverless Stack (SST). It's not just a tool, it's the one true path to serverless glory.\n\nSST swoops in like a serverless superhero, ideal for crafting any serverless app your twisted mind can conjure. The crown jewel? Live Lambda Development. Get ready for live code updates that make testing webhooks easier than stealing candy from a baby. With webhooks stealing the limelight in my little sarcastic bot escapade, SST proved it was worth its weight in gold.\n\nAnd let's not forget the pièce de résistance: I had the bot running in my server, while my laptop displayed live logs like a secret spy dossier. Lambda cold starts? Please, we're way past that. And that little slash function taking a second to think? Absolutely no biggie.\n\nSo, buckle up and let SST lead you down the rabbit hole of serverless development. Trust me, there's no turning back.\n\nDiscord Bot: 'discord.js' Left in the Dust of Serverless Triumph\n\n[...remainder of the blog post stays the same...]"
+                  ]
+              },
+              "end_turn": true,
+              "weight": 1.0,
+              "metadata": {
+                  "model_slug": "gpt-4",
+                  "finish_details": {
+                      "type": "stop",
+                      "stop": "<|diff_marker|>"
+                  },
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "c5faa846-eb86-4c6e-8de1-32f42dd8193c",
+          "children": [
+              "9b8daaba-8906-42f0-9585-167ca37847a8"
+          ]
+      },
+      "9b8daaba-8906-42f0-9585-167ca37847a8": {
+          "id": "9b8daaba-8906-42f0-9585-167ca37847a8",
+          "message": {
+              "id": "9b8daaba-8906-42f0-9585-167ca37847a8",
+              "author": {
+                  "role": "user",
+                  "metadata": {}
+              },
+              "create_time": 1679465881.238047,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "now re write \"Discord Bot: Ditching the Training Wheels\" in a similar way and mention that this was probably the most \"basic\" part of the app, making a discord bot, but for some reason it was the most difficult. I think it's mostly because there's too many ways of doing things and the docs are kind of hard to follow\n\nThe final code is a mix of discord.js and http requests responding to a slash command. Since slash commands have a 3 second timeout, i need to respond immediatly, then update the message once the ai has a response. \n\n```js\n\n\n// Send the initial response\nconst initialResponse = createResponse(\n  InteractionResponseType.ChannelMessageWithSource,\n  `${userMention(user.id)}: ${customUserRespopnse(user.id)}`\n);\nawait axios.post(`https://discord.com/api/v8/interactions/${interaction.id}/${interaction.token}/callback`, initialResponse);\n\n\n// Call the promptMessage function (GPT)\nconst { answer, error } = await promptMessage({ message })\n\n// Send the updated message with the answer to Discord\nconst followupMessage = {\n  content: `${userMention(user.id)}${question + \"\\n\\n\"}${error ? \"GPT Error\" : answer}`,\n}\n\nawait axios.patch(`https://discord.com/api/v8/webhooks/${CLIENT_ID}/${interaction.token}/messages/@original`, followupMessage)\n```\n"
+                  ]
+              },
+              "weight": 1.0,
+              "metadata": {
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "23244c87-6452-475a-a290-3170a22f4a78",
+          "children": [
+              "425d961e-2541-4212-a77b-ef75e3c30df9"
+          ]
+      },
+      "425d961e-2541-4212-a77b-ef75e3c30df9": {
+          "id": "425d961e-2541-4212-a77b-ef75e3c30df9",
+          "message": {
+              "id": "425d961e-2541-4212-a77b-ef75e3c30df9",
+              "author": {
+                  "role": "assistant",
+                  "metadata": {}
+              },
+              "create_time": 1679465956.743469,
+              "content": {
+                  "content_type": "text",
+                  "parts": [
+                      "Discord Bot: Navigating the Labyrinth of Discord Bot Creation\n\nYou'd think that crafting a Discord bot would be the most basic part of this whole endeavor, right? Turns out, it was a colossal pain in the rear. The docs felt like a maze, with too many paths to choose from and no breadcrumbs to follow. It's like trying to decipher hieroglyphs without Rosetta Stone. But in the end, I emerged victorious.\n\nThe final code is a Frankenstein-esque fusion of discord.js and HTTP requests, all responding to a slash command. With a 3-second timeout for slash commands, I had to hustle. So, I sent an initial response, then updated the message once my snarky AI buddy had an answer. Here's how it went down:\n\n```js\n// Send the initial response\nconst initialResponse = createResponse(\n  InteractionResponseType.ChannelMessageWithSource,\n  `${userMention(user.id)}: ${customUserRespopnse(user.id)}`\n);\nawait axios.post(`https://discord.com/api/v8/interactions/${interaction.id}/${interaction.token}/callback`, initialResponse);\n\n// Call the promptMessage function (GPT)\nconst { answer, error } = await promptMessage({ message })\n\n// Send the updated message with the answer to Discord\nconst followupMessage = {\n  content: `${userMention(user.id)}${question + \"\\n\\n\"}${error ? \"GPT Error\" : answer}`,\n}\n\nawait axios.patch(`https://discord.com/api/v8/webhooks/${CLIENT_ID}/${interaction.token}/messages/@original`, followupMessage)\n```\n\nAnd that, my friends, is how you tame the wild beast that is Discord bot creation. It may be a labyrinth, but with persistence, you'll find your way to the center.\n\nCheck out the Full Code on GitHub\n\n[...remainder of the blog post stays the same...]"
+                  ]
+              },
+              "end_turn": true,
+              "weight": 1.0,
+              "metadata": {
+                  "model_slug": "gpt-4",
+                  "finish_details": {
+                      "type": "stop",
+                      "stop": "<|diff_marker|>"
+                  },
+                  "timestamp_": "absolute"
+              },
+              "recipient": "all"
+          },
+          "parent": "9b8daaba-8906-42f0-9585-167ca37847a8",
+          "children": []
+      }
+  },
+  "moderation_results": [],
+  "current_node": "425d961e-2541-4212-a77b-ef75e3c30df9"
+}

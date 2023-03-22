@@ -1,0 +1,113 @@
+---
+type: article
+title: "I Created a Hilariously Sarcastic Discord Bot using GPT 3.5"
+status: 'published'
+description: "How I Created a Hilariously Sarcastic Serverless Discord Bot That Roasts Users Like a Pro"
+slug: 'gpt-bot'
+image: 
+  name: 'gpt-bot.png'
+  width: 1280
+  height: 720
+tags: ['serverless', 'sst', 'lambda', 'api gateway', 'aws', 'discord bot', 'ai', 'gpt', 'gpt 3.5', 'open ai', 'discord', 'discord.js', 'discord slash commands', 'discord slash command', 'discord slash command bot', 'discord slash command']
+---
+
+If you're anything like me, you're probably bored of all those bland and helpful bots out there, catering to everyone's needs like obedient little minions. So, I thought, "Why not craft a Discord bot that not only makes you laugh but also roasts you like a Thanksgiving turkey?" And so, my sarcastic AI Discord bot was born, thanks to the wonders of GPT-3.5 Turbo and Serverless Stack (SST). Prepare yourself for the roller coaster of sass and sarcasm that awaits you in this bot-building tale.
+
+## GPT-3.5 Turbo: Unleashing the Sarcasm Beast
+
+GPT-4 may be playing hard to get, but its sibling, GPT-3.5 Turbo, is more than capable of serving some serious snark. Initially, I was all set to create a helpful assistant bot, but then I had an epiphany: "Helpful is boring. Sarcastic is fun." So, I decided to unleash the beast within GPT-3.5 by tweaking the system prompt, the first user prompt, and the temperature. Lo and behold, my very own digital snark machine was born!
+
+## Mastering the Art of Sarcasm
+
+In the world of GPT-3.5, conversations typically start with a system message that sets the behavior of the assistant, followed by alternating user and assistant messages. But how do you turn an AI into a sarcastic roasting machine? Let's dive into the code examples that'll make you a sarcasm sorcerer.
+
+Here's the vanilla example from the docs:
+
+```js
+const response = await openai.createChatCompletion({
+  model: 'gpt-3.5-turbo',
+  messages: [
+    {"role": "system", "content": "You are a helpful assistant."},
+    { "role": "user", "content": userMessage}
+  ],
+  temperature: 0.7,
+})
+```
+
+So initially, I thought, "Why not just add some spice to this and see what happens?" 
+
+```js
+const response = await openai.createChatCompletion({
+  model: 'gpt-3.5-turbo',
+  messages: [
+    {"role": "system", "content": "You are a helpful assistant. You are very sarcastic, rude, mean, and condescending in a playful way."},
+    { "role": "user", "content": userMessage}
+  ],
+  temperature: 0.7,
+})
+```
+
+I got *some* sarcasm, but it was kind of like a "short sarcastic sentence, just kidding" followed by a normal overly-sensitive GPT response. So I tinkered, I toyed, I experimented, and eventually, I reinforced the sarcastic behavior by tweaking the temperature and maybe most importantly, adding an initial user message to reinforce the behaviour I wanted:
+
+```js
+const response = await openai.createChatCompletion({
+  model: 'gpt-3.5-turbo',
+  messages: [
+    {"role": "system", "content": "You are a helpful assistant. You are very sarcastic, rude, mean, and condescending in a playful way."},
+    { "role": "user", "content": "Only respond to me in very sarcastic, rude, mean, condescending, and playful ways; while still being helpful and giving examples if you need to."},
+    { "role": "user", "content": userMessage}
+  ],
+  temperature: 1.3,
+})
+```
+
+This is not the final code I used, I customized the system message much more to make it a drop-in replacement for myself in my Discord server. The bot actually thinks it's "Sam, a british web dev instructor/youtuber" but if you're itching to see the complete source code, check it out the github link at the end of this post.
+
+## Serverless Stack (SST): The One True Path to Serverless Glory
+
+Why go serverless? Simple. Pay for what you use (which, let's be honest, usually rounds to a sweet $0.00).
+
+Back in the day, I built private Discord bots that ran on "normal" servers, guzzling my precious VM dollars like there was no tomorrow. But now it's 2023, and if it can be built serverless, you bet your ass it's going serverless.
+
+If you've ever dabbled in building serverless apps with lambda functions, API Gateway, and the like, you know firsthand how painfully time-consuming it can be. Enter **[SST](https://sst.dev/)**, the hero that transforms the entire process into a freaking cakewalk.
+
+What absolutely blew my mind was **Live Lambda Development**. Picture this: my minions in the server prodding the bot with questions, while I'm tinkering with GPT parameters on my laptop. The lambda function updates instantly, meaning my Discord bot gets real-time upgrades as I'm developing. Once everything was perfect, I hit deploy and i'm done. Instant feedback, instant updates, and an experience more addictive than a double espresso.
+
+I cannot stress enough how mind-blowingly fantastic it was to test webhooks with SST, deploy to AWS without breaking a sweat.
+
+## Discord Bot: Navigating the Labyrinth of Discord Bot Creation
+
+You'd think that crafting a Discord bot would be the most basic part of this whole endeavor, right? Turns out, it was a colossal pain in the ass. The discord docs, mixed with the discord.js docs felt like a maze, with too many paths to choose from and no breadcrumbs to follow for a serverless bot. 
+
+The final code is a messy fusion of discord.js and HTTP requests, all to respond to the discord slash command `/samgpt`. 
+
+Slash commands have a 3-second timeout, which meant I had to send an initial response, then updated the message once my snarky AI buddy had an answer. Here's the gist of how it went down:
+
+```js
+// Send the initial response
+const initialResponse = createResponse(
+  InteractionResponseType.ChannelMessageWithSource,
+  `${userMention(user.id)}: ${customUserRespopnse(user.id)}`
+);
+await axios.post(`https://discord.com/api/v8/interactions/${interaction.id}/${interaction.token}/callback`, initialResponse);
+
+// Call the promptMessage function (GPT)
+const { answer, error } = await promptMessage({ message })
+
+// Send the updated message with the answer to Discord
+const followupMessage = {
+  content: `${userMention(user.id)}${question + "\n\n"}${error ? "GPT Error" : answer}`,
+}
+
+await axios.patch(`https://discord.com/api/v8/webhooks/${CLIENT_ID}/${interaction.token}/messages/@original`, followupMessage)
+```
+
+This is an oversimplified version of the final code I used.
+
+## Code 
+
+If you're the kind of person who gets a kick out of exploring code, check out the full masterpiece on GitHub: https://github.com/meech-ward/chat-gpt-discord-bot-lambda
+
+## Conclusion
+
+In a world full of helpful, boring bots, my sarcastic AI Discord bot breaks the mold and delivers an experience that'll make you laugh, cry, or maybe even question your life choices. With the power of GPT-3.5 Turbo and SST, this serverless bot takes sarcasm to a whole new level. So go on, give it a try, and see if you can handle the roast!
