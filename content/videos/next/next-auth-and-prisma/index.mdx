@@ -83,7 +83,7 @@ https://github.com/Sam-Meech-Ward/code_snippets_prisma_next_demo/tree/auth
     // /pages/api/posts.js
     import { prisma } from '../../server/db/client'
 
-    import { unstable_getServerSession } from "next-auth/next"
+    import { getServerSession } from "next-auth/next"
     import { authOptions } from "./auth/[...nextauth]"
 
     function titleFromCode(code) {
@@ -91,7 +91,7 @@ https://github.com/Sam-Meech-Ward/code_snippets_prisma_next_demo/tree/auth
     }
 
     async function post(req, res) {
-      const session = await unstable_getServerSession(req, res, authOptions)
+      const session = await getServerSession(req, res, authOptions)
       if (!session) {
         res.status(401).json({ error: 'Unauthorized' })
         return
