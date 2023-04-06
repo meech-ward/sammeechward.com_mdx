@@ -1,0 +1,321 @@
+---
+type: article
+title: "Training an ML.NET Model to Detect Clickbait Titles"
+slug: ml-dotnet
+
+description: "Are you tired of seeing clickbait titles everywhere? Want to create something that can spot those pesky attention-grabbing headlines from a mile away? Well, you've come to the right place!"
+image:
+  name: "nET.png"
+  width: 1280
+  height: 720
+
+status: "published"
+date: "2023-04-05T04:53:51.875Z"
+tags:
+  [
+    "postgres",
+    "entity framework core",
+    "createdat",
+    "timestamp",
+    "sql server",
+    "mysql",
+    "c#",
+    "csharp",
+    "dotnet",
+    ".NET",
+    "asp.net",
+  ]
+---
+
+Are you tired of seeing clickbait titles everywhere? Want to create something that can spot those pesky attention-grabbing headlines from a mile away? Well, you've come to the right place!
+
+In this tutorial, we'll dive into the world of machine learning using mlnet to train a model that's capable of detecting clickbait titles. Then, we'll integrate that model into an ASP.NET Core web app because, why not? Let's get this party started!
+
+## ML.NET: The Machine Learning Sidekick You Never Knew You Needed
+
+Before we jump into the fray, let's have a quick chat about ML.NET. ML.NET is a cross-platform, open-source machine learning framework developed by Microsoft. It's designed to make machine learning accessible to .NET developers like you, without requiring expertise in ML or data science. It's like having a trusty sidekick who's an ML whiz, ready to help you add a touch of AI magic to your applications.
+
+Now that we're acquainted with our new best friend, ML.NET, let's gear up for the journey ahead.
+
+## Data, Data, Data: The Fuel for Our Clickbait Classifier
+
+Before we unleash the power of ML.NET to create our clickbait-detecting machine, we need some data to train it. Think of this data as the fuel that'll power our model, teaching it the subtle art of sniffing out clickbait titles from the vast ocean of internet content.
+
+We'll be using the clickbait title classification dataset from Hugging Face, which you can find here: https://huggingface.co/datasets/marksverdhei/clickbait_title_classification
+
+This dataset is like a goldmine of titles, both clickbait and non-clickbait, just waiting to be dissected and analyzed by our soon-to-be ML model. Download the CSV file and let's get ready to rumble!
+
+[https://huggingface.co/datasets/marksverdhei/clickbait_title_classification/raw/main/clickbait_title_classification.csv](https://huggingface.co/datasets/marksverdhei/clickbait_title_classification/raw/main/clickbait_title_classification.csv)
+
+The data in this CSV file is split into two columns:
+
+1. `title`: Contains the text of the title, which could be clickbait or non-clickbait.
+2. `clickbait`: A binary label, with "1" indicating a clickbait title and "0" indicating a non-clickbait title.
+   During the training process, ML.NET will study this dataset like a detective, searching for patterns and clues that'll help it distinguish between clickbait and non-clickbait titles. It'll learn from these examples and use this newfound knowledge to make educated guesses when faced with new, unseen titles.
+
+Once the model is trained, we'll be able to feed it new titles and watch as it makes a guess between 0 and 1, indicating whether it thinks the title is clickbait or not.
+
+## Setting the Stage: Installing ML.NET
+
+Before we can start training our model, we need to have ML.NET installed on your computer. ML.NET is a powerful machine learning framework designed specifically for .NET developers like you, which means you can build custom machine learning models without needing expertise in the complex world of machine learning.
+
+<Instruction>
+  Install the ML.NET CLI tool by running the following command in your terminal:
+</Instruction>
+
+{/* prettier-ignore */}
+<Tabs>
+<Tab name="Windows">
+x64
+```
+dotnet tool install --global mlnet-win-x64
+```
+ARM
+```
+dotnet tool install --global mlnet-win-arm64
+```
+</Tab>
+<Tab name="macOS">
+x64
+```
+dotnet tool install --global mlnet-osx-x64
+```
+ARM
+```
+dotnet tool install --global mlnet-osx-arm64
+```
+</Tab>
+<Tab name="Linux">
+x64
+```
+dotnet tool install --global mlnet-linux-x64
+```
+ARM
+```
+dotnet tool install --global mlnet-linux-arm64
+```
+</Tab>
+</Tabs>
+
+With ML.NET installed, we're ready to dive into the next step and train our clickbait classifier.
+
+## Roll Up Your Sleeves: Training the Clickbait Classifier Model
+
+Time to put ML.NET to work and train our clickbait classification model! The ML.NET CLI provides a handy command for doing just that, which we'll execute like a true maestro.
+
+<Instruction>
+  Navigate to the folder where you downloaded the CSV file, and run the
+  following command to train your clickbait classification model:
+</Instruction>
+
+{/* prettier-ignore */}
+<Tabs>
+<Tab name="Windows">
+```
+mlnet classification --dataset "clickbait_title_classification.csv" --label-col clickbait --train-time 300 --name ClickbaitModel
+```
+</Tab>
+<Tab name="macOS and Linux">
+```
+~/.dotnet/tools/mlnet classification --dataset "clickbait_title_classification.csv" --label-col clickbait --train-time 300 --name ClickbaitModel
+```
+</Tab>
+</Tabs>
+
+Now, sit back and relax as ML.NET works its magic. While we wait, allow me to break down this command for you:
+
+- `mlnet classification`: Tells ML.NET to perform classification, the task of categorizing data into different classes (in our case, clickbait or non-clickbait).
+- `--dataset`: Points to the CSV file containing our precious clickbait title data.
+- `--label-col`: Specifies which column in the dataset contains the labels (1 for clickbait, 0 for non-clickbait).
+- `--train-time`: Sets the amount of time (in seconds) for ML.NET to train the model. Feel free to increase this if you want to give ML.NET more time to explore and optimize the model.
+- `--name`: Specifies the name of the model. This will be used to name the output files.
+
+It'll analyze the dataset, exploring the vast realm of exsisting classification models and find the best one for our clickbait dataset. It'll try different data transformations, algorithms, and algorithm options, all while the clock ticks down on the specified training time (300 seconds in this case).
+
+As ML.NET scours the landscape of possibilities, you can kick back and relax, knowing that it's doing all the heavy lifting for you. When it's done, ML.NET will present you with the top-performing model, ready to be integrated into your ASP.NET Core web app.
+
+Once the model is trained, you'll have a `ClickbaitModel` folder containing the model `ClickbaitModel.mlnet`, and some other C# files that demonstrate how to use and train the model.
+
+## Generated Console App
+
+ML.NET automatically generates a console application project alongside the model training project. This console app serves as a handy tool for testing the trained model without having to integrate it into an external application.
+
+<Instruction>Navigate to the generated console app project folder:</Instruction>
+
+```
+cd ClickbaitDetectorApp
+```
+
+Here, you'll find a `.csproj` file and a `Program.cs` file. The `Program.cs` file contains the code to load and test the trained model.
+
+### Testing the Model with Sample Titles
+
+<Instruction>
+  Open the `Program.cs` file and replace it with the followig code:
+</Instruction>
+
+```csharp
+using System;
+using System.Linq;
+
+namespace ClickbaitModel.ConsoleApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create single instance of sample data from first line of dataset for model input
+            ClickbaitModel.ModelInput sampleData = new ClickbaitModel.ModelInput()
+            {
+                Title = "You'll never guess how this tutorial was made",
+            };
+
+            var sortedScoresWithLabel = ClickbaitModel.PredictAllLabels(sampleData);
+
+            var isClickbait = sortedScoresWithLabel.First().Key == "1";
+            Console.WriteLine("Is Clickbait: " + isClickbait);
+
+
+            foreach (var score in sortedScoresWithLabel)
+            {
+                Console.WriteLine((score.Key == "1" ? "Clickbait " : "Not Clickbait ") + score.Value);
+            }
+
+        }
+    }
+}
+```
+
+- Inside the Main method, we create a new `ClickbaitModel.ModelInput` object called sampleData and set the `Title` property to a sample title we want to classify.
+- Next, we call the `ClickbaitModel.PredictAllLabels(sampleData)` method, which takes our sampleData as input and returns a sorted list of scores for each class (clickbait and non-clickbait) along with their labels. The first element in the list is the class with the highest score, meaning the first element is the most likely class for the given title.
+- We check if this first element is clickbait or not which is represented by the label "1".
+- We are also looping over the model's confidence scores for both clickbait and non-clickbait classes, giving us an idea of how certain the model is in its prediction. Scores closer to 0.5 indicate that the model is unsure of its prediction.
+
+<Instruction>
+  Run the console app to test the model with your sample title:
+</Instruction>
+
+```
+dotnet run
+```
+
+<Note>
+  If you see the error `The name 'File' does not exist in the current context`,
+  you'll need to add the following line to the top of your Program.cs file:
+  `using System.IO;`
+</Note>
+
+## Integrating the Model into an ASP.NET Core Web App
+
+Time to give our clickbait-detecting machine a shiny new home! We'll create a minimal ASP.NET Core Web API to serve up our model's predictions to the world. Let's roll!
+
+<Instruction>
+  In a different directory, create a new minimal web API project:
+</Instruction>
+
+```
+dotnet new web -o ClickbaitDetectorAPI
+```
+
+This command generates a new minimal web API project called \"ClickbaitDetectorAPI.\" You're off to a great start!
+
+<Instruction>Add the ML.NET NuGet package to the project:</Instruction>
+
+```
+dotnet add package Microsoft.ML
+```
+
+<Instruction>Navigate to the new project folder:</Instruction>
+
+```
+cd ClickbaitDetectorAPI
+```
+
+<Instruction>
+  Copy the `ClickbaitModel.mlnet` model file and the
+  `ClickbaitModel.consumption.cs` file from your ML.NET Model Builder project
+  into the `ClickbaitDetectorAPI` folder.
+</Instruction>
+
+The `.mlnet` file is the actual model, and teh `.consumption.cs` file contains some convenience code to make it easy to load and use the model.
+
+<Instruction>
+  Delete the `namespace ClickbaitModel.ConsoleApp` from the
+  `ClickbaitModel.consumption.cs` file.
+</Instruction>
+
+You can add another namespace for your project if you like, but we don't really need a namespace right now
+
+<Instruction>
+  Edit the `Program.cs` file in the `ClickbaitDetectorAPI` folder to include the
+  necessary using statements:
+</Instruction>
+
+```csharp
+using System.Linq;
+using ClickbaitModel;
+```
+
+<Instruction>Create the prediction endpoint:</Instruction>
+
+```csharp
+app.MapGet("/api/predict", (string title) =>
+{
+    ClickbaitModel.ModelInput input = new ClickbaitModel.ModelInput { Title = title };
+
+    var sortedScoresWithLabel = ClickbaitModel.PredictAllLabels(input);
+    var isClickbait = sortedScoresWithLabel.First().Key == "1";
+
+    return new
+    {
+        isClickbait,
+        scores = sortedScoresWithLabel
+    };
+});
+```
+
+This endpoint accepts a title as input, uses the model to predict if it's clickbait or not, and returns a JSON object containing the result and the confidence scores.
+
+<Instruction>Save your changes and run the web API:</Instruction>
+
+```
+dotnet run
+```
+
+Voilà! Your web API is up and running, eagerly awaiting titles to classify.
+
+<Instruction>
+  Send a GET request to the `/api/predict` endpoint with a title query string,
+  for example:
+</Instruction>
+
+```
+http://localhost:5000/api/predict?title=You Won't Believe What Happened Next!
+```
+
+You should receive a response indicating whether the title is clickbait or not.
+
+```
+{
+    isClickbait: true,
+    scores: [
+        {
+            key: "1",
+            value: 0.9991548
+        },
+        {
+            key: "0",
+            value: 0.0008451774
+        }
+    ]
+}
+```
+
+Congratulations! You've successfully integrated your clickbait classification model into a minimal C# API, providing an efficient and straightforward way to detect clickbait titles. Time to save the world from the clickbait epidemic!
+
+
+### Summary
+
+You've now successfully trained an ML.NET model to detect clickbait titles and integrated it into a minimal C# API.
+
+Go ahead and test the clickbait classifier with a variety of titles, and see how well it performs. With your newfound knowledge of ML.NET and model integration, the possibilities for future projects are endless. Have fun exploring, and happy coding!

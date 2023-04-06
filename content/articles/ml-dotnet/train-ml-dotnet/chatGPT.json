@@ -1,0 +1,613 @@
+{
+    "title": "Train and Deploy ML Model",
+    "create_time": 1680745125.162798,
+    "update_time": 1680747730.0,
+    "mapping": {
+        "c1cbeb33-8a91-49f9-9b1d-a7186620ac3d": {
+            "id": "c1cbeb33-8a91-49f9-9b1d-a7186620ac3d",
+            "message": {
+                "id": "c1cbeb33-8a91-49f9-9b1d-a7186620ac3d",
+                "author": {
+                    "role": "system",
+                    "metadata": {}
+                },
+                "create_time": 1680745125.162798,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        ""
+                    ]
+                },
+                "end_turn": true,
+                "weight": 1.0,
+                "metadata": {},
+                "recipient": "all"
+            },
+            "parent": "69fe254f-8c0b-47d8-81f8-02337613ab2d",
+            "children": [
+                "698a7b12-2cd1-4628-9ea9-6d46df09e5e7"
+            ]
+        },
+        "69fe254f-8c0b-47d8-81f8-02337613ab2d": {
+            "id": "69fe254f-8c0b-47d8-81f8-02337613ab2d",
+            "children": [
+                "c1cbeb33-8a91-49f9-9b1d-a7186620ac3d"
+            ]
+        },
+        "698a7b12-2cd1-4628-9ea9-6d46df09e5e7": {
+            "id": "698a7b12-2cd1-4628-9ea9-6d46df09e5e7",
+            "message": {
+                "id": "698a7b12-2cd1-4628-9ea9-6d46df09e5e7",
+                "author": {
+                    "role": "user",
+                    "metadata": {}
+                },
+                "create_time": 1680745125.165055,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "Write a complete tutorial on using `mlnet` to train a model then use that model in an ASP.NET Core web app. The reader knows C# well and is pretty good at programming, but hasn't trained an ML model before. They also don't have `mlnet` installed on their computer. Use .NET 6 and the latest version of `mlnet`.\n\nuse the clickbait title classification data set from hugging face https://huggingface.co/datasets/marksverdhei/clickbait_title_classification\n\nThis data set is a csv file that looks like this\n```csv\ntitle,clickbait\n\"\"\".asia\"\" domain applications near 300,000 on opening of registration\",0\n\"\"\"1 Indian + 1 Indian = Unrelatable\"\": Television's Race Equations\",1\n```\n\nWrite it in the same style as me but also make it engaging like the writing of tim urban from waitbutwhy.com and make be a little bit playful and rude. Here's an example of a completely different post I wrote about how to use react router for a reference on my writing style. \n\nPOST START \n\nIn this tutorial, we'll explore the process of adding **React Router 6** to a React 18 application using **Vite**. We'll create a simple application with a few routes and configure Vite to make it all work together seamlessly.\n\n## Project Setup\n\nFirst, we need to create a new React project using Vite.\n\n<Instruction>Create a new Vite project using the React template.</Instruction>\n\n\n```\nyarn create vite my-react-router-app --template react\ncd my-react-router-app\nyarn\n```\n\nNow that we've set up our project, let's add React Router 6 to it.\n\n## Adding React Router 6\n\n<Instruction>Install React Router 6 as a dependency.</Instruction>\n\n```\nyarn add react-router-dom\n```\n\nWith React Router 6 installed, let's create a simple application with a few routes to demonstrate its usage.\n\n## Creating Components and Routes\n\n<Instruction>\n  Create three new components: `Home.jsx`, `About.jsx`, and `Contact.jsx` in the\n  `src` folder.\n</Instruction>\n\n**src/Home.jsx**\n\n```javascript\nexport default function Home() {\n  return (\n    <div>\n      <h1>Home</h1>\n      <p>Welcome to our home page!</p>\n    </div>\n  )\n}\n```\n\n**src/About.jsx**\n\n```javascript\nexport default function About() {\n  return (\n    <div>\n      <h1>About</h1>\n      <p>Learn more about us!</p>\n    </div>\n  )\n}\n```\n\n**src/Contact.jsx**\n\n```javascript\nexport default function Contact() {\n  return (\n    <div>\n      <h1>Contact</h1>\n      <p>Get in touch with us!</p>\n    </div>\n  )\n}\n```\n\nNow that we have our components, let's create routes for them using React Router 6.\n\n<Instruction>Modify `src/App.jsx` to include the new routes.</Instruction>\n\n**src/App.jsx**\n\n```javascript\nimport { BrowserRouter, Link, Route, Routes } from 'react-router-dom';\nimport Home from './Home';\nimport About from './About';\nimport Contact from './Contact';\n\nexport default function App() {\n  return (\n    <BrowserRouter>\n      <nav>\n        <ul>\n          <li>\n            <Link to=\"/\">Home</Link>\n          </li>\n          <li>\n            <Link to=\"/about\">About</Link>\n          </li>\n          <li>\n            <Link to=\"/contact\">Contact</Link>\n          </li>\n        </ul>\n      </nav>\n\n      <main>\n        <Routes>\n          <Route path=\"/\" element={<Home />} />\n          <Route path=\"/about\" element={<About />} />\n          <Route path=\"/contact\" element={<Contact />} />\n        </Routes>\n      </main>\n    </BrowserRouter>\n  );\n}\n```\n\nI'll explain the code above in more detail below, but first, let's run our application and see React Router 6 in action.\n\n## Running the Application\n\n<Instruction>Start the development server.</Instruction>\n\n```\nyarn dev\n```\n\nOpen your browser and navigate to `http://localhost:5173`. You should see the home page of our application with the navigation links at the top. Clicking on these links will navigate you to the corresponding pages, demonstrating React Router 6 functionality.\n\n## Explaining `App.jsx`\n\nLet's go through the `App.jsx` code snippet step by step to explain how it works.\n\n```jsx\nimport { BrowserRouter, Link, Route, Routes } from 'react-router-dom';\nimport { HomePage } from './pages/HomePage';\nimport { AboutPage } from './pages/AboutPage';\nimport { ContactPage } from './pages/ContactPage';\n```\n\nIn the beginning, we import the necessary React and React Router components. We also import the `HomePage`, `AboutPage`, and `ContactPage` components from their respective files.\n\n```jsx\nfunction App() {\n  return (\n    <BrowserRouter>\n```\n\nWe define the `App` component, which will serve as the root component of our application. Inside the `App` component, we use the `BrowserRouter` component, which is responsible for handling the routing and history manipulation for our app.\n\n```jsx\n      <nav>\n        <ul>\n          <li>\n            <Link to=\"/\">Home</Link>\n          </li>\n          <li>\n            <Link to=\"/about\">About</Link>\n          </li>\n          <li>\n            <Link to=\"/contact\">Contact</Link>\n          </li>\n        </ul>\n      </nav>\n```\n\nWe create a simple navigation menu using the `nav` and `ul` HTML elements. Within the menu, we use the `Link` component from React Router to create links for our routes. The `to` prop in each `Link` component specifies the destination URL for the link.\n\n```jsx\n      <main>\n        <Routes>\n          <Route path=\"/\" element={<HomePage />} />\n          <Route path=\"/about\" element={<AboutPage />} />\n          <Route path=\"/contact\" element={<ContactPage />} />\n        </Routes>\n      </main>\n```\n\nWe use the `Routes` component to define our application's routes. Inside the `Routes` component, we add a `Route` component for each of our pages. The `path` prop specifies the URL path for the route, while the `element` prop defines the component to render when the route is active.\n\n```jsx\n    </BrowserRouter>\n  );\n}\n\nexport default App;\n```\n\nFinally, we close the `BrowserRouter` component and export the `App` component as the default export of the module.\n\nThis `App.jsx` file sets up a basic React app with three routes (home, about, and contact) and a navigation menu. When users click on the navigation links, the corresponding route will be activated, and the associated component will be rendered within the `main` element.\n\n## Summary\n\nIn this tutorial, we've successfully added React Router 6 to a React 18 application using Vite. We created a simple application with a few routes, set up navigation links, and demonstrated how React Router 6 handles navigation between pages.\n\nIf you have any questions or comments, feel free to leave them below. Happy coding!\n\nPOST END\n\nHere's an example of another completely different post I wrote about setting up a chatgpt discord bot\n\nPOST START \n\nHow I Created a Hilariously Sarcastic Serverless Discord Bot That Roasts Users Like a Pro\n\nIf you're anything like me, you're probably bored of all those bland and helpful bots out there, catering to everyone's needs like obedient little minions. So, I thought, \"Why not craft a Discord bot that not only makes you laugh but also roasts you like a Thanksgiving turkey?\" And so, my sarcastic AI Discord bot was born, thanks to the wonders of GPT-3.5 and Serverless Stack (SST). Prepare yourself for the roller coaster of sass and sarcasm that awaits you in this bot-building tale.\n\n## GPT-3.5 Turbo: Unleashing the Sarcasm Beast\n\nGPT-4 may be playing hard to get, but its sibling, GPT-3.5 Turbo, is more than capable of serving some serious snark. Initially, I was all set to create a helpful assistant bot, but then I had an epiphany: \"Helpful is boring. Sarcastic is fun.\" So, I decided to unleash the beast within GPT-3.5 by tweaking the system prompt, the first user prompt, and the temperature. Lo and behold, my very own digital snark machine was born!\n\n## Serverless Stack (SST): Like a Tech Wizard's Wand\n\nThe sorcery of serverless technology was essential for my sarcastic AI bot. And what's more magical than SST and its Live Lambda Development feature? I had people in my server test this snarky creature while I watched the live logs on my laptop, making GPT parameter adjustments like a true tech wizard. And let's be real, Lambda cold starts aren't that bad anymore. It's totally cool for a slash function to take a second to think, just like you take a second to regret that last slice of pizza.\n\n## Discord Bot: Ditching the Training Wheels\n\nI began my journey with 'discord.js', but quickly realized that the docs were as helpful as a screen door on a submarine. So, I ditched the training wheels and went straight to the source, making requests directly to https://discord.com/api/v10/. The result? A code that may be a bit hacky, but works as beautifully as your mom's not-so-subtle hints about grandchildren.\n\nThis digital sass-master listens for slash commands and then sends a request to my serverless backend, which triggers the GPT function and returns a response that'll either make you laugh or cry (or both). It's a beautiful marriage of serverless magic and AI sarcasm.\n\n## Conclusion\n\nIn a world full of helpful, boring bots, my sarcastic AI Discord bot breaks the mold and delivers an experience that'll make you laugh, cry, or maybe even question your life choices. With the power of GPT-3.5 Turbo and SST, this serverless bot takes sarcasm to a whole new level. So go on, give it a try, and see if you can handle the roast!\n\nIf you're the kind of person who gets a kick out of exploring code, check out the full masterpiece on GitHub: https://github.com/meech-ward/chat-gpt-discord-bot-lambda\n\nAnd, if you're not too busy binge-watching Netflix, let me know if you want a step-by-step tutorial on how to create your own hilariously rude Discord bot.\n\nPOST END"
+                    ]
+                },
+                "weight": 1.0,
+                "metadata": {
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "c1cbeb33-8a91-49f9-9b1d-a7186620ac3d",
+            "children": [
+                "485dc5ce-fde2-454f-8d31-86f6199db00b"
+            ]
+        },
+        "485dc5ce-fde2-454f-8d31-86f6199db00b": {
+            "id": "485dc5ce-fde2-454f-8d31-86f6199db00b",
+            "message": {
+                "id": "485dc5ce-fde2-454f-8d31-86f6199db00b",
+                "author": {
+                    "role": "assistant",
+                    "metadata": {}
+                },
+                "create_time": 1680745220.607927,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "POST START\n\n### Training an ML Model to Detect Clickbait Titles Like a Boss\n\nHey there, you coding genius! Are you tired of seeing clickbait titles everywhere? Want to create something that can spot those pesky attention-grabbing headlines from a mile away? Well, you've come to the right place!\n\nIn this tutorial, we'll dive into the world of machine learning using `mlnet` to train a model that's capable of detecting clickbait titles. Then, we'll integrate that model into an ASP.NET Core web app because, why not? Let's get this party started!\n\n## Installing ML.NET CLI\n\nFirst things first, you'll need the `mlnet` CLI tool, which is like a superpower for training ML models without breaking a sweat. Let's get it installed, shall we?\n\n<Instruction>Install the ML.NET CLI tool using the following command:</Instruction>\n\n```\ndotnet tool install -g mlnet\n```\n\nNow that you've got `mlnet` in your arsenal, it's time to train a model that can identify clickbait titles like a pro.\n\n## Training the Model\n\nRemember that dataset from Hugging Face? You know, the one with clickbait title classification data? Let's put it to good use!\n\n<Instruction>Download the dataset in CSV format from the following link:</Instruction>\n\n[Clickbait Title Classification Dataset](https://huggingface.co/datasets/marksverdhei/clickbait_title_classification)\n\nThe dataset should look like this:\n\n```csv\ntitle,clickbait\n\"\"\".asia\"\" domain applications near 300,000 on opening of registration\",0\n\"\"\"1 Indian + 1 Indian = Unrelatable\"\": Television's Race Equations\",1\n```\n\nNow that you've got the dataset, let's train our model.\n\n<Instruction>Use the `mlnet` CLI tool to train a model using the dataset.</Instruction>\n\n```\nmlnet classification --dataset path/to/your/clickbait_dataset.csv --label-col clickbait --output output_directory\n```\n\nSit back and relax as `mlnet` works its magic. Once it's done, you'll find a brand-new model named `MLModel.zip` in the `output_directory` you specified. Good job!\n\n## Integrating the Model into an ASP.NET Core Web App\n\nEnough with the model training! It's time to put our hard work to the test by integrating it into an ASP.NET Core web app.\n\n<Instruction>Create a new ASP.NET Core Web API project using the .NET CLI.</Instruction>\n\n```\ndotnet new webapi -n ClickbaitDetector\ncd ClickbaitDetector\n```\n\n<Instruction>Add the ML.NET NuGet package to your project.</Instruction>\n\n```\ndotnet add package Microsoft.ML\n```\n\n<Instruction>Create a new folder named `MLModel` in the root of your project and copy the `MLModel.zip` file you generated earlier into it.</Instruction>\n\nNow, let's create a class that'll help us interact with the model.\n\n<Instruction>Create a new file named `ClickbaitModel.cs` in your project.</Instruction>\n\n```csharp\nusing Microsoft.ML.Data;\n\npublic class ClickbaitModel\n{\n    [LoadColumn(0)] public string Title;\n    [LoadColumn(1)] public bool IsClickbait;\n\n    public class ClickbaitPrediction\n    {\n        [ColumnName(\"PredictedLabel\")]\n        public bool IsClickbait;\n    }\n}\n```\n\nWith the `ClickbaitModel` class ready, let's create a class that'll handle the model loading and predictions.\n\n<Instruction>Create a new file named `ClickbaitModelService.cs` in your project"
+                    ]
+                },
+                "end_turn": false,
+                "weight": 1.0,
+                "metadata": {
+                    "model_slug": "gpt-4",
+                    "finish_details": {
+                        "type": "max_tokens"
+                    },
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "698a7b12-2cd1-4628-9ea9-6d46df09e5e7",
+            "children": [
+                "d6143f3a-524b-43bd-91fb-a5e41e66fd66"
+            ]
+        },
+        "d6143f3a-524b-43bd-91fb-a5e41e66fd66": {
+            "id": "d6143f3a-524b-43bd-91fb-a5e41e66fd66",
+            "message": {
+                "id": "d6143f3a-524b-43bd-91fb-a5e41e66fd66",
+                "author": {
+                    "role": "user",
+                    "metadata": {}
+                },
+                "create_time": 1680745405.328782,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "Start over and explain what the `mlnet classification --dataset` command is doing like \n\n\"The mlnet classification command runs ML.NET with AutoML to explore many iterations of classification models in the given amount of train time with varying combinations of data transformations, algorithms, and algorithm options and then chooses the highest performing model.\"\n\nbut make the explanation simple to understand, engaging, fun, and go into more depth about what's actually happening when they \"Sit back and relax as mlnet works its magic.\""
+                    ]
+                },
+                "weight": 1.0,
+                "metadata": {
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "485dc5ce-fde2-454f-8d31-86f6199db00b",
+            "children": [
+                "354de173-c7a2-40d4-b574-ea66d0401aea"
+            ]
+        },
+        "354de173-c7a2-40d4-b574-ea66d0401aea": {
+            "id": "354de173-c7a2-40d4-b574-ea66d0401aea",
+            "message": {
+                "id": "354de173-c7a2-40d4-b574-ea66d0401aea",
+                "author": {
+                    "role": "assistant",
+                    "metadata": {}
+                },
+                "create_time": 1680745446.439134,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "Alright, let's break it down for you!\n\nThe `mlnet classification --dataset` command is like a master chef in the kitchen of machine learning. When you run this command, you're essentially telling ML.NET to put on its chef's hat and cook up the tastiest classification model it can using the dataset you provide.\n\nHere's the fun part: ML.NET uses a technique called AutoML to create the perfect recipe for your model. It's like an episode of your favorite cooking show, where the chef experiments with different ingredients, cooking techniques, and presentation styles to create a mouth-watering dish.\n\nIn the world of ML.NET, these \"ingredients\" are data transformations, algorithms, and algorithm options. ML.NET whips up a bunch of different combinations and tastes them all (metaphorically, of course!). It's like a culinary adventure to find the perfect balance of flavors.\n\nOnce ML.NET has tried a smorgasbord of options, it picks the one that performs the best – the model that tantalizes your machine learning taste buds like no other. And that, my friend, is the magic you're witnessing when you sit back and relax as `mlnet` does its thing.\n\nSo, to sum it up, when you run the `mlnet classification --dataset` command, you're inviting ML.NET to embark on an exciting quest to find the best classification model for your dataset. It explores a vast array of combinations and settles on the one that delivers the most delicious results. Bon appétit!"
+                    ]
+                },
+                "end_turn": true,
+                "weight": 1.0,
+                "metadata": {
+                    "model_slug": "gpt-4",
+                    "finish_details": {
+                        "type": "stop",
+                        "stop": "<|diff_marker|>"
+                    },
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "d6143f3a-524b-43bd-91fb-a5e41e66fd66",
+            "children": [
+                "ce0630ed-7016-4167-bd60-f06d47537590"
+            ]
+        },
+        "ce0630ed-7016-4167-bd60-f06d47537590": {
+            "id": "ce0630ed-7016-4167-bd60-f06d47537590",
+            "message": {
+                "id": "ce0630ed-7016-4167-bd60-f06d47537590",
+                "author": {
+                    "role": "user",
+                    "metadata": {}
+                },
+                "create_time": 1680745543.291474,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "start the tutorial over from the beginning"
+                    ]
+                },
+                "weight": 1.0,
+                "metadata": {
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "354de173-c7a2-40d4-b574-ea66d0401aea",
+            "children": [
+                "c83a540c-0840-4b07-9da0-b45447877302"
+            ]
+        },
+        "c83a540c-0840-4b07-9da0-b45447877302": {
+            "id": "c83a540c-0840-4b07-9da0-b45447877302",
+            "message": {
+                "id": "c83a540c-0840-4b07-9da0-b45447877302",
+                "author": {
+                    "role": "assistant",
+                    "metadata": {}
+                },
+                "create_time": 1680745567.718858,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "Alright, buckle up, my programming friend! We're about to embark on an adventure to tame the wild beast of machine learning and create a clickbait title classifier using `mlnet` and ASP.NET Core. By the end of this tutorial, you'll have a fancy new model that knows clickbait when it sees it, and you'll be able to use it in an ASP.NET Core web app like a pro.\n\n## Setting the Stage: Installing ML.NET CLI\n\nBefore we dive into the sea of code, we need to make sure you have the ML.NET CLI installed on your computer. It's like the magic wand that'll make all your machine learning dreams come true.\n\n<Instruction>Install ML.NET CLI using the .NET CLI.</Instruction>\n\n```\ndotnet tool install --global mlnet\n```\n\nWith that out of the way, let's start playing with some data!\n\n## Data, Data, Data: Grab the Clickbait Dataset\n\nWe'll be using the clickbait title classification dataset from Hugging Face, which you can find here: https://huggingface.co/datasets/marksver"
+                    ]
+                },
+                "weight": 1.0,
+                "metadata": {
+                    "model_slug": "gpt-4",
+                    "finish_details": {
+                        "type": "interrupted"
+                    },
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "ce0630ed-7016-4167-bd60-f06d47537590",
+            "children": [
+                "7dad31ce-35ac-4cce-a3d7-c850e9ea871b"
+            ]
+        },
+        "7dad31ce-35ac-4cce-a3d7-c850e9ea871b": {
+            "id": "7dad31ce-35ac-4cce-a3d7-c850e9ea871b",
+            "message": {
+                "id": "7dad31ce-35ac-4cce-a3d7-c850e9ea871b",
+                "author": {
+                    "role": "user",
+                    "metadata": {}
+                },
+                "create_time": 1680745588.024635,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "start over and add a section the breifly explains what ML.NET is"
+                    ]
+                },
+                "weight": 1.0,
+                "metadata": {
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "c83a540c-0840-4b07-9da0-b45447877302",
+            "children": [
+                "89ba01e0-3acf-41a7-8d21-356bc1bd4cd2"
+            ]
+        },
+        "89ba01e0-3acf-41a7-8d21-356bc1bd4cd2": {
+            "id": "89ba01e0-3acf-41a7-8d21-356bc1bd4cd2",
+            "message": {
+                "id": "89ba01e0-3acf-41a7-8d21-356bc1bd4cd2",
+                "author": {
+                    "role": "assistant",
+                    "metadata": {}
+                },
+                "create_time": 1680745674.864004,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "Hold on to your hats, code wranglers! We're about to embark on a wild ride through the world of machine learning, creating a clickbait title classifier using ML.NET and ASP.NET Core. By the end of this tutorial, you'll have a snazzy new model that can sniff out clickbait like a bloodhound, and you'll be able to integrate it into an ASP.NET Core web app like a boss.\n\n## ML.NET: The Machine Learning Sidekick You Never Knew You Needed\n\nBefore we jump into the fray, let's have a quick chat about ML.NET. ML.NET is a cross-platform, open-source machine learning framework developed by Microsoft. It's designed to make machine learning accessible to .NET developers like you, without requiring expertise in ML or data science. It's like having a trusty sidekick who's an ML whiz, ready to help you add a touch of AI magic to your applications.\n\nNow that we're acquainted with our new best friend, ML.NET, let's gear up for the journey ahead.\n\n## Setting the Stage: Installing ML.NET CLI\n\nOur first order of business is to make sure you have the ML.NET CLI installed on your computer. It's the secret sauce that makes whipping up machine learning models a breeze.\n\n<Instruction>Install ML.NET CLI using the .NET CLI.</Instruction>\n\n```\ndotnet tool install --global mlnet\n```\n\nWith that out of the way, let's start playing with some data!\n\n## Data, Data, Data: Grab the Clickbait Dataset\n\nWe'll be using the clickbait title classification dataset from Hugging Face, which you can find here: https://huggingface.co/datasets/marksverdhei/clickbait_title_classification\n\nThis dataset is like a treasure trove of tantalizing titles, ready to be analyzed by our future ML model. Download the CSV file and let's get cracking!\n\n## Training the Model: Let the ML.NET Magic Begin\n\nNow that we have our dataset in hand, it's time to let ML.NET work its magic and create a model for us. We'll use the `mlnet classification` command to tell our trusty ML.NET sidekick what we want to accomplish.\n\n<Instruction>Run the ML.NET classification command with the dataset file.</Instruction>\n\n```\nmlnet classification --dataset path/to/clickbait_dataset.csv --label-col clickbait --train-time 300\n```\n\nThis command is like your secret handshake with ML.NET, telling it to explore the vast realm of classification models and find the best one for our clickbait dataset. It'll try different data transformations, algorithms, and algorithm options, all while the clock ticks down on the specified training time (300 seconds in this case).\n\nAs ML.NET scours the landscape of possibilities, you can kick back and relax, knowing that it's doing all the heavy lifting for you. When it's done, ML.NET will present you with the top-performing model, ready to be integrated into your ASP.NET Core web app.\n\n## Integrating the Model: Unleash the Clickbait Classifier on Your ASP.NET Core Web App\n\nNow that ML.NET has crafted the perfect clickbait-sniffing model for you, it's time to bring it into your ASP.NET Core web app and watch it work its magic.\n\n1. Add the `Microsoft.ML` NuGet package to your web app project.\n2. Move the generated `Model.zip` and `MLModel.ConsoleApp` files into your web app's directory.\n3. Create a class for your input data and output data schema.\n4. Load the model using the `MLContext` class.\n5. Create a prediction engine and use it to classify titles.\n\nNow you"
+                    ]
+                },
+                "end_turn": false,
+                "weight": 1.0,
+                "metadata": {
+                    "model_slug": "gpt-4",
+                    "finish_details": {
+                        "type": "max_tokens"
+                    },
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "7dad31ce-35ac-4cce-a3d7-c850e9ea871b",
+            "children": [
+                "90e0bbc6-5a8d-4c42-9c9d-0cdef869809b"
+            ]
+        },
+        "90e0bbc6-5a8d-4c42-9c9d-0cdef869809b": {
+            "id": "90e0bbc6-5a8d-4c42-9c9d-0cdef869809b",
+            "message": {
+                "id": "90e0bbc6-5a8d-4c42-9c9d-0cdef869809b",
+                "author": {
+                    "role": "user",
+                    "metadata": {}
+                },
+                "create_time": 1680745728.861389,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "re write the \"Data, Data, Data: Grab the Clickbait Dataset\" section to explain how the data in the csv  file is going to train the model and how the model will be used later on"
+                    ]
+                },
+                "weight": 1.0,
+                "metadata": {
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "89ba01e0-3acf-41a7-8d21-356bc1bd4cd2",
+            "children": [
+                "34c42890-7b93-499f-b5dd-97de990656d6"
+            ]
+        },
+        "34c42890-7b93-499f-b5dd-97de990656d6": {
+            "id": "34c42890-7b93-499f-b5dd-97de990656d6",
+            "message": {
+                "id": "34c42890-7b93-499f-b5dd-97de990656d6",
+                "author": {
+                    "role": "assistant",
+                    "metadata": {}
+                },
+                "create_time": 1680745772.612124,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "## Data, Data, Data: The Fuel for Our Clickbait Classifier\n\nBefore we unleash the power of ML.NET to create our clickbait-detecting machine, we need some data to train it. Think of this data as the fuel that'll power our model, teaching it the subtle art of sniffing out clickbait titles from the vast ocean of internet content.\n\nWe'll be using the clickbait title classification dataset from Hugging Face, which you can find here: https://huggingface.co/datasets/marksverdhei/clickbait_title_classification\n\nThis dataset is like a goldmine of juicy titles, both clickbait and non-clickbait, just waiting to be dissected and analyzed by our soon-to-be ML model. Download the CSV file and let's get ready to rumble!\n\nThe data in this CSV file is split into two columns:\n\n1. `title`: Contains the text of the title, which could be clickbait or non-clickbait.\n2. `clickbait`: A binary label, with \"1\" indicating a clickbait title and \"0\" indicating a non-clickbait title.\n\nDuring the training process, ML.NET will study this dataset like a detective, searching for patterns and clues that'll help it distinguish between clickbait and non-clickbait titles. It'll learn from these examples and use this newfound knowledge to make educated guesses when faced with new, unseen titles.\n\nOnce our model is trained and ready to rock, we'll integrate it into an ASP.NET Core web app, where it'll act like a clickbait-sensing superhero. Whenever a new title comes its way, the model will use the insights it gained during training to confidently declare whether it's clickbait or not.\n\nNow that we've got our training data in hand, let's move on to the next step and watch ML.NET work its magic!"
+                    ]
+                },
+                "end_turn": true,
+                "weight": 1.0,
+                "metadata": {
+                    "model_slug": "gpt-4",
+                    "finish_details": {
+                        "type": "stop",
+                        "stop": "<|diff_marker|>"
+                    },
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "90e0bbc6-5a8d-4c42-9c9d-0cdef869809b",
+            "children": [
+                "59c69c84-d97b-455a-83e0-354540cb2307"
+            ]
+        },
+        "59c69c84-d97b-455a-83e0-354540cb2307": {
+            "id": "59c69c84-d97b-455a-83e0-354540cb2307",
+            "message": {
+                "id": "59c69c84-d97b-455a-83e0-354540cb2307",
+                "author": {
+                    "role": "user",
+                    "metadata": {}
+                },
+                "create_time": 1680745843.542783,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "keep going with the rest of the tutorial "
+                    ]
+                },
+                "weight": 1.0,
+                "metadata": {
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "34c42890-7b93-499f-b5dd-97de990656d6",
+            "children": [
+                "f58449ad-ab50-43e2-8260-32a90a4a886a"
+            ]
+        },
+        "f58449ad-ab50-43e2-8260-32a90a4a886a": {
+            "id": "f58449ad-ab50-43e2-8260-32a90a4a886a",
+            "message": {
+                "id": "f58449ad-ab50-43e2-8260-32a90a4a886a",
+                "author": {
+                    "role": "assistant",
+                    "metadata": {}
+                },
+                "create_time": 1680745930.858178,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "## Setting the Stage: Installing ML.NET\n\nBefore we can start training our model, we need to have ML.NET installed on your computer. ML.NET is a powerful machine learning framework designed specifically for .NET developers like you, which means you can build custom machine learning models without needing expertise in the complex world of machine learning.\n\n<Instruction>Install the ML.NET CLI tool by running the following command in your terminal:</Instruction>\n\n```\ndotnet tool install --global mlnet\n```\n\nWith ML.NET installed, we're ready to dive into the next step and train our clickbait classifier.\n\n## Roll Up Your Sleeves: Training the Clickbait Classifier Model\n\nTime to put ML.NET to work and train our clickbait classification model! The ML.NET CLI provides a handy command for doing just that, which we'll execute like a true maestro.\n\n<Instruction>Navigate to the folder where you downloaded the CSV file, and run the following command to train your clickbait classification model:</Instruction>\n\n```\nmlnet classification --dataset \"path/to/your/clickbait_title_classification.csv\" --label-col clickbait --train-time 300 --output \"ClickbaitModel\"\n```\n\nAllow me to break down this command for you:\n\n- `mlnet classification`: Tells ML.NET to perform classification, the task of categorizing data into different classes (in our case, clickbait or non-clickbait).\n- `--dataset`: Points to the CSV file containing our precious clickbait title data.\n- `--label-col`: Specifies which column in the dataset contains the labels (1 for clickbait, 0 for non-clickbait).\n- `--train-time`: Sets the amount of time (in seconds) for ML.NET to train the model. Feel free to increase this if you want to give ML.NET more time to explore and optimize the model.\n- `--output`: Defines the output folder where the trained model and other artifacts will be stored.\n\nNow, sit back and relax as ML.NET works its magic. It'll analyze the dataset, trying out different combinations of data transformations, algorithms, and algorithm options. It's like a mad scientist concocting the perfect potion. Once it's done, it'll pick the highest-performing model, and voilà! You've got yourself a clickbait-detecting masterpiece.\n\n## Integrating the Model into an ASP.NET Core Web App\n\nWith our clickbait classifier trained and ready for action, it's time to integrate it into an ASP.NET Core web app. Our model will act as the web app's trusty sidekick, always on standby to identify clickbait titles.\n\n<Instruction>Create a new ASP.NET Core Web App using the following command:</Instruction>\n\n```\ndotnet new webapp -o ClickbaitDetector\n```\n\n<Instruction>Navigate to the newly created project directory:</Instruction>\n\n```\ncd ClickbaitDetector\n```\n\n<Instruction>Add the ML.NET Model Builder package to the project:</Instruction>\n\n```\ndotnet add package Microsoft.Extensions.ML\n```\n\n<Instruction>Copy the `model.zip` file and the `MLModelDefinition.cs` file from the `ClickbaitModel` folder (created during model training) into the `ClickbaitDetector` project folder.</Instruction>\n\nNow, let's configure our web app to use the clickbait classification model.\n\n<Instruction>Modify the `Startup.cs` file to include the following code:</Instruction>\n\n```csharp\nusing Microsoft.Extensions.ML;\nusing ClickbaitDetector.DataModels;\n\n// ...\n\npublic void ConfigureServices(IServiceCollection services)\n{\n    // ...\n    services.AddPredictionEnginePool<ClickbaitData, ClickbaitPrediction>()\n        .FromFile(modelName: \"Click"
+                    ]
+                },
+                "end_turn": false,
+                "weight": 1.0,
+                "metadata": {
+                    "model_slug": "gpt-4",
+                    "finish_details": {
+                        "type": "max_tokens"
+                    },
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "59c69c84-d97b-455a-83e0-354540cb2307",
+            "children": [
+                "a1f6d40b-0d61-4f2d-91a6-3566bd5133e5"
+            ]
+        },
+        "a1f6d40b-0d61-4f2d-91a6-3566bd5133e5": {
+            "id": "a1f6d40b-0d61-4f2d-91a6-3566bd5133e5",
+            "message": {
+                "id": "a1f6d40b-0d61-4f2d-91a6-3566bd5133e5",
+                "author": {
+                    "role": "user",
+                    "metadata": {}
+                },
+                "create_time": 1680746809.398968,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "keep going but adjust the last instruction because there's just a program.cs file with a minimal C# api "
+                    ]
+                },
+                "weight": 1.0,
+                "metadata": {
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "f58449ad-ab50-43e2-8260-32a90a4a886a",
+            "children": [
+                "27519c35-911c-42f6-812e-296e632dfb16"
+            ]
+        },
+        "27519c35-911c-42f6-812e-296e632dfb16": {
+            "id": "27519c35-911c-42f6-812e-296e632dfb16",
+            "message": {
+                "id": "27519c35-911c-42f6-812e-296e632dfb16",
+                "author": {
+                    "role": "assistant",
+                    "metadata": {}
+                },
+                "create_time": 1680746872.64711,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "## Integrating the Model into a Minimal C# API\n\nWith our clickbait classifier trained and ready for action, it's time to integrate it into a minimal C# API. Our model will act as the API's trusty sidekick, always on standby to identify clickbait titles.\n\n<Instruction>Copy the `model.zip` file and the `MLModelDefinition.cs` file from the `ClickbaitModel` folder (created during model training) into the minimal C# API project folder.</Instruction>\n\nNow, let's configure our API to use the clickbait classification model.\n\n<Instruction>Modify the `Program.cs` file to include the following code:</Instruction>\n\n```csharp\nusing Microsoft.Extensions.DependencyInjection;\nusing Microsoft.Extensions.ML;\nusing ClickbaitDetector.DataModels;\n\n// ...\n\nvar builder = WebApplication.CreateBuilder(args);\n\n// Add services to the container\nbuilder.Services.AddPredictionEnginePool<ClickbaitData, ClickbaitPrediction>()\n    .FromFile(modelName: \"ClickbaitModel\", filePath: \"model.zip\", watchForChanges: true);\n\n// Build the app\nvar app = builder.Build();\n\n// ...\n\napp.Run();\n```\n\nWith the model integrated, let's create an endpoint in our API to classify titles as clickbait or non-clickbait.\n\n<Instruction>Add the following code to your `Program.cs` file:</Instruction>\n\n```csharp\nusing ClickbaitDetector.DataModels;\n\n// ...\n\napp.MapPost(\"/api/classify\", (ClickbaitData inputData, IPredictionEnginePool<ClickbaitData, ClickbaitPrediction> predictionEnginePool) =>\n{\n    var prediction = predictionEnginePool.Predict(inputData);\n    bool isClickbait = prediction.Prediction;\n\n    return new { input = inputData.Title, isClickbait };\n});\n```\n\nNow, your minimal C# API has an endpoint that can classify titles as clickbait or non-clickbait. To test it, you can use a tool like [Postman](https://www.postman.com/) or [Insomnia](https://insomnia.rest/).\n\n<Instruction>Run the minimal C# API:</Instruction>\n\n```\ndotnet run\n```\n\n<Instruction>Send a POST request to the `/api/classify` endpoint with a JSON payload containing a title, for example:</Instruction>\n\n```json\n{\n    \"Title\": \"You Won't Believe What Happened Next!\"\n}\n```\n\nYou should receive a response indicating whether the title is clickbait or not.\n\nCongratulations! You've successfully integrated your clickbait classification model into a minimal C# API, providing an efficient and straightforward way to detect clickbait titles. Time to save the world from the clickbait epidemic!"
+                    ]
+                },
+                "end_turn": true,
+                "weight": 1.0,
+                "metadata": {
+                    "model_slug": "gpt-4",
+                    "finish_details": {
+                        "type": "stop",
+                        "stop": "<|diff_marker|>"
+                    },
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "a1f6d40b-0d61-4f2d-91a6-3566bd5133e5",
+            "children": [
+                "e5dccd06-a133-49fa-abcf-00aaf783ad32"
+            ]
+        },
+        "e5dccd06-a133-49fa-abcf-00aaf783ad32": {
+            "id": "e5dccd06-a133-49fa-abcf-00aaf783ad32",
+            "message": {
+                "id": "e5dccd06-a133-49fa-abcf-00aaf783ad32",
+                "author": {
+                    "role": "user",
+                    "metadata": {}
+                },
+                "create_time": 1680746893.756522,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "kleep going"
+                    ]
+                },
+                "weight": 1.0,
+                "metadata": {
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "27519c35-911c-42f6-812e-296e632dfb16",
+            "children": [
+                "f5f50f11-6152-4f99-a04a-e268658df07c"
+            ]
+        },
+        "f5f50f11-6152-4f99-a04a-e268658df07c": {
+            "id": "f5f50f11-6152-4f99-a04a-e268658df07c",
+            "message": {
+                "id": "f5f50f11-6152-4f99-a04a-e268658df07c",
+                "author": {
+                    "role": "assistant",
+                    "metadata": {}
+                },
+                "create_time": 1680746975.538832,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "## Testing Your Clickbait Classifier API\n\nWith the clickbait classification model integrated into the minimal C# API, let's take it for a spin and test some clickbait titles. You can use tools like [Postman](https://www.postman.com/) or [Insomnia](https://insomnia.rest/) to send requests to your API, or you can create a simple web page that interacts with the API.\n\n### Creating a Simple Web Page for Testing\n\n<Instruction>Create a new HTML file named `index.html` in your project folder with the following content:</Instruction>\n\n```html\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Clickbait Classifier</title>\n    <style>\n        /* Add some basic styles */\n    </style>\n</head>\n<body>\n    <h1>Clickbait Classifier</h1>\n    <form id=\"classify-form\">\n        <label for=\"title\">Title:</label>\n        <input type=\"text\" id=\"title\" name=\"title\">\n        <button type=\"submit\">Classify</button>\n    </form>\n    <p id=\"result\"></p>\n\n    <script>\n        // Add JavaScript code to handle form submission and interact with the API\n    </script>\n</body>\n</html>\n```\n\nNow let's add JavaScript code to handle form submission and interact with the API.\n\n<Instruction>Add the following JavaScript code inside the `script` tag in your `index.html` file:</Instruction>\n\n```javascript\nconst form = document.getElementById(\"classify-form\");\nconst resultElement = document.getElementById(\"result\");\n\nform.addEventListener(\"submit\", async (event) => {\n    event.preventDefault();\n    const title = event.target.title.value;\n\n    const response = await fetch(\"/api/classify\", {\n        method: \"POST\",\n        headers: {\n            \"Content-Type\": \"application/json\"\n        },\n        body: JSON.stringify({ Title: title })\n    });\n\n    const result = await response.json();\n    const isClickbait = result.isClickbait ? \"Yes, it's clickbait.\" : \"Nope, not clickbait.\";\n    resultElement.textContent = `Result: ${isClickbait}`;\n});\n```\n\nNow, when you run the minimal C# API and open `index.html` in a browser, you can enter a title and click \"Classify\" to get a clickbait classification result.\n\n<Instruction>Run the minimal C# API:</Instruction>\n\n```\ndotnet run\n```\n\n<Instruction>Open the `index.html` file in a web browser and test some titles.</Instruction>\n\nYou should see the clickbait classification result displayed on the page.\n\n### Summary\n\nYou've now successfully trained an ML.NET model to detect clickbait titles and integrated it into a minimal C# API. You've also created a simple web page for testing the API, allowing you to classify titles with ease.\n\nGo ahead and test the clickbait classifier with a variety of titles, and see how well it performs. With your newfound knowledge of ML.NET and model integration, the possibilities for future projects are endless. Have fun exploring, and happy coding!"
+                    ]
+                },
+                "end_turn": true,
+                "weight": 1.0,
+                "metadata": {
+                    "model_slug": "gpt-4",
+                    "finish_details": {
+                        "type": "stop",
+                        "stop": "<|diff_marker|>"
+                    },
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "e5dccd06-a133-49fa-abcf-00aaf783ad32",
+            "children": [
+                "8b113dc3-541e-4f82-b7e1-3243baa3c0fa"
+            ]
+        },
+        "8b113dc3-541e-4f82-b7e1-3243baa3c0fa": {
+            "id": "8b113dc3-541e-4f82-b7e1-3243baa3c0fa",
+            "message": {
+                "id": "8b113dc3-541e-4f82-b7e1-3243baa3c0fa",
+                "author": {
+                    "role": "user",
+                    "metadata": {}
+                },
+                "create_time": 1680747237.929242,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "Add a section to the tutorial on using the generated console project to test the ai model"
+                    ]
+                },
+                "weight": 1.0,
+                "metadata": {
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "f5f50f11-6152-4f99-a04a-e268658df07c",
+            "children": [
+                "1cb2be53-51e6-4377-95b7-2c41ee42e5af"
+            ]
+        },
+        "1cb2be53-51e6-4377-95b7-2c41ee42e5af": {
+            "id": "1cb2be53-51e6-4377-95b7-2c41ee42e5af",
+            "message": {
+                "id": "1cb2be53-51e6-4377-95b7-2c41ee42e5af",
+                "author": {
+                    "role": "assistant",
+                    "metadata": {}
+                },
+                "create_time": 1680747286.098613,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "## Testing the Model with the Generated Console App\n\nML.NET automatically generates a console application project alongside the model training project. This console app serves as a handy tool for testing the trained model without having to integrate it into an external application.\n\n### Exploring the Generated Console App\n\n<Instruction>Navigate to the generated console app project folder:</Instruction>\n\n```\ncd ClickbaitDetectorApp\n```\n\nHere, you'll find a `.csproj` file and a `Program.cs` file. The `Program.cs` file contains the code to load the trained model, create a sample input, and call the `Predict()` method to make a prediction using the model.\n\n### Testing the Model with Sample Titles\n\n<Instruction>Open the `Program.cs` file and find the `CreateSingleDataSample()` method. Replace the sample data with your own title and save the file:</Instruction>\n\n```csharp\nprivate static ModelInput CreateSingleDataSample()\n{\n    // Load the sample data\n    ModelInput sampleData = new ModelInput\n    {\n        Title = \"Your sample title goes here\"\n    };\n    return sampleData;\n}\n```\n\n<Instruction>Run the console app to test the model with your sample title:</Instruction>\n\n```\ndotnet run\n```\n\nThe console app will load the model, make a prediction using your sample title, and display the prediction result in the console window.\n\nYou can try various titles by changing the `Title` property value in the `CreateSingleDataSample()` method and rerunning the console app. This will give you a sense of how well your model performs on different inputs.\n\n### Summary\n\nIn this section, you've learned how to use the generated console app project to test the trained ML.NET model with sample titles. This convenient tool allows you to quickly evaluate the model's performance and make adjustments as needed before integrating the model into your applications.\n\nFeel free to experiment with various titles and see how well your clickbait classifier performs. With this hands-on experience, you'll be better prepared to fine-tune your model and create powerful machine learning applications using ML.NET. Happy coding!"
+                    ]
+                },
+                "end_turn": true,
+                "weight": 1.0,
+                "metadata": {
+                    "model_slug": "gpt-4",
+                    "finish_details": {
+                        "type": "stop",
+                        "stop": "<|diff_marker|>"
+                    },
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "8b113dc3-541e-4f82-b7e1-3243baa3c0fa",
+            "children": [
+                "4bb5973a-c3d0-4e58-b4df-2eb9f4a38853"
+            ]
+        },
+        "4bb5973a-c3d0-4e58-b4df-2eb9f4a38853": {
+            "id": "4bb5973a-c3d0-4e58-b4df-2eb9f4a38853",
+            "message": {
+                "id": "4bb5973a-c3d0-4e58-b4df-2eb9f4a38853",
+                "author": {
+                    "role": "user",
+                    "metadata": {}
+                },
+                "create_time": 1680747653.969949,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "explain this code as part of the tutorial in the same tone as the tutorial\n\n```C#\n\n// This file was auto-generated by ML.NET Model Builder. \n\nusing System;\n\nnamespace ClickbaitModel.ConsoleApp\n{\n    class Program\n    {\n        static void Main(string[] args)\n        {\n            var title = \"Your sample title goes here\";\n            // Create single instance of sample data from first line of dataset for model input\n            ClickbaitModel.ModelInput sampleData = new ClickbaitModel.ModelInput()\n            {\n                Title = title,\n            };\n\n            Console.WriteLine(\"Using model to make single prediction -- Comparing actual Clickbait with predicted Clickbait from sample data...\\n\\n\");\n\n\n            Console.WriteLine($\"Title: {title}\");\n            Console.WriteLine($\"Clickbait: {@\"0\"}\");\n\n\n            var sortedScoresWithLabel = ClickbaitModel.PredictAllLabels(sampleData);\n            Console.WriteLine($\"{\"Class\",-40}{\"Score\",-20}\");\n            Console.WriteLine($\"{\"-----\",-40}{\"-----\",-20}\");\n\n            foreach (var score in sortedScoresWithLabel)\n            {\n                Console.WriteLine($\"{score.Key,-40}{score.Value,-20}\");\n            }\n            Console.WriteLine(\"=============== End of process, hit any key to finish ===============\");\n            Console.ReadKey();\n        }\n    }\n}\n```"
+                    ]
+                },
+                "weight": 1.0,
+                "metadata": {
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "1cb2be53-51e6-4377-95b7-2c41ee42e5af",
+            "children": [
+                "27539dc0-30a1-46a3-aabe-7d408b94d2c3"
+            ]
+        },
+        "27539dc0-30a1-46a3-aabe-7d408b94d2c3": {
+            "id": "27539dc0-30a1-46a3-aabe-7d408b94d2c3",
+            "message": {
+                "id": "27539dc0-30a1-46a3-aabe-7d408b94d2c3",
+                "author": {
+                    "role": "assistant",
+                    "metadata": {}
+                },
+                "create_time": 1680747730.031479,
+                "content": {
+                    "content_type": "text",
+                    "parts": [
+                        "## Understanding the Generated Console App Code\n\nIn this section, we'll dive into the auto-generated `Program.cs` code to understand how it works and how you can use it to test your trained ML.NET model. Prepare for an engaging, fun-filled journey through the code that will make you feel like a wizard of AI!\n\n```csharp\n// This file was auto-generated by ML.NET Model Builder. \n\nusing System;\n\nnamespace ClickbaitModel.ConsoleApp\n{\n    class Program\n    {\n        static void Main(string[] args)\n        {\n```\n\nThe code above begins with an auto-generated comment to remind you that ML.NET Model Builder has bestowed this magical code upon you. It then defines a namespace and class, `ClickbaitModel.ConsoleApp.Program`, which contains the `Main` method – the entry point of the console app.\n\n```csharp\n            var title = \"Your sample title goes here\";\n            // Create single instance of sample data from first line of dataset for model input\n            ClickbaitModel.ModelInput sampleData = new ClickbaitModel.ModelInput()\n            {\n                Title = title,\n            };\n```\n\nHere, we're defining a `title` variable to store the sample title you want to test. We then create a new instance of the `ModelInput` class and assign the sample title to the `Title` property. This instance represents the input data for our model.\n\n```csharp\n            Console.WriteLine(\"Using model to make single prediction -- Comparing actual Clickbait with predicted Clickbait from sample data...\\n\\n\");\n\n            Console.WriteLine($\"Title: {title}\");\n            Console.WriteLine($\"Clickbait: {@\"0\"}\");\n```\n\nWe're printing some fancy text to the console to let you know we're about to make a prediction. Then, we display the sample title and the actual clickbait value (0 in this case).\n\n```csharp\n            var sortedScoresWithLabel = ClickbaitModel.PredictAllLabels(sampleData);\n            Console.WriteLine($\"{\"Class\",-40}{\"Score\",-20}\");\n            Console.WriteLine($\"{\"-----\",-40}{\"-----\",-20}\");\n```\n\nNext, we call the `PredictAllLabels()` method, passing in our `sampleData` instance. This method returns a sorted list of prediction scores for each label. We then print out column headers for \"Class\" and \"Score\" to display the results in a nicely formatted table.\n\n```csharp\n            foreach (var score in sortedScoresWithLabel)\n            {\n                Console.WriteLine($\"{score.Key,-40}{score.Value,-20}\");\n            }\n            Console.WriteLine(\"=============== End of process, hit any key to finish ===============\");\n            Console.ReadKey();\n        }\n    }\n}\n```\n\nWe loop through the sorted list of prediction scores, printing the class (label) and score for each prediction. Finally, we display a message to indicate the end of the process, and we wait for the user to press any key to close the console app.\n\nNow that you've gained a deeper understanding of the generated console app code, you can confidently use it to test your AI model like a true ML.NET wizard! Happy coding!"
+                    ]
+                },
+                "end_turn": true,
+                "weight": 1.0,
+                "metadata": {
+                    "model_slug": "gpt-4",
+                    "finish_details": {
+                        "type": "stop",
+                        "stop": "<|diff_marker|>"
+                    },
+                    "timestamp_": "absolute"
+                },
+                "recipient": "all"
+            },
+            "parent": "4bb5973a-c3d0-4e58-b4df-2eb9f4a38853",
+            "children": []
+        }
+    },
+    "moderation_results": [],
+    "current_node": "27539dc0-30a1-46a3-aabe-7d408b94d2c3"
+}
