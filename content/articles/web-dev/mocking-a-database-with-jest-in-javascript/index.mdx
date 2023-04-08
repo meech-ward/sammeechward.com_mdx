@@ -47,6 +47,8 @@ Before we can do this, we need to take a look at the dependencies:
 
 Let's assume for a moment that the internal logic and database wrapper have already been fully tested. We know that these two parts of the app work in isolation. So we can forget about those for now. But how are we going to test the http server part of the app in isolation when it's dependent on these other pieces?
 
+<Advertisement/>
+
 ## Mocking
 
 When we use a mock in an automated test, we are using a fake version of a real thing. We can use the fake version to test the interactions. We can test that the `createUser` function was actually called, and the correct data was passed in, but we won't test the real database. Take a look at the following code block:
@@ -203,6 +205,8 @@ test("should save the username and password in the database", () => {
 ```
 
 Now we're testing two username and password combinations, but we could add more if we wanted.
+
+<Advertisement />
 
 ## Mock Function Return Value
 
