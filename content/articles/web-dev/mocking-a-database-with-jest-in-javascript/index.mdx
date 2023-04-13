@@ -47,7 +47,6 @@ Before we can do this, we need to take a look at the dependencies:
 
 Let's assume for a moment that the internal logic and database wrapper have already been fully tested. We know that these two parts of the app work in isolation. So we can forget about those for now. But how are we going to test the http server part of the app in isolation when it's dependent on these other pieces?
 
-<Advertisement/>
 
 ## Mocking
 
@@ -62,6 +61,8 @@ app.post('/users', async (req, res) => {
 ```
 
 In our production application, database will be an object that makes requests to a real database, maybe MySQL or Mongo or something. But in our tests, we can use a mock database and test that the `createUser` method was called.
+
+<Advertisement/>
 
 ## Mocking with Jest
 

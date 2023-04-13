@@ -55,6 +55,8 @@ Examples of how to upload, download and delete files from S3 bucket using [multe
 I used [Prisma](/prisma-and-nextjs) with MySQL for the database and [tailwind](https://tailwindcss.com/) for the styling. These are irrelevant details for this example. Any database or styling would work. The important part is how the Node.js backend communicates with S3.
 </Note>
 
+<Advertisement/>
+
 ## Posting an image to the server
 
 To post an image to the server, the client sends a `multipart/form-data` request to the server with the image data and any other data that the client wants to send.
@@ -232,4 +234,5 @@ app.delete("/api/posts/:id", async (req, res) => {
 })
 ```
 
+<Advertisement/>
 

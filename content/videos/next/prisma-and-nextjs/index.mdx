@@ -111,6 +111,8 @@ Now anytime you need to run a prisma command, you can use the scripts you just a
   If you're deploying to vercel, then just change the build script to be `yarn production:build` in your vercel settings.
 </Note>
 
+<Advertisement/>
+
 ## `DATABASE_URL`
 
 The next thing you need to do is supply a valid `DATABASE_URL` to your `.env.local` file so that prisma can start performing its magic.
@@ -192,6 +194,7 @@ This create a migration file, which is the raw SQL that needs to be run against 
 
 You should now have a `/prisma/migrations` directory that contains all the raw SQL. You can completely ignore this directory, but make sure you commit it to your repo.
 
+<Advertisement/>
 
 ## npm install @prisma/client
 
@@ -204,8 +207,6 @@ Run the following command to install the prisma client:
 ```sh
 yarn add @prisma/client
 ```
-
-
 
 <Tabs>
   <Tab name="JS">
@@ -332,6 +333,7 @@ You should see the Post model and the single post you just created:
 
 You can use prisma studio to create, read, update, and delete data.
 
+<Advertisement/>
 
 ## Single Client 
 
@@ -695,4 +697,3 @@ This is a pretty basic app, but it's a good starting point for next and prisma. 
 * [Crud](https://www.prisma.io/docs/concepts/components/prisma-client/crud)
 * [Seeding your database](https://www.prisma.io/docs/guides/database/seed-database)
 * [Get started with Prisma Migrate](https://www.prisma.io/docs/concepts/components/prisma-migrate/get-started)
-

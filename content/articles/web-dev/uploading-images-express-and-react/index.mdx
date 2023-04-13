@@ -79,6 +79,8 @@ Then we send that data to the server, but we have to specify that the content ty
 
 So that's it for the client side, what about the server? What does the server need to do when we make a post request to `'/images'` with this form data?
 
+<Advertisement/>
+
 ## Express
 
 Let's start with a basic express server:
@@ -170,6 +172,8 @@ app.get('/images/:imageName', (req, res) => {
   readStream.pipe(res)
 })
 ```
+
+<Advertisement/>
 
 ## Final Code
 
