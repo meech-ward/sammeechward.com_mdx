@@ -9,7 +9,7 @@ image:
   height: 720
 status: "published"
 description: "How to setup up a new ASP.NET Core API with a database and a React client."
-tags: ['c#', 'csharp', 'dotnet', '.NET', 'asp.net']
+tags: ["c#", "csharp", "dotnet", ".NET", "asp.net"]
 ---
 
 This is more of a reference than a how to guide. It goes through the steps of setting up a new ASP.NET Core API with a database, but there's not much information on why you would do things a certain way.
@@ -45,37 +45,39 @@ public class Todo
 }
 ```
 
-<Instruction>
-  Create a new file in your `Models` directory to manage your database
-  connection.
-</Instruction>
-
-```csharp
-using Microsoft.EntityFrameworkCore;
-
-namespace MyApp.Models;
-
-public class DatabaseContext : DbContext
-{
-  public DatabaseContext(DbContextOptions<DatabaseContext> options)
-      : base(options) { }
-
-  public DbSet<Todo> Todos => Set<Todo>();
-
-  protected override void OnModelCreating(ModelBuilder modelBuilder)
-  {
-    modelBuilder.Entity<Todo>()
-        .Property(e => e.CreatedAt)
-        .HasDefaultValueSql("now()");
-  }
-}
-```
-
-Choose either Postgres or MySQL.
+Choose either Postgres, MySQL, or In Memory.
 
 {/* prettier-ignore */}
 <Tabs>
   <Tab name="Postgres">
+
+    <Instruction>
+      Create a new `DatabaseContext.cs` file in your `Models` directory to manage your database
+      connection.
+    </Instruction>
+
+    ```csharp
+    using Microsoft.EntityFrameworkCore;
+
+    namespace MyApp.Models;
+
+    public class DatabaseContext : DbContext
+    {
+      public DatabaseContext(DbContextOptions<DatabaseContext> options)
+          : base(options) { }
+
+      public DbSet<Todo> Todos => Set<Todo>();
+
+      protected override void OnModelCreating(ModelBuilder modelBuilder)
+      {
+        modelBuilder.Entity<Todo>()
+            .Property(e => e.CreatedAt)
+            .HasDefaultValueSql("now()");
+      }
+    }
+    ```
+
+
     <Instruction>
       Install the `Npgsql.EntityFrameworkCore.PostgreSQL` package:
     </Instruction>
@@ -89,6 +91,11 @@ Choose either Postgres or MySQL.
     </Instruction>
 
     ```csharp
+    using Microsoft.EntityFrameworkCore;
+    using MyApp.Models;
+
+    //...
+
     var connectionString = "Host=localhost;Database=yourDBName;Username=yourUsername;Password=yourPassword";
     services.AddDbContext<DatabaseContext>(
         opt =>
@@ -107,6 +114,33 @@ Choose either Postgres or MySQL.
 
   </Tab>
   <Tab name="MySQL">
+
+      <Instruction>
+      Create a new `DatabaseContext.cs` file in your `Models` directory to manage your database
+      connection.
+    </Instruction>
+
+    ```csharp
+    using Microsoft.EntityFrameworkCore;
+
+    namespace MyApp.Models;
+
+    public class DatabaseContext : DbContext
+    {
+      public DatabaseContext(DbContextOptions<DatabaseContext> options)
+          : base(options) { }
+
+      public DbSet<Todo> Todos => Set<Todo>();
+
+      protected override void OnModelCreating(ModelBuilder modelBuilder)
+      {
+        modelBuilder.Entity<Todo>()
+            .Property(e => e.CreatedAt)
+            .HasDefaultValueSql("now()");
+      }
+    }
+    ```
+
     <Instruction>
       Install the `Pomelo.EntityFrameworkCore.MySql` package:
     </Instruction>
@@ -137,6 +171,60 @@ Choose either Postgres or MySQL.
         }
     );
     ```
+
+  </Tab>
+  <Tab name="InMemory">
+
+{" "}
+<Instruction>
+  Create a new `DatabaseContext.cs` file in your `Models` directory to manage
+  your database connection.
+</Instruction>
+
+```csharp
+using Microsoft.EntityFrameworkCore;
+
+namespace MyApp.Models;
+
+public class DatabaseContext : DbContext
+{
+  public DatabaseContext(DbContextOptions<DatabaseContext> options)
+      : base(options) { }
+
+  public DbSet<Todo> Todos => Set<Todo>();
+}
+```
+
+      <Instruction>
+        Install the `Microsoft.EntityFrameworkCore.InMemory` package:
+      </Instruction>
+
+      ```bash
+      dotnet add package Microsoft.EntityFrameworkCore.InMemory
+      ```
+
+      <Instruction>
+        Add the following to your `Program.cs` file:
+      </Instruction>
+
+      ```csharp
+      builder.Services.AddDbContext<DatabaseContext>(
+            opt =>
+          {
+              opt.UseInMemoryDatabase("InMemoryDatabase");
+            if (builder.Environment.IsDevelopment())
+            {
+                opt
+                .LogTo(Console.WriteLine, LogLevel.Information)
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors();
+            }
+          }
+      );
+      ```
+      <Note>
+    If you're using the InMemory database, you don't need to worry about the env var or migration sections below.
+    </Note>
 
   </Tab>
 </Tabs>
@@ -249,7 +337,7 @@ Once you have your database setup, you can start creating CRUD endpionts. This i
         if (todo is null) return Results.NotFound();
 
         todo.Name = inputTodo.Name;
-        todo.IsComplete = inputTodo.IsComplete;
+        todo.Completed = inputTodo.Completed;
 
         await db.SaveChangesAsync();
 
@@ -302,7 +390,7 @@ Once you have your database setup, you can start creating CRUD endpionts. This i
         [HttpGet("complete")]
         public async Task<ActionResult<IEnumerable<Todo>>> GetCompletedTodoItems()
         {
-            return await _context.Todos.Where(t => t.IsComplete).ToListAsync();
+            return await _context.Todos.Where(t => t.Completed).ToListAsync();
         }
 
         [HttpGet("{id}")]
@@ -427,7 +515,7 @@ if (app.Environment.IsDevelopment())
 }
 ```
 
-Now you can test your app and see the swagger UI at `https://localhost:5053/swagger/`
+Now you can test your app and see the swagger UI at `http://localhost:5000/swagger/`
 
 ## React
 
@@ -436,7 +524,7 @@ This react app will be deployed as part of your .NET app in production. They wil
 <Instruction>Create a new React app:</Instruction>
 
 ```
-yarn vite create my-app-frontend
+yarn create vite my-app-frontend
 ```
 
 <Instruction>Proxy to the dotnet server:</Instruction>
@@ -497,4 +585,3 @@ The dotnet app should now serve up your frontend app when you make a request tha
 
 - https://learn.microsoft.com/en-us/aspnet/core/fundamentals/apis?view=aspnetcore-7.0
 - https://learn.microsoft.com/en-us/ef/core/modeling/
-
