@@ -45,7 +45,12 @@ public class Todo
 }
 ```
 
-Choose either Postgres, MySQL, or In Memory.
+
+<Advertisement/>
+
+<Instruction>
+Choose either Postgres, MySQL, or In Memory for your database. 
+</Instruction>
 
 {/* prettier-ignore */}
 <Tabs>
@@ -192,6 +197,13 @@ public class DatabaseContext : DbContext
       : base(options) { }
 
   public DbSet<Todo> Todos => Set<Todo>();
+
+   protected override void OnModelCreating(ModelBuilder modelBuilder)
+      {
+        modelBuilder.Entity<Todo>()
+            .Property(e => e.CreatedAt)
+            .HasDefaultValueSql("now()");
+      }
 }
 ```
 
@@ -272,6 +284,8 @@ DotNetEnv.Env.Load();
 
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
 ```
+
+<Advertisement/>
 
 ## Migrations
 
@@ -516,6 +530,8 @@ if (app.Environment.IsDevelopment())
 ```
 
 Now you can test your app and see the swagger UI at `http://localhost:5000/swagger/`
+
+<Advertisement/>
 
 ## React
 
