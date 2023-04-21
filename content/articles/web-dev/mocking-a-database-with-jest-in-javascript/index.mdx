@@ -160,7 +160,7 @@ describe("when passed a username and password", () => {
 })
 ```
 
-The `createUser` function will keep track of what's passed into the function every time it's called. So `createUser.mock.calls[0]` represents the data that gets passed in the first time it's called. The server should call the function with the username and password like this `createUser(username, password)`, so `createUser.mock.calls[0][0]` should be the username and `createUser.mock.calls[0][0]` should be the password.
+The `createUser` function will keep track of what's passed into the function every time it's called. So `createUser.mock.calls[0]` represents the data that gets passed in the first time it's called. The server should call the function with the username and password like this `createUser(username, password)`, so `createUser.mock.calls[0][0]` should be the username and `createUser.mock.calls[0][1]` should be the password.
 
 If we run the test it should fail because the server isn't calling the createUser function. Let's change that in app.js:
 
