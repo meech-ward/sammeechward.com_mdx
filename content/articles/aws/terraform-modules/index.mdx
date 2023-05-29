@@ -9,13 +9,15 @@ image:
   width: 6912
   height: 3456
 status: 'published'
-description: 'A terraform file can get very large very quickly as you add more and more resource blocks. Custom modules are a great way of organizing your terraform code into logical pieces. You might have one module that handles the VPC set up, one that handles RDS, and another for EC2 instances. In this post, we’ll \[…\]'
+description: 'A terraform file can get very large very quickly as you add more and more resource blocks. Custom modules are a great way of organizing your terraform code into logical pieces. You might have one module that handles the VPC set up, one that handles RDS, and another for EC2 instances. In this post, we'll \[…\]'
 tags: ['aws', 'cloud computing', 'terraform', 'iac', 'infrastructure as code']
+previousPostSlug: 'intro-to-terraform-with-aws'
+nextPostSlug: 'variables-and-outputs-in-terraform'
 ---
 
 A terraform file can get very large very quickly as you add more and more resource blocks. Custom modules are a great way of organizing your terraform code into logical pieces. You might have one module that handles the VPC set up, one that handles RDS, and another for EC2 instances. In this post, we'll look at how to make custom modules in terraform.
 
-If you haven’t already, read the [Variables and Outputs in Terraform](https://sammeechward.com/variables-and-outputs-in-terraform/) article.
+If you haven't already, read the [Variables and Outputs in Terraform](https://sammeechward.com/variables-and-outputs-in-terraform/) article.
 
 ## Module Setup
 
@@ -36,7 +38,7 @@ When you create a new terraform project, you should add these three files to the
 *   `variables.tf`
 *   `outputs.tf`
 
-This is a terraform module, it’s the root module. This is all you need to start using terraform, but we want to organize our code a little better using modules. So we can add a new `modules` directory to the project and add other modules in there.
+This is a terraform module, it's the root module. This is all you need to start using terraform, but we want to organize our code a little better using modules. So we can add a new `modules` directory to the project and add other modules in there.
 
 Create the following project structure:
 
@@ -54,7 +56,7 @@ Create the following project structure:
             *   `variables.tf`
             *   `outputs.tf`
 
-It’s the same structure as the root module. Each sub-module is its own isolated set of blocks that can be used and reused by the root module.
+It's the same structure as the root module. Each sub-module is its own isolated set of blocks that can be used and reused by the root module.
 
 ## VPC Module
 
@@ -127,9 +129,9 @@ resource "aws_security_group" "web_sg" {
 
 ## Root Module
 
-All of the VPC resources have been defined in `modules/vpc/main.tf`, but running terraform apply would do nothing because there’s nothing in the **root** module’s `main.tf`.
+All of the VPC resources have been defined in `modules/vpc/main.tf`, but running terraform apply would do nothing because there's nothing in the **root** module's `main.tf`.
 
-Add the following code to the **root** module’s `main.tf`:
+Add the following code to the **root** module's `main.tf`:
 
 ```ruby
 terraform {
@@ -154,7 +156,7 @@ module "my_vpc" {
 
 The first part is just the basic aws setup code, but under that is a `module` block. This will tell terraform to add the resources from the `modules/vpc` module.
 
-Add the following code to **root** module’s `variables.tf` file:
+Add the following code to **root** module's `variables.tf` file:
 
 ```ruby
 variable "region" {
@@ -164,7 +166,7 @@ variable "region" {
 }
 ```
 
-Just to make it easy to change the region that’s used.
+Just to make it easy to change the region that's used.
 
 If you run `terraform init` to setup the project, then `terraform apply`, this will create all of the resources in the VPC module.
 
@@ -188,7 +190,7 @@ resource "aws_subnet" "some_private_subnet" {
 }
 ```
 
-Let’s make these more dynamic using variables.
+Let's make these more dynamic using variables.
 
 In `modules/vpc/variables.tf` add the following variables:
 
@@ -229,7 +231,7 @@ resource "aws_subnet" "some_private_subnet" {
 
 Now the CIDR values are coming from terraform variables, but where do we define the values for these variables?
 
-Modify the root module’s `main.tf` module block:
+Modify the root module's `main.tf` module block:
 
 ```ruby
 module "my_vpc" {
@@ -261,13 +263,13 @@ module "my_vpc_2" {
 }
 ```
 
-And we don’t have to duplicate all of the VPC setup code.
+And we don't have to duplicate all of the VPC setup code.
 
 ## Module Outputs
 
 The VPC is set up and we have a public subnet and security group. We could use this to deploy an ec2 instance running an HTTP server.
 
-Modify the root’s `main.tf` file to create a new ec2 instance:
+Modify the root's `main.tf` file to create a new ec2 instance:
 
 ```ruby
 module "my_vpc" {
@@ -301,7 +303,7 @@ resource "aws_instance" "web_instance" {
 }
 ```
 
-First, we set up the VPC, then we set up a new EC2 instance running Nginx. But notice that we need to provide the subnet id and the security group id from the resources that are defined in the VPC module. We can’t access those here because they’re in a different module, so we need to **output** them from the module.
+First, we set up the VPC, then we set up a new EC2 instance running Nginx. But notice that we need to provide the subnet id and the security group id from the resources that are defined in the VPC module. We can't access those here because they're in a different module, so we need to **output** them from the module.
 
 Add the following code to `modules/vpc/output.tf`:
 
@@ -317,7 +319,7 @@ output "public_sg_id" {
 
 This will output the public subnet and public security group ids. If this were done in the root module then we would see this data printed to the console after running `terraform apply`. But in a submodule, outputs are used to access data outside of the module.
 
-Modify the root module’s `aws_instance` block to use these values:
+Modify the root module's `aws_instance` block to use these values:
 
 ```ruby
 resource "aws_instance" "web_instance" {
@@ -330,9 +332,9 @@ resource "aws_instance" "web_instance" {
 }
 ```
 
-Now we are accessing the needed values from the vpc module’s outputs. If you run `terraform apply` now, you will have an ec2 instance running nginx on the public subnet of the custom VPC.
+Now we are accessing the needed values from the vpc module's outputs. If you run `terraform apply` now, you will have an ec2 instance running nginx on the public subnet of the custom VPC.
 
-Add the following output to the root module’s `outputs.tf`
+Add the following output to the root module's `outputs.tf`
 
 ```ruby
 output "public_ip" {
@@ -344,7 +346,7 @@ And now the public ip address of the ec2 instance will get logged to the console
 
 ## EC2 Module
 
-Even though it’s only a small amount of code, let’s move the ec2 code into it’s own module. This is what the ec2 module should look like:
+Even though it's only a small amount of code, let's move the ec2 code into it's own module. This is what the ec2 module should look like:
 
 `modules/ec2/variables.tf`:
 
@@ -394,9 +396,9 @@ resource "aws_instance" "web_instance" {
 }
 ```
 
-Now the subnet and security group id values need to be passed into the ec2 module’s variables so they can be used by the `ec2_instnace` resource block.
+Now the subnet and security group id values need to be passed into the ec2 module's variables so they can be used by the `ec2_instnace` resource block.
 
-Modify the root module’s `main.tf` file:
+Modify the root module's `main.tf` file:
 
 ```ruby
 module "my_vpc" {
@@ -415,11 +417,11 @@ module "my_ec2" {
 }
 ```
 
-Now we are getting the subnet and security group ids from the vpc module’s outputs and passing them to the ec2 module’s variables.
+Now we are getting the subnet and security group ids from the vpc module's outputs and passing them to the ec2 module's variables.
 
 One more thing, the ec2 module is outputting the public IP address. It would be nice to still see that on the console when this is done.
 
-Modify the root module’s `outputs.tf`:
+Modify the root module's `outputs.tf`:
 
 ```ruby
 output "public_ip" {

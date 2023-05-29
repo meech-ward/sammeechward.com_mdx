@@ -11,6 +11,8 @@ image:
 status: 'published'
 description: "Let's take a look at how to use the aws cli to create a VPC, Subnets, EC2 instances, and more."
 tags: ['aws', 'cloud computing', 'ec2', 'terraform', 'vpc', 'iac', 'infrastructure as code']
+previousPostSlug: 'intro-to-terraform-with-aws'
+nextPostSlug: 'variables-and-outputs-in-terraform'
 ---
 
 Let's take a look at how to use Terraform with AWS to create a VPC, Subnets, EC2 instances, and more.
@@ -24,9 +26,11 @@ In this article, we will take a look at how to do the following using terraform:
 *   Create security groups
 *   Create an ec2 instance on a public subnet and install nginx
 
-Every block of code in this article needs to be added to a .tf file and run using terraform to setup the infrastructure. Skip to the bottom of the article if you just want the script.
+Every block of code in this article needs to be added to a `.tf` file and run using terraform to setup the infrastructure. Skip to the bottom of the article if you just want the script.
 
-I won't be going over the basic setup of terraform or the installation instructions, the purpose of this article is to give a real example of a .tf file that sets up some basic infrastructure. For a quick introduction and installation instructions, check out [HashiCorp Learn](https://learn.hashicorp.com/tutorials/terraform/infrastructure-as-code?in=terraform/aws-get-started)
+I won't be going over the basic setup of terraform or the installation instructions, the purpose of this article is to give a real example of a `.tf` file that sets up some basic infrastructure. For an introduction to terraform, check out my video:
+
+<PostCard slug="intro-to-terraform-with-aws" />
 
 ## Terraform and AWS
 

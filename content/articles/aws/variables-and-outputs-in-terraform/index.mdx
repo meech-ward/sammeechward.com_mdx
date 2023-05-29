@@ -9,15 +9,17 @@ image:
   width: 6912
   height: 3456
 status: 'published'
-description: 'In this post, we’ll go over the basic structure of a terraform module and how to use variables and outputs in the root module.'
+description: "In this post, we'll go over the basic structure of a terraform module and how to use variables and outputs in the root module."
 tags: ['aws', 'cloud computing', 'terraform', 'iac', 'devops', 'infrastructure as code']
+previousPostSlug: 'intro-to-terraform-with-aws'
+nextPostSlug: 'terraform-modules'
 ---
 
-In this post, we’ll go over the basic structure of a terraform module and how to use variables and outputs in the root module.
+In this post, we'll go over the basic structure of a terraform module and how to use variables and outputs in the root module.
 
 ## Root Module
 
-When we are creating terraform configurations, we are creating a terraform **module**. Every Terraform configuration has at least one module, known as its root module. And we can nest modules to organize our code, but for now, we’ll only focus on the **root** module.
+When we are creating terraform configurations, we are creating a terraform **module**. Every Terraform configuration has at least one module, known as its root module. And we can nest modules to organize our code, but for now, we'll only focus on the **root** module.
 
 When you create a new terraform module, you should create a new directory with at least the following three files inside:
 
@@ -25,13 +27,13 @@ When you create a new terraform module, you should create a new directory with a
 *   `variables.tf`: Any input variables for the module. This allows the user running terraform to easily customize the configuration.
 *   `outputs.tf`: Any outputs from the module. This allows the user running terraform to easily get data about any resources.
 
-[These are the recommended filenames for a minimal module, even if they’re empty.](https://www.terraform.io/docs/language/modules/develop/structure.html)
+[These are the recommended filenames for a minimal module, even if they're empty.](https://www.terraform.io/docs/language/modules/develop/structure.html)
 
-We’ll look into variables and outputs more in this article, but for now, just know you should have those files created in your module.
+We'll look into variables and outputs more in this article, but for now, just know you should have those files created in your module.
 
 ## Region Variable
 
-We’re already familiar with the basic setup of `main.tf`, first we configure terraform and the provider, then we add a bunch of resource blocks.
+We're already familiar with the basic setup of `main.tf`, first we configure terraform and the provider, then we add a bunch of resource blocks.
 
 ```ruby
 terraform {
@@ -52,7 +54,7 @@ provider "aws" {
 # Resources
 ```
 
-Even with this small amount of code, we already have a good use case for a variable. See the region is hard coded to `us-west-2`, so if myself or anyone else that I share this code with wants to deploy to a different region, they have to modify the `main.tf` file. But there’s a better way.
+Even with this small amount of code, we already have a good use case for a variable. See the region is hard coded to `us-west-2`, so if myself or anyone else that I share this code with wants to deploy to a different region, they have to modify the `main.tf` file. But there's a better way.
 
 We can turn this into a variable by adding the following to the `variables.tf` file:
 
@@ -71,9 +73,9 @@ provider "aws" {
 }
 ```
 
-Now the provider is using the value defined in the variable, easy! But wait, what’s the value? We haven’t actually specified the region, we’ve only created a variable.
+Now the provider is using the value defined in the variable, easy! But wait, what's the value? We haven't actually specified the region, we've only created a variable.
 
-Let’s try running `terraform apply` and see what happens.
+Let's try running `terraform apply` and see what happens.
 
 ```shell
 ➜ terraform apply
@@ -87,7 +89,7 @@ Terraform knows we need a value for this variable, so the cli is prompting us to
 
 ## `terraform.tfvars`
 
-Let’s add a new file to our module named `terraform.tfvars` with the following code inside:
+Let's add a new file to our module named `terraform.tfvars` with the following code inside:
 
 ```ruby
 region = "us-west-2"
@@ -101,7 +103,7 @@ Since `tfvars` files never get committed into a VCS, you **can** put sensitive i
 
 ## Default Values
 
-In a case like this where we’re just defining the region that the infrastructure should be built in, it might be nice to provide a default value. So if someone doesn’t specify a region in the `tfvars` file, it will still be able to build.
+In a case like this where we're just defining the region that the infrastructure should be built in, it might be nice to provide a default value. So if someone doesn't specify a region in the `tfvars` file, it will still be able to build.
 
 ```ruby
 variable "region" {
@@ -115,7 +117,7 @@ By adding this `default` argument, terraform will first check the `tfvars` file 
 
 ## Sensitive Information
 
-Let’s setup a database using RDS. We need to add two resource blocks for this, a security group to allow traffic on port 3306, and the actual RDS resource.
+Let's setup a database using RDS. We need to add two resource blocks for this, a security group to allow traffic on port 3306, and the actual RDS resource.
 
 **Security Group**
 
@@ -155,7 +157,7 @@ resource "aws_db_instance" "mydb" {
 }
 ```
 
-This is a really basic RDS setup using MySQL, but i’ve left the username and password arguments blank. These arguments are for the admin’s username and password that can be used to control the entire database. I really don’t want these existing in the code and tracked with source control. But I also want anyone running this script to be able to define their own username and password for these values. So the solution here is variables.
+This is a really basic RDS setup using MySQL, but i've left the username and password arguments blank. These arguments are for the admin's username and password that can be used to control the entire database. I really don't want these existing in the code and tracked with source control. But I also want anyone running this script to be able to define their own username and password for these values. So the solution here is variables.
 
 In `variables.tf` we need two new variables:
 
@@ -192,7 +194,7 @@ database_admin_password = "MyNewPass1!"
 
 Now the database will be setup with those credentials.
 
-**IMPORTANT:** **Don’t commit your `.tfvars` file into version control.**
+**IMPORTANT:** **Don't commit your `.tfvars` file into version control.**
 
 I recommend adding this gitignore to your project: https://github.com/github/gitignore/blob/master/Terraform.gitignore
 
@@ -200,7 +202,7 @@ I recommend adding this gitignore to your project: https://github.com/github/git
 
 Running `terraform apply` at this point will setup the database using the provided variable values. Once this is done, we probably want to access the database using the address, which we can find using `terraform state`. But we can make this process a little bit easier.
 
-In the `outputs.tf` file, we can specify an output for the database’s address.
+In the `outputs.tf` file, we can specify an output for the database's address.
 
 ```ruby
 output "db_address" {
@@ -208,7 +210,7 @@ output "db_address" {
 }
 ```
 
-The name is a custom output name, i’ve used `db_address` here. Then the value is set in the normal way we use values in terraform. Since this is a resource we start start with the resource type `aws_db_instance` followed by the name we gave to the resource `mydb`, followed by the argument we want the data for `address`.
+The name is a custom output name, i've used `db_address` here. Then the value is set in the normal way we use values in terraform. Since this is a resource we start start with the resource type `aws_db_instance` followed by the name we gave to the resource `mydb`, followed by the argument we want the data for `address`.
 
 Now if we run `terraform apply`, it will create the resource, then print out the `db_address` to the console.
 
@@ -222,7 +224,7 @@ db_address = "terraform-20211030230110222000000001.cytxejtt9yks.us-west-1.rds.am
 
 ## Sub Modules
 
-Just a quick note about submodules. When we’re using variables and outputs with the **root module**:
+Just a quick note about submodules. When we're using variables and outputs with the **root module**:
 
 *   All data comes in to variables from the user running terraform, from the cli or `.tfvars`.
 *   All data comes out of outputs back to the user running terraform, usually just displayed in the cli.

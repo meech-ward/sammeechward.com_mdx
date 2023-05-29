@@ -5,46 +5,91 @@ videoId: bStIFxbD1fo
 title: "Intro to Terraform with AWS"
 date: "2021-10-26T16:10:59Z"
 slug: "intro-to-terraform-with-aws"
-image: 
+image:
   name: "intro-to-terraform-with-aws.jpg"
   alt: "Intro to Terraform with AWS"
   width: 1280
   height: 720
-status: 'published'
+status: "published"
 description: "Learn the basics of using terraform to manage your AWS infrastructure."
-tags: ['aws', 'cloud computing', 'iac', 'infrastructure as code', 'devops']
+tags: ["aws", "cloud computing", "iac", "infrastructure as code", "devops"]
+previousPostSlug: "intro-to-packer-with-aws"
+nextPostSlug: "variables-and-outputs-in-terraform"
 ---
 
 Learn the basics of using terraform to manage your AWS infrastructure.
 
+For a quick installation instructions, check out [HashiCorp Learn](https://learn.hashicorp.com/tutorials/terraform/infrastructure-as-code?in=terraform/aws-get-started)
 
 ## Chapters:
 
-* 0:00​ Intro
-* 2:10 Project Setup
-* 2:39 Setting up the project
-* 3:57 Terraform CLI
-* 5:46 EC2 Resource Block
-* 7:38 terraform apply
-* 8:55 terraform state
-* 11:34 Security Group Resource
-* 15:29 Idempotent
-* 18:16 terraform destroy
-* 19:20 Data Block
-* 22:35 Review
+- 0:00​ Intro
+- 2:10 Project Setup
+- 2:39 Setting up the project
+- 3:57 Terraform CLI
+- 5:46 EC2 Resource Block
+- 7:38 terraform apply
+- 8:55 terraform state
+- 11:34 Security Group Resource
+- 15:29 Idempotent
+- 18:16 terraform destroy
+- 19:20 Data Block
+- 22:35 Review
 
-🔗Code:
+## Code:
+
 [https://github.com/Sam-Meech-Ward/intro-to-terraform](https://github.com/Sam-Meech-Ward/intro-to-terraform)
 
-🔗Other tutorials:
-Intro to Packer with AWS: [https://youtu.be/dde-bWUeRMo](https://youtu.be/dde-bWUeRMo)
-Cloud Computing Playlist: [https://youtube.com/playlist?list=PL0X6fGhFFNTcU-_MCPe9dkH6sqmgfhy_M](https://youtube.com/playlist?list=PL0X6fGhFFNTcU-_MCPe9dkH6sqmgfhy_M)
+```tf
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.0"
+    }
+  }
+}
 
-Variables and Outputs in Terraform: [https://sammeechward.com/variables-and-outputs-in-terraform/](https://sammeechward.com/variables-and-outputs-in-terraform/)
+# Configure the AWS Provider
+provider "aws" {
+  region = "us-west-2"
+}
+
+
+resource "aws_security_group" "app_sg" {
+  name        = "app_sg"
+  description = "allow on port 8080"
+
+  ingress {
+    from_port        = 8080
+    to_port          = 8080
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+}
+
+data "aws_ami" "app_ami" {
+  most_recent      = true
+  name_regex       = "cocktails-app-*"
+  owners           = ["self"]
+}
+
+resource "aws_instance" "web_app" {
+  instance_type          = "t2.micro"
+  ami                    = data.aws_ami.app_ami.id
+  vpc_security_group_ids = [aws_security_group.app_sg.id]
+}
+```
+
+
 S3 and IAM with Terraform: [https://sammeechward.com/s3-and-iam-with-terraform/](https://sammeechward.com/s3-and-iam-with-terraform/)
 Cloud-init and Terraform with AWS: [https://sammeechward.com/cloud-init-and-terraform-with-aws/](https://sammeechward.com/cloud-init-and-terraform-with-aws/)
-
-🔗Installing Packer:
-[https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/aws-get-started](https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/aws-get-started)
-
-
