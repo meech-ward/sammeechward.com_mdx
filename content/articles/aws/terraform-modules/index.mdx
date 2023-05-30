@@ -9,7 +9,7 @@ image:
   width: 6912
   height: 3456
 status: 'published'
-description: 'A terraform file can get very large very quickly as you add more and more resource blocks. Custom modules are a great way of organizing your terraform code into logical pieces. You might have one module that handles the VPC set up, one that handles RDS, and another for EC2 instances. In this post, we'll \[…\]'
+description: "A terraform file can get very large very quickly as you add more and more resource blocks. Custom modules are a great way of organizing your terraform code into logical pieces. You might have one module that handles the VPC set up, one that handles RDS, and another for EC2 instances."
 tags: ['aws', 'cloud computing', 'terraform', 'iac', 'infrastructure as code']
 previousPostSlug: 'intro-to-terraform-with-aws'
 nextPostSlug: 'variables-and-outputs-in-terraform'
@@ -74,7 +74,7 @@ Although each project will have different requirements, it will most likely need
 
 Add the following code to `modules/vpc/main.tf`:
 
-```ruby
+```tf
 resource "aws_vpc" "some_custom_vpc" {
   cidr_block = "10.0.0.0/16"
 }
@@ -133,7 +133,7 @@ All of the VPC resources have been defined in `modules/vpc/main.tf`, but running
 
 Add the following code to the **root** module's `main.tf`:
 
-```ruby
+```tf
 terraform {
   required_providers {
     aws = {
@@ -158,7 +158,7 @@ The first part is just the basic aws setup code, but under that is a `module` bl
 
 Add the following code to **root** module's `variables.tf` file:
 
-```ruby
+```tf
 variable "region" {
   description = "AWS region"
   type        = string
@@ -174,7 +174,7 @@ If you run `terraform init` to setup the project, then `terraform apply`, this w
 
 Currently, the CIDR blocks for the VPC and subnets are hardcoded into the VPC module. So this module will always use those CIDR blocks no matter what.
 
-```ruby
+```tf
 resource "aws_vpc" "some_custom_vpc" {
   cidr_block = "10.0.0.0/16"
 }
@@ -194,7 +194,7 @@ Let's make these more dynamic using variables.
 
 In `modules/vpc/variables.tf` add the following variables:
 
-```ruby
+```tf
 variable "vpc_cidr" {
   description = "CIDR block for the entire VPC"
   type        = string
@@ -213,7 +213,7 @@ variable "private_sub_1_cidr" {
 
 Then in `modules/vpc/main.tf` modify the resource blocks to use the variables:
 
-```ruby
+```tf
 resource "aws_vpc" "some_custom_vpc" {
   cidr_block = var.vpc_cidr
 }
@@ -233,7 +233,7 @@ Now the CIDR values are coming from terraform variables, but where do we define 
 
 Modify the root module's `main.tf` module block:
 
-```ruby
+```tf
 module "my_vpc" {
   source = "./modules/vpc"
 
@@ -245,7 +245,7 @@ module "my_vpc" {
 
 If a sub-module defines variables in the variables.tf file, then the root module can pass in values when it defines the module block. And modules can be reused, so you could easily make multiple VPCs by just defining more of these blocks.
 
-```ruby
+```tf
 module "my_vpc_1" {
   source = "./modules/vpc"
 
@@ -271,7 +271,7 @@ The VPC is set up and we have a public subnet and security group. We could use t
 
 Modify the root's `main.tf` file to create a new ec2 instance:
 
-```ruby
+```tf
 module "my_vpc" {
   source = "./modules/vpc"
 
@@ -307,7 +307,7 @@ First, we set up the VPC, then we set up a new EC2 instance running Nginx. But n
 
 Add the following code to `modules/vpc/output.tf`:
 
-```ruby
+```tf
 output "public_subnet_id" {
   value = aws_subnet.some_public_subnet.id
 }
@@ -321,7 +321,7 @@ This will output the public subnet and public security group ids. If this were d
 
 Modify the root module's `aws_instance` block to use these values:
 
-```ruby
+```tf
 resource "aws_instance" "web_instance" {
   ...
 
@@ -336,7 +336,7 @@ Now we are accessing the needed values from the vpc module's outputs. If you run
 
 Add the following output to the root module's `outputs.tf`
 
-```ruby
+```tf
 output "public_ip" {
   value = aws_instance.web_instance.public_ip
 }
@@ -350,7 +350,7 @@ Even though it's only a small amount of code, let's move the ec2 code into it's 
 
 `modules/ec2/variables.tf`:
 
-```ruby
+```tf
 variable "public_sg_id" {
   description = "ID of the security group for the public subnet"
   type        = string
@@ -364,7 +364,7 @@ variable "public_subnet_id" {
 
 `modules/ec2/outputs.tf`:
 
-```ruby
+```tf
 output "public_ip" {
   value = aws_instance.web_instance.public_ip
 }
@@ -372,7 +372,7 @@ output "public_ip" {
 
 `modules/ec2/main.tf`:
 
-```ruby
+```tf
 data "aws_ami" "amz_linux_2" {
   most_recent = true
   name_regex  = "amzn2-ami-hvm-2.*.1-x86_64-gp2"
@@ -400,7 +400,7 @@ Now the subnet and security group id values need to be passed into the ec2 modul
 
 Modify the root module's `main.tf` file:
 
-```ruby
+```tf
 module "my_vpc" {
   source = "./modules/vpc"
 
@@ -423,7 +423,7 @@ One more thing, the ec2 module is outputting the public IP address. It would be 
 
 Modify the root module's `outputs.tf`:
 
-```ruby
+```tf
 output "public_ip" {
   value = module.my_ec2.public_ip
 }

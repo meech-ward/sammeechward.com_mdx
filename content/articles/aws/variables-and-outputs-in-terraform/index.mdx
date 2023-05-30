@@ -35,7 +35,7 @@ We'll look into variables and outputs more in this article, but for now, just kn
 
 We're already familiar with the basic setup of `main.tf`, first we configure terraform and the provider, then we add a bunch of resource blocks.
 
-```ruby
+```tf
 terraform {
   required_providers {
     aws = {
@@ -58,7 +58,7 @@ Even with this small amount of code, we already have a good use case for a varia
 
 We can turn this into a variable by adding the following to the `variables.tf` file:
 
-```ruby
+```tf
 variable "region" {
   description = "AWS region"
   type        = string
@@ -67,7 +67,7 @@ variable "region" {
 
 This declares a new variable named `region` that has the type `string` and a human readable description. Then we can modify the `main.tf` code to use this variable:
 
-```ruby
+```tf
 provider "aws" {
   region  = var.region
 }
@@ -91,7 +91,7 @@ Terraform knows we need a value for this variable, so the cli is prompting us to
 
 Let's add a new file to our module named `terraform.tfvars` with the following code inside:
 
-```ruby
+```tf
 region = "us-west-2"
 ```
 
@@ -105,7 +105,7 @@ Since `tfvars` files never get committed into a VCS, you **can** put sensitive i
 
 In a case like this where we're just defining the region that the infrastructure should be built in, it might be nice to provide a default value. So if someone doesn't specify a region in the `tfvars` file, it will still be able to build.
 
-```ruby
+```tf
 variable "region" {
   description = "AWS region"
   default     = "us-east-1"
@@ -121,7 +121,7 @@ Let's setup a database using RDS. We need to add two resource blocks for this, a
 
 **Security Group**
 
-```ruby
+```tf
 resource "aws_security_group" "public_db" {
   name = "Public access to the database"
 
@@ -143,7 +143,7 @@ resource "aws_security_group" "public_db" {
 
 **Database:**
 
-```ruby
+```tf
 resource "aws_db_instance" "mydb" {
   allocated_storage      = 20
   engine                 = "mysql"
@@ -161,7 +161,7 @@ This is a really basic RDS setup using MySQL, but i've left the username and pas
 
 In `variables.tf` we need two new variables:
 
-```ruby
+```tf
 variable "database_admin_username" {
   description = "The database's admin user's username"
   type        = string
@@ -175,7 +175,7 @@ variable "database_admin_password" {
 
 In `main.tf` we can use these variables:
 
-```ruby
+```tf
 resource "aws_db_instance" "mydb" {
   ...
   username               = var.database_admin_username
@@ -186,7 +186,7 @@ resource "aws_db_instance" "mydb" {
 
 And in `terraform.tfvars` we can define values for these variables:
 
-```ruby
+```tf
 region                  = "us-west-1"
 database_admin_username = "admin"
 database_admin_password = "MyNewPass1!"
@@ -204,7 +204,7 @@ Running `terraform apply` at this point will setup the database using the provid
 
 In the `outputs.tf` file, we can specify an output for the database's address.
 
-```ruby
+```tf
 output "db_address" {
   value = aws_db_instance.mydb.address
 }

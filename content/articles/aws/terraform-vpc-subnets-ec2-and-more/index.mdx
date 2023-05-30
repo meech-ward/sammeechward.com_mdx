@@ -36,7 +36,7 @@ I won't be going over the basic setup of terraform or the installation instructi
 
 Terraform can be used with many [providers](https://registry.terraform.io/providers/hashicorp/aws/latest/docs) like aws, azure, or google cloud. To use it with AWS, we first declare the aws provider with the region we're using to setup our infrastructure.
 
-```r
+```tf
 provider "aws" {
   profile = "default"
   region  = "us-east-1"
@@ -59,7 +59,7 @@ When setting up a new VPC to deploy EC2 instances, we usually follow these basic
 
 [Resource: aws\_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc)
 
-```r
+```tf
 resource "aws_vpc" "some_custom_vpc" {
   cidr_block = "10.0.0.0/16"
 
@@ -77,7 +77,7 @@ This will setup a new VPC with the cidr block `10.0.0.0/16` and the name “Some
 
 [Resource: aws\_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet)
 
-```r
+```tf
 resource "aws_subnet" "some_public_subnet" {
   vpc_id            = aws_vpc.some_custom_vpc.id
   cidr_block        = "10.0.1.0/24"
@@ -105,7 +105,7 @@ This will create two new subnets in az 1a with the cidr blocks `10.0.1.0/24` and
 
 [Resource: aws\_internet\_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway)
 
-```r
+```tf
 resource "aws_internet_gateway" "some_ig" {
   vpc_id = aws_vpc.some_custom_vpc.id
 
@@ -121,7 +121,7 @@ This creates an internet gateway and attaches it to the custom VPC. Now we need 
 
 [Resource: aws\_route\_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table)
 
-```r
+```tf
 resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.some_custom_vpc.id
 
@@ -145,7 +145,7 @@ This will create a new route table on the custom vpc. We can also specify the ro
 
 [Resource: aws\_route\_table\_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association)
 
-```r
+```tf
 resource "aws_route_table_association" "public_1_rt_a" {
   subnet_id      = aws_subnet.some_public_subnet.id
   route_table_id = aws_route_table.public_rt.id
@@ -160,7 +160,7 @@ Before we setup a new EC2 instance on the public subnet, we need to create a sec
 
 [Resource: aws\_security\_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group)
 
-```r
+```tf
 resource "aws_security_group" "web_sg" {
   name   = "HTTP and SSH"
   vpc_id = aws_vpc.some_custom_vpc.id
@@ -203,7 +203,7 @@ This will generate a new keypair and store the private key on your machine at `~
 
 [Resource: aws\_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#associate_public_ip_address)
 
-```r
+```tf
 resource "aws_instance" "web_instance" {
   ami           = "ami-0533f2ba8a1995cf9"
   instance_type = "t2.micro"
@@ -243,7 +243,7 @@ Here's what everything looks like as a single .tf file. Use the following comman
 
 Use that last command to get the public IP address of the ec2 instance so you can visit it in your web browser.
 
-```r
+```tf
 provider "aws" {
   profile = "default"
   region  = "us-east-1"
