@@ -5,33 +5,38 @@ slug: naming-tsx
 
 description: "How should you name your `.tsx` files?"
 image:
-  name: "naming-tsx.png"
+  name: "name-tsx.png"
   width: 2002
   height: 840
 
 status: "published"
 date: "2023-09-04T01:05:14.555Z"
 tags: ["React", "typescript", "Next.js", "javascript", "jsx", "tsx"]
-previousPostSlug: 'useeffect-everything-you-need-to-know'
-nextPostSlug: 'use-context-auth'
+previousPostSlug: "useeffect-everything-you-need-to-know"
+nextPostSlug: "use-context-auth"
 ---
 
-How should you name your `.tsx` files?
+
+| Not file-based routingn (**Vite**) | File-based routing (**Next.js**) |
+| ---------------------------------- | -------------------------------- |
+| DismissButton.tsx                  | dismiss-button.tsx               |
+
+## How should you name your `.tsx` files?
 
 Common naming conventions you might see:
 
-* DismissButton.tsx
-* dismissButton.tsx
-* dismiss_button.tsx
-* **dismiss-button.tsx**
+- DismissButton.tsx
+- dismissButton.tsx
+- dismiss_button.tsx
+- **dismiss-button.tsx**
 
-### PascalCase
+## PascalCase
 
-When your framework or dev tools **don't** use file based routing, so the file name has nothing to do with the url, then it usually makes a lot of sense to use **PascalCase**. That way the default export of a component matches the file name. 
+When your framework or dev tools **don't** use file based routing, so the file name has nothing to do with the url, then it usually makes a lot of sense to use **PascalCase**. That way the default export of a component matches the file name.
 
 **DismissButton.tsx**
 
-```tsx 
+```tsx
 export default function DismissButton() {
   return <button>Dismiss</button>
 }
@@ -39,18 +44,18 @@ export default function DismissButton() {
 
 However, when your framework or dev tools **do** use file based routing, then it makes a lot of sense to use **kebab-case**. This is the case in Next.js, where the file name is used to determine the url.
 
-### kebab-case
+## kebab-case
 
 PascalCase, camelCase, or any case that potentially depends on distinguishing between uppercase and lowercase letters can be problematic in URLs. Most Unix-based web servers (not MacOS, but who uses MacOS as a web server anyway?) are case-sensitive, whereas some like Microsoft's IIS are not.
 
-That leaves us with lowercase naming conventions, and kebab-case is popular and reliable. It's hard to find a reason **not** to use this case, so let's use it for our urls. 
+That leaves us with lowercase naming conventions, and kebab-case is popular and reliable. It's hard to find a reason **not** to use this case, so let's use it for our urls.
 
 Next.js uses a file-system based router, which means that the names of our directories will appear as part of the url. So directory names will be kebab case. On top of that, the framework uses kebab-case for its `.tsx` file names, even when they don't appear as part of the url. One example in their docs is the [`not-found.tsx`](https://nextjs.org/docs/app/api-reference/file-conventions/not-found) page:
 
 ```tsx
 // not-found.tsx
-import Link from 'next/link'
- 
+import Link from "next/link"
+
 export default function NotFound() {
   return (
     <div>
@@ -62,7 +67,7 @@ export default function NotFound() {
 }
 ```
 
-You can see the name of the file uses kebab-case even though the default export uses PascalCase. 
+You can see the name of the file uses kebab-case even though the default export uses PascalCase.
 
 Consistency is important within a project so it makes sense to keep all `.tsx` files in kebab-case, even when they don't represent an entire page. So here's an example of a route:
 
@@ -75,13 +80,13 @@ Consistency is important within a project so it makes sense to keep all `.tsx` f
     - 📄 submit-button.tsx
 ```
 
-Each of these files would contain a react component as the default export, and remember that react components are PascalCase. 
+Each of these files would contain a react component as the default export, and remember that react components are PascalCase.
 
 All of this only applies to `.tsx` files. Other files, including `.js` or `.ts` files, can use PascalCase or camelCase depending on your preference. For example, I default export a helper `calculateTotals` function in `/src/utils/calculateTotals.ts`.
 
-### Summary
+## Summary
 
-* Maintain consistency in your `.tsx` file naming for readability and maintainability.
-* Use kebab-case with diretories and `.tsx` files when you are dealing with file-based routing.
-* Use PascalCase when not dealing with file-based routing.
-* Other file types can use PascalCase or camelCase based on your project's guidelines.
+- Maintain consistency in your `.tsx` file naming for readability and maintainability.
+- Use kebab-case with diretories and `.tsx` files when you are dealing with file-based routing.
+- Use PascalCase when not dealing with file-based routing.
+- Other file types can use PascalCase or camelCase based on your project's guidelines.
