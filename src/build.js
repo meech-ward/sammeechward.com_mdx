@@ -107,9 +107,9 @@ for (let playlist of playlists) {
 
 // Home Page
 
-putSetting("featured", "featured-1", sections.find(e => e.slug === "useeffect-everything-you-need-to-know"))
+putSetting("featured", "featured-1", sections.find(e => e.slug === "i-stopped-using-expressjs-because-bun-and-hono"))
 putSetting("featured", "featured-2", sections.find(e => e.slug === "storing-images-in-s3-from-node-server"))
-putSetting("featured", "featured-3", sections.find(e => e.slug === "100-dollar-diy-ebike"))
+putSetting("featured", "featured-3", sections.find(e => e.slug === "underated-database-trick-database-sql-mysql-webdevelopment-programming-coding"))
 
 const mostRecentVideo = sections.find(e => e.type === 'video')
 
