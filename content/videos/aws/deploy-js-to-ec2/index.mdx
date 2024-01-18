@@ -4,15 +4,207 @@ title: 'Deploying Full Stack Apps to AWS EC2 with SQL Databases'
 date: '2024-01-18T04:46:20.706Z'
 slug: 'deploying-full-stack-js-to-aws-ec2'
 image: 
-  name: 'aws-cli-vpc-subnets-ec2-and-more-2.png'
-  width: 1280
-  height: 720
+name: 'aws-cli-vpc-subnets-ec2-and-more-2.png'
+width: 1280
+height: 720
 status: 'published'
-description: 'EC2 are virtual machines, so you’re basically going to copy what you’ve done locally (localhost) and put that on a computer owned by amazon running in the cloud'
+description: "EC2 are virtual machines, so you're basically going to copy what you've done locally (localhost) and put that on a computer owned by amazon running in the cloud"
 tags: ['aws', 'cloud computing', 'nodejs', 'express', 'postgresql', 'sql', 'react', 'javascript', 'full stack', 'deployment']
 ---
 
 # Deploying Full Stack Apps to AWS EC2 with SQL Databases
 
+## Setup EC2 Instance 
+
+```sh
+sudo apt update
+sudo apt upgrade
+```
+
+## Install Node.js
+
+```sh
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+## rsync 
+
+```sh 
+rsync -avz --exclude 'node_modules' --exclude '.git' --exclude '.env' \
+-e "ssh -i ~/.ssh/your-key.pem" \
+. ubuntu@ip-address:~/app
+```
+
+## Database 
+
+{/* prettier-ignore */}
+<Tabs>
+  <Tab name="MySQL">
+```sh
+sudo apt install mysql-server
+
+sudo systemctl start mysql
+sudo systemctl enable mysql
+```
+
+<br />
+```sql
+CREATE DATABASE my_app;
+CREATE USER 'my_app_user'@'localhost' IDENTIFIED WITH mysql_native_password BY 'MyNewPass1!';
+GRANT ALL PRIVILEGES ON my_app.* TO 'my_app_user'@'localhost';
+```
+</Tab>
+<Tab name="Postgres">
+```sh
+sudo apt install postgresql postgresql-contrib
+
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+
+sudo -i -u postgres
+```
+<br />
+
+```sql
+CREATE DATABASE my_app;
+CREATE ROLE my_app_role WITH LOGIN PASSWORD 'some_password';
+GRANT ALL PRIVILEGES ON DATABASE "my_app" TO my_app_role;
+```
+  </Tab>
+</Tabs>
 
 
+## systemd
+
+### Step 1: Create the Environment File
+
+Create a new file for your environment variables and open the file in Vim: 
+
+```sh
+sudo vim /etc/app.env
+```
+
+In Vim, add your variables in the format `VARIABLE=value`. For example:
+
+```sh
+DB_PASSWORD=your_secure_password
+```
+
+<Note>
+to save and exit vim, press `esc` then `:wq` then `enter`
+</Note>
+
+
+Restrict the file permissions for security.
+
+```sh
+sudo chmod 600 /etc/app.env
+sudo chown ubuntu:ubuntu /etc/app.env
+```
+
+### Step 2: Create the systemd Service File
+
+Navigate to the systemd directory and create a new service file, `myapp.service`.
+
+```sh
+sudo vim /etc/systemd/system/myapp.service
+```
+
+Define the service settings. Add the following content in Vim, modifying as needed for your application:
+
+```sh
+[Unit]
+Description=Node.js App
+After=network.target multi-user.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/app
+ExecStart=/usr/bin/npm start
+Restart=always
+Environment=NODE_ENV=production
+EnvironmentFile=/etc/app.env
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=myapp
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Reload systemd and start your service.
+
+```sh
+sudo systemctl daemon-reload
+sudo systemctl enable myapp.service
+sudo systemctl start myapp.service
+```
+
+Verify that the service is running properly.
+
+```sh
+sudo systemctl status myapp.service
+```
+
+### View Logs
+
+```sh
+sudo journalctl -u myapp.service
+```
+
+tail logs: 
+
+```sh
+sudo journalctl -fu myapp.service
+```
+
+## Caddy 
+
+### Step 1: Install Caddy
+
+[https://caddyserver.com/docs/install](https://caddyserver.com/docs/install)
+
+```sh
+sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+sudo apt update
+sudo apt install caddy
+```
+
+```
+sudo vim /etc/caddy/Caddyfile
+```
+
+```
+:80 {
+    reverse_proxy localhost:3000
+}
+```
+
+```
+sudo systemctl restart caddy
+```
+
+### Step 2: Configure Caddy to Use HTTPS
+
+Add a domain name for your server. 
+
+<PostCard slug="aws-route-53-domain-name" />
+
+Update the Caddyfile to use your domain name and enable HTTPS.
+
+```
+sudo vim /etc/caddy/Caddyfile
+```
+
+```
+mydomain.com {
+    reverse_proxy localhost:3000
+}
+```
+
+```
+sudo systemctl restart caddy
+```
