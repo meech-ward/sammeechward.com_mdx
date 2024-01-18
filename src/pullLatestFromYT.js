@@ -109,7 +109,9 @@ const uploadsId = await youtube.channels.list({
 
 const mostRecentUpload = await youtube.playlistItems.list({
   part: 'snippet,contentDetails',
-  maxResults: 1,
+  maxResults: 11,
   playlistId: uploadsId
 })
 await Promise.all(mostRecentUpload.data.items.map(createFileForVideo))
+
+// console.log(uploadsId, mostRecentUpload.data.items)
