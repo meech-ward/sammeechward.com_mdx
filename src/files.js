@@ -63,6 +63,10 @@ export async function getEntities(dirPath, posts) {
       // }
 
       // Auto width and height
+      if (!metaData.image) {
+        console.log("No image", metaData.slug)
+        metaData.image = {}
+      }
       if (metaData.image && !metaData.image.width || !metaData.image.height) {
         const imageFile = fs.readFileSync(path.join(dirPath, 'images', metaData.image.name))
         const image = await sharp(imageFile);
