@@ -134,3 +134,4 @@ A specialty custom component only used in the `concurrency-control` article.
 ## SQLJoinsEditor
 
 A specialty custom component used to allow writing and running sqlite code in the browser that is only used in the `sql-joins` article.
+
