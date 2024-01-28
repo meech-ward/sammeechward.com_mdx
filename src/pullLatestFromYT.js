@@ -24,8 +24,17 @@ const mdReplacer = {
   }
 }
 
+function getHashTags(content) {
+  const hashtagRegex = /#\w+/g;
+  const matches = content.match(hashtagRegex) || [];
+  const hashTags = matches.map((tag) => tag.slice(1));
+  return hashTags
+}
+
 function convertVideoToMarkdown(video) {
   const content = video.snippet.description
+  const hashTags = getHashTags(video.snippet.title)
+
   let md = `---
 type: video
 yt_id: ${video.id}
@@ -40,7 +49,7 @@ image:
   height: ${video.image.height}
 status: 'published'
 description: "${video.snippet.description.split('\n')[0]}"
-tags: []
+tags: []${hashTags.length ? `\nhashtags: ${JSON.stringify(hashTags)}\nis_short: true` : ''}
 ---
 
 ${mdReplacer.links(content).split("🔗Moar Links")[0].split('\n').map(line => {
@@ -109,7 +118,7 @@ const uploadsId = await youtube.channels.list({
 
 const mostRecentUpload = await youtube.playlistItems.list({
   part: 'snippet,contentDetails',
-  maxResults: 11,
+  maxResults: 2,
   playlistId: uploadsId
 })
 await Promise.all(mostRecentUpload.data.items.map(createFileForVideo))
