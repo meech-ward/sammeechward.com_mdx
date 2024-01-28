@@ -389,13 +389,13 @@ Once you have your database setup, you can start creating CRUD endpionts. This i
         }
 
         [HttpGet]
-        public async Task<ActionResult<IQueryable<Todo>>> GetTodoItems()
+        public async Task<ActionResult<IEnumerable<Todo>>> GetTodoItems()
         {
             return await _context.Todos.ToListAsync();
         }
 
         [HttpGet("complete")]
-        public async Task<ActionResult<IQueryable<Todo>>> GetCompletedTodoItems()
+        public async Task<ActionResult<IEnumerable<Todo>>> GetCompletedTodoItems()
         {
             return await _context.Todos.Where(t => t.Completed).ToListAsync();
         }
