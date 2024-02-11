@@ -1,0 +1,554 @@
+---
+type: article
+title: "SignalR + React"
+date: "2023-02-08T23:23:28.003Z"
+slug: "signal-r-react"
+image:
+  name: "signalr.png"
+  width: 1024
+  height: 1024
+status: "published"
+description: "How to setup SignalR in a C# app with a React client."
+tags: ["c#", "csharp", "dotnet", ".NET", "asp.net", "react", "signalr"]
+---
+
+{/* https://learn.microsoft.com/en-us/aspnet/core/tutorials/signalr?view=aspnetcore-7.0&tabs=visual-studio-code
+
+https://www.npmjs.com/package/@microsoft/signalr
+
+https://learn.microsoft.com/en-us/aspnet/core/signalr/javascript-client?view=aspnetcore-7.0&tabs=visual-studio
+
+## Azure
+
+https://learn.microsoft.com/en-us/azure/azure-signalr/signalr-quickstart-dotnet-core
+
+
+## server
+
+```csharp
+builder.Services.AddSignalR();
+
+//...
+
+app.MapHub<TheHub>("/r/theHub");
+```
+
+## React 
+
+yarn add @microsoft/signalr
+
+```js
+import * as signalR from "@microsoft/signalr"
+```
+
+
+https://learn.microsoft.com/en-us/aspnet/core/signalr/hubcontext?view=aspnetcore-7.0
+ */}
+
+
+
+here is a rough tutorial on how to use signalR to make a basic chat app in C# with a react frontend:
+
+
+
+
+## Setup
+
+<Instruction>
+Use these instructions to setup a new Todo List ASP.NET App:
+</Instruction>
+
+https://sammeechward.com/asp-net-core-api-react-client
+
+
+* Use Controllers 
+* Use the in memory database 
+* Setup the react app and make sure it works 
+
+
+## SignalR
+
+Think of [SignalR](https://dotnet.microsoft.com/en-us/apps/aspnet/signalr) as a tool that helps you easily add real-time functionality to your web applications. It abstracts away some of the complexities of setting up websockets and lets you focus on building your application's features.
+
+With SignalR, you can easily add real-time functionality to your React app. For example, you could use SignalR to update a chat room in real-time, to notify users of new events, or to show real-time updates on a dashboard.
+
+SignalR takes care of the heavy lifting of setting up the websocket connection between your server and client and gives you a simple API to send and receive messages. You can also use SignalR to broadcast messages to multiple clients at once.
+
+Overall, SignalR makes it easy for you to add real-time functionality to your React apps, and it's a great choice if you want to save time and focus on building your app's features.
+
+<Instruction>
+Create a Hubs folder in your project and add a new class called ChatHub.cs
+</Instruction>
+
+```csharp
+namespace MyApp.Hubs;
+
+public class ChatHub : Hub
+{
+  public override Task OnConnectedAsync()
+  {
+    Console.WriteLine("A Client Connected: " + Context.ConnectionId);
+    return base.OnConnectedAsync();
+  }
+
+  public override Task OnDisconnectedAsync(Exception exception)
+  {
+    Console.WriteLine("A client disconnected: " + Context.ConnectionId);
+    return base.OnDisconnectedAsync(exception);
+  }
+}
+```
+
+<Instruction>
+Configure SignalR by adding the following to the `Program.cs`
+</Instruction>
+
+```csharp
+using MyApp.Hubs;
+
+builder.Services.AddSignalR();
+
+// I'm prefixing signal r rotuers with r and my controller routes with api
+// This is just a style choice for the urls to make the routes more obvious
+app.MapHub<ChatHub>("/r/chatHub");
+```
+
+
+Hubs are used to send messages to clients and to receive messages from clients. Kind of like a controller but for bidrecetional, real-time communication. 
+
+The only thing this hub will do right now is log when a client connects and disconnects.
+
+## React
+
+<Instruction>
+Create a new React app:
+</Instruction>
+
+```bash
+yarn create vite chat-app
+```
+
+<Instruction>
+Setup a proxy to the server:
+</Instruction>
+
+```js
+export default defineConfig({
+  server: {
+    proxy: {
+      "/api": "http://127.0.0.1:5001",
+      "/r": {
+        target: "http://127.0.0.1:5001",
+        ws: true,
+      },
+    },
+  },
+  plugins: [react()],
+});
+```
+
+Forward all requests starting with `/api` or `/r` to the server.
+
+<Instruction>
+Replace the contexts of `App.ts` with the following:
+</Instruction>
+
+```ts
+import { useEffect, useState } from "react";
+import "./App.css";
+
+import {
+  HubConnection,
+  HubConnectionBuilder,
+  LogLevel,
+} from "@microsoft/signalr";
+
+export default function App() {
+  let [connection, setConnection] = useState<HubConnection | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    // Cancel everything if this component unmounts
+    let canceled = false;
+
+    // Build a connection to the signalR server. Automatically reconnect if the connection is lost.
+    const connection = new HubConnectionBuilder()
+      .withUrl("/r/chat")
+      .withAutomaticReconnect()
+      .configureLogging(LogLevel.Information)
+      .build();
+
+    // Try to start the connection
+    connection
+      .start()
+      .then(() => {
+        if (!canceled) {
+          setConnection(connection);
+        }
+      })
+      .catch((error) => {
+        console.log("signal error", error);
+      });
+
+    // Handle the connection closing
+    connection.onclose((error) => {
+      if (canceled) {
+        return;
+      }
+      console.log("signal closed");
+      setConnection(undefined);
+    });
+
+    // If the connection is lost, it won't close. Instead it will try to reconnect.
+    // So we need to treat this is a lost connection until `onreconnected` is called.
+    connection.onreconnecting((error) => {
+      if (canceled) {
+        return;
+      }
+      console.log("signal reconnecting");
+      setConnection(undefined);
+    });
+
+    // Connection is back, yay
+    connection.onreconnected((error) => {
+      if (canceled) {
+        return;
+      }
+      console.log("signal reconnected");
+      setConnection(connection);
+    });
+
+    // Clean up the connection when the component unmounts
+    return () => {
+      canceled = true;
+      connection.stop();
+    };
+  }, []);
+
+  return (
+    <div className="App">
+      <h1>SignalR Chat</h1>
+      <p>{connection ? "Connected" : "Not connected"}</p>
+    </div>
+  );
+}
+```
+
+Read the comments in the code to get a better understanding of what's going on. It's a lot of code, but it's really just basic boilerplate code.
+
+**Try to connect to the signalR hub and handle any connection errors by always trying to reconnect.**
+
+<Instruction>
+Run the server and the react app to make sure everything is working.
+</Instruction>
+
+If you restart the server, you should see the connection status change from `Connected` to `Not connected` and then back to `Connected`.
+
+## Custom Hooks
+
+Since that's really just setup code, let's move it into a custom hook. This will clean up the main component make it easier to use the connection in other components if we ever need to in teh future
+
+<Instruction>
+Create a new file called `useSignalR.ts` in the `src` folder and add the following code:
+</Instruction>
+
+```tsx
+import { useEffect, useState } from "react";
+import {
+  HubConnection,
+  HubConnectionBuilder,
+  LogLevel,
+} from "@microsoft/signalr";
+
+export default function useSignalR(url) {
+  let [connection, setConnection] = useState<HubConnection | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    let canceled = false;
+    const connection = new HubConnectionBuilder()
+      .withUrl(url)
+      .withAutomaticReconnect()
+      .configureLogging(LogLevel.Information)
+      .build();
+
+    connection
+      .start()
+      .then(() => {
+        if (!canceled) {
+          setConnection(connection);
+        }
+      })
+      .catch((error) => {
+        console.log("signal error", error);
+      });
+
+    connection.onclose((error) => {
+      if (canceled) {
+        return;
+      }
+      console.log("signal closed");
+      setConnection(undefined);
+    });
+
+    connection.onreconnecting((error) => {
+      if (canceled) {
+        return;
+      }
+      console.log("signal reconnecting");
+      setConnection(undefined);
+    });
+
+    connection.onreconnected((error) => {
+      if (canceled) {
+        return;
+      }
+      console.log("signal reconnected");
+      setConnection(connection);
+    });
+
+    // Clean up the connection when the component unmounts
+    return () => {
+      canceled = true;
+      connection.stop();
+    };
+  }, []);
+
+  return { connection };
+}
+```
+
+Then update your `App.tsx` to use the hook:
+
+```ts
+import { useEffect, useState } from "react";
+import "./App.css";
+import useSignalR from "./useSignalR";
+
+export default function App() {
+  const { connection } = useSignalR("/r/chat");
+
+  return (
+    <div className="App">
+      <h1>SignalR Chat</h1>
+      <p>{connection ? "Connected" : "Not connected"}</p>
+    </div>
+  );
+}
+```
+
+The behavior should be the same, but now `App.tsx` is way cleaner.
+
+## Send and receive messages
+
+To send a message to the hub, the hub needs to have a method that can be called. The client can then call that method to send a message.
+
+So if we added a `SendMessage` method to the hub like this:
+
+```c#
+public class ChatHub : Hub
+{
+    public async Task SendMessage(string message)
+    {
+        Console.WriteLine($"Received message: {message}");
+    }
+
+```
+
+Then the react app would be able to invoke that `SendMessage` function like this:
+
+```ts
+export default function App() {
+  const { connection } = useSignalR("/r/chat");
+  const [message, setMessage] = useState("")
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    // Send the message to signal r
+    connection?.invoke("SendMessage", message)
+  }
+
+  return (
+    <div className="App">
+      <h1>SignalR Chat</h1>
+      <p>{connection ? "Connected" : "Not connected"}</p>
+
+      <form onSubmit={handleSubmit}>
+        <input type="text" value={message} onChange={e => setMessage(e.target.value)} />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  );
+}
+```
+
+We could also have the server broadcast that message to all clients like this:
+
+```c#
+public class ChatHub : Hub
+{
+    public async Task SendMessage(string message)
+    {
+        // Every single time a client sends a message to the server
+        // Broadcast that messsage to every single client that is listening
+        await Clients.All.SendAsync("ReceiveMessage", message);
+    }
+
+```
+
+Then our clients can listen for those messages like this:
+
+```ts
+useEffect(() => {
+  if (!connection) {
+    return
+  }
+  // listen for messages from the server
+  connection.on("ReceiveMessage", (message) => {
+    console.log("message from the server", message)
+  })
+
+  return () => {
+    connection.off("ReceiveMessage")
+  }
+}, [connection])
+```
+
+
+
+## POST request 
+
+Instead of seing messages through signalR, we're going to use a `POST` request to send the message to the server, then use signalR to notify all the clients that a new message has been received. So our controller needs access to the hub. We can access this by having the hub passed into the constructor of the controller.
+
+```c#
+    private readonly DatabaseContext _context;
+    private readonly IHubContext<ChatHub> _hub;
+    public ChannelsController(DatabaseContext context, IHubContext<ChatHub> hub)
+    {
+        _context = context;
+        _hub = hub;
+    }
+```
+
+Now when we post a message, we can broadcast that message to all clients listening to the hub.
+
+```c#
+    [HttpPost]
+    public async Task<ActionResult<Channel>> PostChannel(Channel channel)
+    {
+        _context.Channels.Add(channel);
+        await _context.SaveChangesAsync();
+
+        // Send a message to all clients listening to the hub
+        await _hub.Clients.All.SendAsync("ReceiveMessage", channel);
+
+        return CreatedAtAction("GetChannel", new { id = channel.Id }, channel);
+    }
+```
+
+And the react app should POST the message to the server:
+
+```ts
+export default function App() {
+  const { connection } = useSignalR("/r/chat");
+  const [message, setMessage] = useState("")
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    await fetch("/api/channels/1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        text: input,
+        userName: "saM"
+      })
+    })
+  }
+```
+
+
+## Groups
+
+Our app currently has multiple channels, and a message is created only for a specific channel. So we want to be able to send a message to a specific channel, and only clients that are listening to that channel should receive the message. 
+
+To acheive this, we can setup SignalR to use groups. So when a client connects to the hub, we can add them to a group. Then when we want to send a message to a specific channel, we can send that message to the group that represents that channel.
+
+<Instruction>
+Add `AddToGroup` and `RemoveFromGroup` methods to the `ChatHub` class. 
+</Instruction>
+
+```cs
+using Microsoft.AspNetCore.SignalR;
+
+namespace MyApp.Hubs;
+public class ChatHub : Hub
+{
+
+  public async Task AddToGroup(string groupName)
+  {
+    await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+
+    await Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId} has joined the group {groupName}.");
+  }
+
+  public async Task RemoveFromGroup(string groupName)
+  {
+    await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
+
+    await Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId} has left the group {groupName}.");
+  }
+}
+```
+
+<Instruction>
+Update the `App.tsx` to call those methods when the user joins or leaves a channel.
+</Instruction>
+
+```ts
+useEffect(() => {
+  if (!connection) {
+    return
+  }
+  // Only listen for messages coming from a certain chat room
+  connection.invoke("AddToGroup", "1")
+
+  // listen for messages from the server
+  connection.on("ReceiveMessage", (message) => {
+    console.log("message from the server", message)
+  })
+
+  return () => {
+    connection.invoke("RemoveFromGroup", "1")
+    connection.off("ReceiveMessage")
+  }
+}, [connection])
+```
+
+
+<Instruction>
+Update the `ChannelsController` to send the message to the group that represents the channel.
+</Instruction>
+
+```cs
+    [HttpPost("{channelId}/Messages")]
+    public async Task<Message> PostChannelMessage(int channelId, Message Message)
+    {
+        Message.ChannelId = channelId;
+        _context.Messages.Add(Message);
+        await _context.SaveChangesAsync();
+
+        await _hub.Clients.Group(channelId.ToString()).SendAsync("ReceiveMessage", Message);
+
+        return Message;
+    }
+```
+
+## Complete the chat app
+
+<Instruction>
+Complete the chat app by add CRUD features for channels and messages and using signalR to view new messages in real time.
+</Instruction>
