@@ -1,0 +1,215 @@
+---
+type: article
+title: "Next Auth and Prisma"
+date: "2022-11-10T13:00:01Z"
+slug: "xclone"
+image: 
+  name: "next_auth_2.png"
+  alt: "Next Auth and Prisma"
+  width: 1280
+  height: 720
+status: 'draft'
+description: "Learn how to store your next auth user's details in a database using prisma"
+tags: ['JavaScript', 'js', 'next.js', 'nextjs', 'next', 'database', 'relational database', 'orm']
+previousPostSlug: 'prisma-and-nextjs-video'
+nextPostSlug: 'the-easiest-way-to-add-auth-to-a-next-app'
+---
+
+Learn how to store your next auth user's details in a database using prisma. This is the second of two videos so make sure you check out the first one if you haven't already.
+
+<PostCard slug="the-easiest-way-to-add-auth-to-a-next-app" />
+
+## Code Examples
+
+https://github.com/Sam-Meech-Ward/code_snippets_prisma_next_demo/tree/auth
+
+<Advertisement/>
+
+<Tabs>
+  <Tab name="[...nextauth].js">
+    ```jsx
+    // /pages/api/auth/[...nextauth].js
+    import NextAuth from "next-auth"
+    import GithubProvider from "next-auth/providers/github"
+    import { PrismaAdapter } from "@next-auth/prisma-adapter"
+    import { prisma } from "../../../server/db/client"
+
+    export const authOptions = {
+      // Configure one or more authentication providers
+      adapter: PrismaAdapter(prisma),
+      providers: [
+        GithubProvider({
+          clientId: process.env.GITHUB_ID,
+          clientSecret: process.env.GITHUB_SECRET,
+        }),
+        // ...add more providers here
+      ],
+    }
+
+    export default NextAuth(authOptions)
+    ```
+
+</Tab>
+  <Tab name="_app.jsx">
+    ```jsx
+    import '../styles/globals.css'
+    import 'highlight.js/styles/stackoverflow-dark.css'
+
+    import SiteNavigation from "../components/SiteNavigation"
+
+    import { SessionProvider } from "next-auth/react"
+
+    import TimeAgo from 'javascript-time-ago'
+    import en from 'javascript-time-ago/locale/en'
+    TimeAgo.setDefaultLocale(en.locale)
+    TimeAgo.addLocale(en)
+
+    function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
+      return (
+        <>
+          <SessionProvider session={session}>
+            <SiteNavigation></SiteNavigation>
+            <Component {...pageProps} />
+          </SessionProvider>
+        </>
+      )
+    }
+
+    export default MyApp
+    ```
+
+</Tab>
+  <Tab name="posts.js">
+    ```jsx
+    // /pages/api/posts.js
+    import { prisma } from '../../server/db/client'
+
+    import { getServerSession } from "next-auth/next"
+    import { authOptions } from "./auth/[...nextauth]"
+
+    function titleFromCode(code) {
+      return code.trim().split('\n')[0].replace('// ', '')
+    }
+
+    async function post(req, res) {
+      const session = await getServerSession(req, res, authOptions)
+      if (!session) {
+        res.status(401).json({ error: 'Unauthorized' })
+        return
+      }
+
+      const prismaUser = await prisma.user.findUnique({
+        where: { email: session.user.email },
+      })
+
+      if (!prismaUser) {
+        res.status(401).json({ error: 'Unauthorized' })
+        return
+      }
+      
+      const { language, code } = req.body
+      const title = titleFromCode(code)
+      const post = await prisma.post.create({
+        data: {
+          title,
+          language,
+          code,
+          userId: prismaUser.id,
+        },
+      })
+      res.status(201).json(post)
+    }
+
+    export default async function handler(req, res) {
+      const { method } = req
+
+      switch (method) {
+        case 'POST':
+          post(req, res)
+          break
+        default:
+          res.setHeader('Allow', ['POST'])
+          res.status(405).end(`Method ${method} Not Allowed`)
+      }
+    }
+    ```
+  </Tab>
+  <Tab name="schema.prisma">
+    ```prisma
+    // This is your Prisma schema file,
+    // learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+    generator client {
+      provider = "prisma-client-js"
+    }
+
+    datasource db {
+      provider = "postgresql"
+      url      = env("DATABASE_URL")
+    }
+
+    model User {
+      id            String    @id @default(cuid())
+      name          String?
+      email         String?   @unique
+      emailVerified DateTime?
+      image         String?
+      accounts      Account[]
+      sessions      Session[]
+      posts         Post[]
+    }
+
+    model Post {
+      id            Int      @id @default(autoincrement())
+      title         String
+      code          String   @db.Text
+      language      String
+      totalLikes    Int      @default(0)
+      totalComments Int      @default(0)
+      createdAt     DateTime @default(now())
+      updatedAt     DateTime @updatedAt
+      userId        String
+      user          User     @relation(fields: [userId], references: [id])
+    }
+
+
+    model Account {
+      id                 String  @id @default(cuid())
+      userId             String
+      type               String
+      provider           String
+      providerAccountId  String
+      refresh_token      String?  @db.Text
+      access_token       String?  @db.Text
+      expires_at         Int?
+      token_type         String?
+      scope              String?
+      id_token           String?  @db.Text
+      session_state      String?
+
+      user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+      @@unique([provider, providerAccountId])
+    }
+
+    model Session {
+      id           String   @id @default(cuid())
+      sessionToken String   @unique
+      userId       String
+      expires      DateTime
+      user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    }
+
+
+    model VerificationToken {
+      identifier String
+      token      String   @unique
+      expires    DateTime
+
+      @@unique([identifier, token])
+    }
+    ```
+  </Tab>
+</Tabs>
+
+
