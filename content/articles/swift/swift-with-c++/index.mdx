@@ -1,0 +1,220 @@
+---
+type: article
+title: 'C++ Inside Swift'
+date: '2024-06-08T19:40:01.993Z'
+slug: 'swift-with-cpp'
+image: 
+  name: 'swift-c.png'
+status: 'published'
+description: 'Did you know that you can just dump C++ code into your swift project? Did you know that it actually works really nicely? Did you know that you can do this all useing the Swift Package Manager and never touch Xcode?'
+tags: ['programming', 'swift', 'c++']
+---
+
+Did you know that you can just dump C++ code into your swift project? Did you know that it actually works really nicely? Did you know that you can do this all useing the Swift Package Manager and never touch Xcode?
+
+This is an amazing thing to know about when you're forced into using C++, but you don't want to write your entire app in C++.  
+
+Recently I had to make a cli application for someone that would take photos from a medical usb camera and stream them over a private network. The custom camera was incompatible with all standard drivers. The company that makes the camera just handed over a custom implementation of OpenCV with some C++ examples of how to interact with the camera. So I've got a C++ library, some C++ sample code, I guess i'm building a C++ cli. 
+
+But I really don't want to have to handle all the application logic in C++, so what are my options? 
+
+There's lots actually, C++ is kind of interoperable with tons of languages. You could write a language that calls into your c++ code using a Foreign Function Interface. Theoretically you can just pick your favorite language, compile a C++ library out of your own code, or wrap an exsiting library, then import it into your language and just use it.
+
+In practice, this is never as clean as I want it to be. Enter Swift.  
+
+## Swift and C++
+
+As of swift 5.9, you can just dump C++ files directly into your swift project. This is one of the few times I've seen this in a language where it's so simple to start using C++ from another language. 
+
+Here are the basic instructions to get setup quickly. These instructions will get everything working on a linux machine. 
+
+<Instruction>
+Create a new swift package excutable as normal
+</Instruction>
+
+```
+swift package init --name CliApp --type executable
+```
+
+<Instruction>
+Update the project structure to look like this
+</Instruction>
+
+
+```
+├── CliApp
+└── Sources
+    ├── CliApp  // all swift files go in here
+    │   └── CliApp.swift
+    └── cppLib // all cpp files go in here
+        ├── Item.cpp
+        └── include // all cpp header files go in here
+            ├── Item.h
+            └── cppLib.h // make sure you have an umbrella header file
+```
+
+Here's some sample code to get things started:
+
+**Item.h**
+
+```cpp
+#ifndef ITEM_H
+#define ITEM_H
+
+#include <string>
+
+class Item {
+private:
+  std::string name;
+
+public:
+  Item(std::string name)
+      : name(name) {}
+  std::string getName() const;
+};
+
+#endif // ITEM_H
+```
+
+**Item.cpp**
+
+```cpp
+#include "Item.h"
+
+std::string Item::getName() const {
+  return name;
+}
+```
+
+**cppLib.h**
+
+```cpp
+#pragma once
+
+#include "Item.h"
+```
+
+**CliApp.swift**
+
+```swift
+import cppLib
+
+// You don't need to use a struct as the entry point here with @main
+// But i find it easier so that you can easily opt into swift concurrency
+@main
+struct CliApp {
+  static func main() async {
+    let item = Item("Some Name")
+    print(item.getName)
+  }
+}
+```
+
+All you have to do is import the cpp code as a libary and then start using the cpp classes, structs, functions, whatever. And everything just kind of works really nicely. The string being passed into item, is actually a c++ `std::string`, but swift knows how to make those and can simply convert between, from the perspective of swift, `std.string` and a swift string. 
+
+You can look at all the details of how this works, and all the rules here: https://www.swift.org/documentation/cxx-interop/
+
+This won't work just yet though, you still need to update the `package.swift`
+
+```swift
+// swift-tools-version: 5.10
+import PackageDescription
+
+let package = Package(
+  name: "CliApp",
+  products: [
+    .library(
+      name: "cppLib",
+      targets: ["cppLib"]),
+    .executable(
+      name: "CliApp",
+      targets: ["CliApp"]),
+  ],
+  targets: [
+
+    .target(
+      name: "cppLib"),
+    .executableTarget(
+      name: "CliApp",
+      dependencies: ["cppLib"],
+      swiftSettings: [.interoperabilityMode(.Cxx)]),
+  ],
+  cxxLanguageStandard: .cxx17
+)
+```
+
+Now you can just run  `swift run` and your app will compile and run all the code together. 
+
+## C++ Libraries
+
+Great, you can run C++ inside the swift code. That's pretty cool, but this is mostly going to be practical when you can bring in a C++ library seemlessly into your swift app. 
+
+Here's one big caveat I've found while trying to get all of this working. The swift docs make it seem like you can basically bring in any C++ library from anywhere on the system. However, I found this to be quite difficult. The only time this really worked easily and nicely was when the libraries were global. 
+
+* Make sure that your C++ libary is in `/usr/local/lib`
+* Make sure that your C++ headers are in `/usr/local/include`
+
+For example, I downloaded the OpenCV source code and compiled `opencv_world` locally on my machine. I then had to `cp -r /usr/local/include/opencv4/opencv2/ /usr/local/include/` to make sure the headers were in the correct place. But after that, including the opencv was as easy as adding it as a dependency.  
+
+```swift
+//...
+  targets: [
+    .target(
+      name: "cppLib",
+      linkerSettings: [
+        .linkedLibrary("opencv_world"),  
+      ]),
+    .executableTarget(
+      name: "CliApp",
+      dependencies: ["cppLib"],
+      swiftSettings: [.interoperabilityMode(.Cxx)]),
+  ],
+/...
+```
+
+I've found that it's nicest to bring the external C++ library into the C++ code in your project and kind of "wrap" it in your own code before exposing it to swift. There are just certain ways of using a C++ library that work better in C++. This lets you choose how much swift and how much C++ you will write. You can also just expose the entire library if you want. 
+
+But now in my cpp code, I can make a thin wrapper for opencv and expose things direcly to my swift code. I created a camera class with methods like this:
+
+**Camera.cpp**
+
+```cpp
+// error handling still needs to be added
+std::vector<unsigned char> Camera::takePhoto()
+{
+  std::vector<unsigned char> buffer;
+  cv::Mat frame;
+
+  this->cap.read(frame); 
+
+  cv::imencode(".jpg", dframe, buffer)
+
+  return buffer; 
+}
+```
+
+Then in swift, I can capture that image and handle the image buffer data and multithreading and everything else from the swift app. 
+
+**CliApp.swift**
+
+```swift
+import cppLib
+
+// You don't need to use a struct as the entry point here with @main
+// But i find it easier so that you can easily opt into swift concurrency
+@main
+struct CliApp {
+  static func main() async {
+    let camera = Camera()
+    let buffer = camera.takePhoto()
+    //... more swift code
+  }
+}
+```
+
+Apple's resources on this topic:
+
+* https://www.swift.org/documentation/cxx-interop/
+* https://www.swift.org/documentation/articles/wrapping-c-cpp-library-in-swift.html
+* https://www.swift.org/documentation/cxx-interop/project-build-setup/
+* https://www.swift.org/documentation/cxx-interop/status/
