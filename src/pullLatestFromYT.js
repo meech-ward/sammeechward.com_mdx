@@ -68,7 +68,11 @@ return md
 
 
 async function createFileForVideo(video) {
-  const slug = video.snippet.title.toLowerCase().replace(/[\+\?#\.\|\-\_,]/g, '').replace(/\s+/g, '-')
+  const slug = video.snippet.title.toLowerCase() // Convert the whole title to lower case
+  .replace(/[\+\?#\.\|\-\_,\(\)\!':]/g, '') // Remove specified characters
+  .replace(/\s+/g, '-') // Replace all kinds of whitespace with a single dash
+  .replace(/&/g, 'and') // Replace ampersand with 'and'
+  .replace(/-+/g, '-'); // Replace multiple dashes with a single dash
   video.slug = slug
   video.title = video.snippet.title
 
